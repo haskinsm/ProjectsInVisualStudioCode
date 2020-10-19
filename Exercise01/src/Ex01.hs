@@ -1,10 +1,11 @@
 module Ex01 where
 import Data.Char (toUpper)
+import Data.List(group)
 
 name, idno, username :: String
-name      =  "Myself, Me"  -- replace with your name
-idno      =  "01234567"    -- replace with your student id
-username  =  "memyselfi"   -- replace with your TCD username
+name      =  "Michael Haskins"  -- replace with your name
+idno      =  "18323076"    -- replace with your student id
+username  =  "haskinsm"   -- replace with your TCD username
 
 
 declaration -- do not modify this
@@ -25,9 +26,15 @@ if it is lowercase. All other characters are unchanged.
 It is imported should you want to use it.
 
 -}
-raise :: String -> String
-raise str = undefined
+raise :: String -> String  --String is a synonym for [char] --Don't mess with the types here
+raise str = helper str
 
+helper :: [Char] -> [Char]   
+helper [] = []
+--helper (x:_) = x  --Don't think this line is needed. Think the below line will handle 'singletons'
+helper (x:xs) = toUpper x : helper xs
+
+ 
 {- Part 2
 
 Write a function 'nth' that returns the nth element of a list.
@@ -35,7 +42,9 @@ Hint: the test will answer your Qs
 
 -}
 nth :: Int -> [a] -> a
-nth i xs = undefined
+nth 1 (x:xs) = x
+nth i (x:xs) = nth (i-1) xs
+
 
 
 {- Part 3
@@ -45,7 +54,11 @@ and reports the length of the prefix they have in common.
 
 -}
 commonLen :: Eq a => [a] -> [a] -> Int
-commonLen xs ys = undefined
+commonLen [] [] = 0
+commonLen [] (y:ys) = 0
+commonLen (x:xs) [] = 0
+commonLen (x:xs) (y:ys) | x == y = 1 + commonLen xs ys
+                        | otherwise = 0
 
 {- Part 4
 
@@ -64,5 +77,24 @@ HINT: Don't worry about code efficiency
        Seriously, don't!
 
 -}
-runs :: Eq a => [a] -> [[a]]
-runs xs = undefined
+runs :: Eq a => [a] -> [[a]]  --Note: could be any type
+{- runs [] = [] --Might need to let it equal nothing or something like that
+runs x:xs = [x : runsHelper x xs] : runs (runsSecondHelper x xs) --Need to alter xs so doesnt have the elements equal to x when use it recursively here
+
+runsHelper :: a -> [a] -> [a]
+runsHelper b [] = []
+runsHelper [] (x:xs) = []
+runsHelper b (x:xs) | b == x = x : runsHelper b xs
+                    | otherwise = []
+
+runsSecondHelper :: a -> [a] -> [a]
+runsSecondHelper a [] = []
+runsSecondHelper a (x:xs) | a == x = runsSecondHelper a xs
+                          | otherwise = xs -}
+
+--import Data.List(group)   Must import at the top of the page or doesn't run
+runs [] = []
+runs xs = group xs  --Makes use of the Haskell prelude function 'group'
+{- check Hoogle when you're looking for a function 
+   that might already exist -> can search by type, so in this case 
+   search Eq a => [a] -> [[a]] -}
