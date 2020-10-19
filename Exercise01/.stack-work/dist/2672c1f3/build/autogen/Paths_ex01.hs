@@ -17,7 +17,7 @@ version = Version [0,1,0,0] []
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\bin"
-libdir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\lib\\x86_64-windows-ghc-7.10.3\\ex01-0.1.0.0-DAmIZvqlGfO1en5WWmRvQz"
+libdir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\lib\\x86_64-windows-ghc-7.10.3\\ex01-0.1.0.0-4Ch4nA9uNhZIfM66l3U3CC"
 datadir    = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\share\\x86_64-windows-ghc-7.10.3\\ex01-0.1.0.0"
 libexecdir = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\libexec"
 sysconfdir = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise01\\.stack-work\\install\\aba25aff\\etc"
