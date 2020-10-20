@@ -30,7 +30,7 @@ def lowest_common_ancestor(node1,node2):
 
 def main():
 
-  # making the Binary tree structure shown above.
+  # making the Binary tree structure 
   BST = BinaryTree('d')
 
   BST.root.left_Node = Node('c')
