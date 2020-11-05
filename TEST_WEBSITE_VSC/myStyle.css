@@ -4,3 +4,7 @@ body {
     background-size: cover; /* Resize the background image to cover the entire container (Page) */
     color: white /*This is the colour of the text*/
 }
+table, th, td{
+    border: 1px solid black;
+    color: red;
+}
