@@ -30,7 +30,7 @@ version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\bin"
-libdir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\lib\\x86_64-windows-ghc-8.6.4\\ex02-0.1.0.0-AhExcsFbY9TC0QrBvy6N08-ex02"
+libdir     = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\lib\\x86_64-windows-ghc-8.6.4\\ex02-0.1.0.0-L2yrBJX1zVd6OTCxeHvQnj-ex02"
 dynlibdir  = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\lib\\x86_64-windows-ghc-8.6.4"
 datadir    = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\share\\x86_64-windows-ghc-8.6.4\\ex02-0.1.0.0"
 libexecdir = "C:\\Users\\micha\\Documents\\GitHub\\VisualStudioCode\\Exercise02\\.stack-work\\install\\3d547ec3\\libexec\\x86_64-windows-ghc-8.6.4\\ex02-0.1.0.0"

@@ -56,8 +56,14 @@ v42 = Val 42 ; j42 = Just v42
   -- (2) the expression contains a variable not in the dictionary.
   -- see test outcomes for the precise format of those messages
 
-eval :: EDict -> Expr -> Either String Double
-eval d e = error "eval NYI"
+eval :: EDict -> Expr -> Either String Double --Might need to change the last to Maybe Double, but returns string on occasion so think its ok as is
+eval d (Add x y) =
+eval d (Mul x y) =
+eval d (Sub x y) =
+eval d (Dvd x (val 0)) = Nothing --So as to prohibit deviding by 0
+eval d (Dvd x y) =
+eval d (var a) = find d a
+eval d (Def a x y) 
 
 -- Part 1 : Expression Laws -- (15 test marks, worth 15 Exercise Marks) --------
 
