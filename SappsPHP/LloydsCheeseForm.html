@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table
+        th{
+            text-align: left;
+            background-color: cadetblue;
+            color: #ffffff;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lloyd Cheese Order</title>
+</head>
+<body>
+    <img src="Cheese.jpg" alt="cheese" height="136" width = "193"> <h2>Lloyd Cheese Company</h2>
+    <form action="processorder.php" method = "post" name = "orderform" id = "orderform">
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+            <tr>
+                <td>Montgomery Cheddar</td>
+                <td><input type="text" name ="cheddarqty" id = "cheddarqty" size = 5></td>
+            </tr>
+            <tr>
+                <td>Cashel Blue</td>
+                <td><input type="text" name ="cashelqty" id = "cashelqty" size = 5></td>
+            </tr>
+            <tr>
+                <td>Gubeen</td>
+                <td><input type="text" name ="gubeenqty" id = "gubeenqty" size = 5></td>
+            </tr>
+            <tr>
+                <td>Durrus</td>
+                <td><input type="text" name ="durrusqty" id = "durrusqty" size = 5></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name = "Submit" value = "Submit Order">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
