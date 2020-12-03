@@ -22,11 +22,11 @@ import Data.ByteString.UTF8 (fromString)
 someFunc :: IO ()
 someFunc = do
   putStrLn "Let's try a GitHubCall"
-  (rName:user:token:_) <- getArgs
-  putStrLn $ "name is " ++ rName
-  putStrLn $ "github account for API call is " ++ user
-  putStrLn $ "github token for api call is " ++ token
-
+  (rName:user:token:_) <- getArgs --User => username, token => not sure if this is password or like an API key, rNmae => The account we want to get info about so username
+  putStrLn $ "name is " ++ rName -- one would enter in the arguments by using cd to get into src, then stack run -- <parameters>
+  putStrLn $ "github account for API call is " ++ user --All 3 parameters would need to be passed in or build/run will fail
+  putStrLn $ "github token for api call is " ++ token --E.g.: stack run -- esjmb esjmb <token>   (esjmb is lecturers username I believe). Run will fail for my username as I dont have a name set on github account and code cant handle the null, would need a maybe text to handle this I believe.
+                                                                --Find my token on OneNote, if cant just generate your own personal access token on github
   let auth = BasicAuthData (fromString user) (fromString token)
 
   testGitHubCall auth $ pack rName
