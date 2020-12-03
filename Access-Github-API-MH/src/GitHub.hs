@@ -77,7 +77,7 @@ type GitHubAPI = "users" :> Header  "user-agent" UserAgent
                          :> Capture "username" Username
                          :> Capture "repo"     Reponame
                          :> "contributors"
-                         :> GetPaged '[JSON] [RepoContributor]
+                         :> GetPaged '[JSON] [RepoContributor] --Gets number of contributers of a repo
 
             -- This call has been implemented to return link Headers so that we can gather multipage responses
             :<|> "repositories" :> Header  "user-agent" UserAgent

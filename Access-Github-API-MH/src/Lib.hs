@@ -51,13 +51,17 @@ testGitHubCall auth name =
             intercalate ", " (map (\(GH.GitHubRepo n _ _ ) -> unpack n) repos) --Ends up as a comma seperated list of all repos found (Inlcudes cloned repos)
 
           -- now lets get the full list of collaborators from repositories
-          (partitionEithers <$> mapM (getContribs auth name) repos) >>= \case
+          (partitionEithers <$> mapM (getContribs auth name) repos) >>= \case  ---The dollar yokie here is a way of saying do this IO thing (the brackets right after)
+          -- and then pass the result of that to the preceding call and then return all of that in the IO space 
+          -- See getContribs function below
 
-            ([], contribs) ->
+          -- Case matching return of above function (I believe)
+            ([], contribs) -> -- Contribs is a list of list of contributers hwere each list of contributers is the response to a call to a particular repo
               putStrLn $ " contributors are: " ++
-              (intercalate "\n\t" .
-               map (\(GH.RepoContributor n c) -> "[" ++ show n ++ "," ++ show c ++ "]") .
-               groupContributors $ concat contribs)
+              (intercalate "\n\t" . --Intercalating-> just putting it on a new line with a tab
+               map (\(GH.RepoContributor n c) -> "[" ++ show n ++ "," ++ show c ++ "]") . -- internal bit here maps this into a string for each (cntributors i think) and then mapping into a string for each where each is just showing the name and the count
+               groupContributors $ concat contribs) -- Concat turns the list of lists into a list => now have list of contributers
+                --groupContributers is a function defined below
 
             (ers, _)-> do
               putStrLn $ "heuston, we have a problem (getting contributors): " ++ show ers
@@ -66,12 +70,12 @@ testGitHubCall auth name =
         getContribs auth name (GH.GitHubRepo repo _ _) =
           GH.runClientPagedM (GH.getRepoContribs (Just "haskell-app") auth name repo)
 
-        groupContributors :: [GH.RepoContributor] -> [GH.RepoContributor]
-        groupContributors  = sortBy (\(GH.RepoContributor _ c1) (GH.RepoContributor _ c2) -> compare c1 c2) .
+        groupContributors :: [GH.RepoContributor] -> [GH.RepoContributor] --Uses some standard functions, first groups by name of contributer
+        groupContributors  = sortBy (\(GH.RepoContributor _ c1) (GH.RepoContributor _ c2) -> compare c1 c2) . -- then maps over a map function which is defined below
                              map mapfn .
-                             groupBy (\(GH.RepoContributor l1 _) (GH.RepoContributor l2 _) -> l1 == l2)
-         where mapfn :: [GH.RepoContributor] -> GH.RepoContributor
-
+                             groupBy (\(GH.RepoContributor l1 _) (GH.RepoContributor l2 _) -> l1 == l2) -- Then just doing a sorting
+         where mapfn :: [GH.RepoContributor] -> GH.RepoContributor -- Takes a list of repo contributers (All of same name thanks to above sorting/grouping) and 
+                -- .. creates a single repo contributer element with the right name and sum of all the contributions across the list
                mapfn xs@((GH.RepoContributor l _):_) = GH.RepoContributor l .sum $
                                                        map (\(GH.RepoContributor _ c) -> c)  xs
 
