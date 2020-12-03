@@ -47,7 +47,7 @@ type Reponame  = Text
 data GitHubUser =
   GitHubUser { login :: Text
              , name  :: Text
-             , email :: Maybe Text
+             , email :: Maybe Text --Note email is a weird type for github api that sometimes will return null, thats why the Maybe yoke is here
              } deriving (Generic, FromJSON, Show)
 
 data GitHubRepo =
@@ -62,7 +62,7 @@ data RepoContributor =
                   } deriving (Generic, FromJSON, Show)
 
 type GitHubAPI = "users" :> Header  "user-agent" UserAgent
-                         :> BasicAuth "github" Int
+                         :> BasicAuth "github" Int --Is defined in the servant code (imported)
                          :> Capture "username" Username
                          :> Get '[JSON] GitHubUser
 

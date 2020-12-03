@@ -34,7 +34,7 @@ someFunc = do
 
 testGitHubCall :: BasicAuthData -> Text -> IO ()
 testGitHubCall auth name = 
-  GH.runClientM (GH.getUser (Just "haskell-app") auth name) >>= \case --I think replace auth name with "<authname>"
+  GH.runClientM (GH.getUser (Just "haskell-app") auth name) >>= \case 
 
     Left err -> do
       putStrLn $ "heuston, we have a problem: " ++ show err
