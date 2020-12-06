@@ -45,7 +45,7 @@ testGitHubCall auth name =
       -- now lets get the users repositories. Note this is now running paged cass.
       GH.runClientPagedM (GH.getUserRepos (Just "haskell-app") auth name) >>= \case
         Left err -> do
-          putStrLn $ "heuston, we have a problem (gettign repos): " ++ show err
+          putStrLn $ "heuston, we have a problem (getting repos): " ++ show err  
         Right repos -> do
           putStrLn $ " repositories are:" ++
             intercalate ", " (map (\(GH.GitHubRepo n _ _ ) -> unpack n) repos) --Ends up as a comma seperated list of all repos found (Inlcudes cloned repos)
@@ -66,6 +66,25 @@ testGitHubCall auth name =
             (ers, _)-> do
               putStrLn $ "heuston, we have a problem (getting contributors): " ++ show ers
 
+      --Below created by me
+      GH.runClientPagedM (GH.getGitHubFollowers (Just "haskell-app") auth name) >>= \case
+        Left err -> do
+          putStrLn $ "heuston, we have a problem (getting GitHub followers): " ++ show err
+        Right users -> do
+          putStrLn $ " followers are: " ++ --Remove this if works
+            intercalate ", " (map (\(GH.GitHubFollower n ) -> unpack n) users)
+{-
+            --Now attempting to count how many followers each follower of the originally inputted user at program start has
+            (partitionEithers <$> mapM (getGitHubFollowers auth name) users) >>= \case --Need to write where getGitHubFollowers section below
+
+              ([], followers) ->
+                putStrLn $ " followers are: " ++
+                (intercalate "\n\t" . --Intercalating-> just putting it on a new line with a tab
+                map (\(GH.GitHubFollower n) -> "[" ++ show n ++ "," ++ show n ++ "]") ) -- internal bit here maps this into a string for each (cntributors i think) and then mapping into a string for each where each is just showing the name and the count
+
+              (ers, _)-> do
+                putStrLn $ "heuston, we have a problem (getting GitHub Followers): " ++ show ers
+-}
   where getContribs :: BasicAuthData -> GH.Username -> GH.GitHubRepo -> IO (Either SC.ClientError [GH.RepoContributor])
         getContribs auth name (GH.GitHubRepo repo _ _) =
           GH.runClientPagedM (GH.getRepoContribs (Just "haskell-app") auth name repo)
@@ -78,6 +97,23 @@ testGitHubCall auth name =
                 -- .. creates a single repo contributer element with the right name and sum of all the contributions across the list
                mapfn xs@((GH.RepoContributor l _):_) = GH.RepoContributor l .sum $
                                                        map (\(GH.RepoContributor _ c) -> c)  xs
+{-
+  where getGitHubFollowers :: BasicAuthData -> GH.Username -> GH.GitHubFollower -> IO (Either SC.ClientError [GH.GitHubFollower])
+        getGitHubFollowers auth name (GH.GitHubFollower n) =
+          GH.runClientPagedM (GH.getGitHubFollowers (Just "haskell-app") auth name n)
+
+  groupGitHubFollowers :: [GH.GitHubFollower] -> [GH.GitHubFollower] --Uses some standard functions, first groups by name of follower
+  groupGitHubFollowers  =  sortBy (\(GH.GitHubFollower n1) (GH.GitHubFollower n2) -> compare n1 n2) -- then maps over a map function which is defined below
+                     -- map mapfn .
+                     -- groupBy (\(GH.RepoContributor l1 _) (GH.RepoContributor l2 _) -> l1 == l2) -- Then just doing a sorting
+ -- where mapfn :: [GH.RepoContributor] -> GH.RepoContributor -- Takes a list of repo contributers (All of same name thanks to above sorting/grouping) and 
+          -- .. creates a single repo contributer element with the right name and sum of all the contributions across the list
+       -- mapfn xs@((GH.RepoContributor l _):_) = GH.RepoContributor l .sum $
+                                              --  map (\(GH.RepoContributor _ c) -> c)  xs
+-}
+
+                                               
+                                               
 
 
 

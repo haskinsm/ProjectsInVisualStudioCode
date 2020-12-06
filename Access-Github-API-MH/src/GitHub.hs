@@ -60,6 +60,10 @@ data RepoContributor =
   RepoContributor { login :: Text
                   , contributions :: Integer
                   } deriving (Generic, FromJSON, Show)
+-- Below is datatype I created
+data GitHubFollower = 
+  GitHubFollower { login :: Text
+                 } deriving (Generic, FromJSON, Show)
 
 type GitHubAPI = "users" :> Header  "user-agent" UserAgent
                          :> BasicAuth "github" Int --Is defined in the servant code (imported)
@@ -79,6 +83,13 @@ type GitHubAPI = "users" :> Header  "user-agent" UserAgent
                          :> "contributors"
                          :> GetPaged '[JSON] [RepoContributor] --Gets number of contributers of a repo
 
+            :<|> "users" :> Header "user-agent" UserAgent  --Created by me
+                         :> BasicAuth "github" Int
+                         :> Capture "username" Username
+                         :> "followers"              --Might need to like Capture "followers" Username
+                         :> GetPaged '[JSON] [GitHubFollower]
+                         
+
             -- This call has been implemented to return link Headers so that we can gather multipage responses
             :<|> "repositories" :> Header  "user-agent" UserAgent
                                 :> BasicAuth "github" Int
@@ -94,10 +105,11 @@ type ClientMPaged a = Maybe String -> ClientM (GitHubPaged a)
 
 getUser ::          Maybe UserAgent -> BasicAuthData -> Username            -> ClientM GitHubUser
 getUserRepos ::     Maybe UserAgent -> BasicAuthData -> Username            -> ClientMPaged [GitHubRepo]
-getRepoContribs ::  Maybe UserAgent -> BasicAuthData -> Username -> Reponame -> ClientMPaged [RepoContributor]
+getRepoContribs ::  Maybe UserAgent -> BasicAuthData -> Username -> Reponame -> ClientMPaged [RepoContributor] --Data types created above
+getGitHubFollowers :: Maybe UserAgent -> BasicAuthData -> Username          -> ClientMPaged [GitHubFollower] --Created by me
 getRepositories ::  Maybe Text      -> BasicAuthData                       -> ClientMPaged [GitHubRepo]
 
-getUser :<|> getUserRepos :<|> getRepoContribs :<|> getRepositories = client gitHubAPI
+getUser :<|> getUserRepos :<|> getRepoContribs :<|> getGitHubFollowers :<|> getRepositories = client gitHubAPI --getGitHubFollowers Created by me
 
 -- run a GitHub API call where teh result is pagnated
 runClientPagedM fn = recursiveCall "1"
