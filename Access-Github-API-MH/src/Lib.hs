@@ -72,7 +72,7 @@ testGitHubCall auth name =
           putStrLn $ "heuston, we have a problem (getting GitHub followers): " ++ show err
         Right users -> do
           putStrLn $ " followers are: " ++ --Remove this if works
-            intercalate ", " (map (\(GH.GitHubFollower n ) -> unpack n) users)
+            intercalate ", " (map (\(GH.GitHubFollower n ) -> unpack n) users) --Not sure here if map is just a data structure yoke or like the actual name of the map/ data structure.
 {-
             --Now attempting to count how many followers each follower of the originally inputted user at program start has
             (partitionEithers <$> mapM (getGitHubFollowers auth name) users) >>= \case --Need to write where getGitHubFollowers section below
@@ -111,6 +111,8 @@ testGitHubCall auth name =
        -- mapfn xs@((GH.RepoContributor l _):_) = GH.RepoContributor l .sum $
                                               --  map (\(GH.RepoContributor _ c) -> c)  xs
 -}
+
+
 
                                                
                                                
