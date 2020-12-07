@@ -48,6 +48,9 @@
                 if ( !is_numeric($organstudnum) ){
                     $organstudnumErr = "Invalid Organizer Student Number. Must contain numbers only.";
                 }
+                if( count_digit($organstudnum) > 10 || count_digit($organstudnum) < 5){  
+                    $organstudnumErr = "Invalid Student Number. Must be between 5 and 10 digits in length.";
+                }
             }
         
             if (empty($_POST["price"])) {
@@ -142,6 +145,11 @@
             return $data;
         }
 
+        function count_digit($number)
+        {
+            return strlen((string) $number);
+        }
+
     ?>
 
     <script language="javascript">	
@@ -211,7 +219,7 @@
         </table>
     </form>
     <br><br><br><br><br>
-    <a href="DUMMSMainPage.html"> DUMMS Home Page </a>
+    <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>
 

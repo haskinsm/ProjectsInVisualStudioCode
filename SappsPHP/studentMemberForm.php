@@ -52,6 +52,9 @@
                 if ( !is_numeric($studnum) ){
                     $studnumErr = "Invalid Student Number. Must contain numbers only.";
                 }
+                if( count_digit($studnum) > 10 || count_digit($studnum) < 5){  
+                    $studnumErr = "Invalid Student Number. Must be between 5 and 10 digits in length.";
+                }
             }
         
             if (empty($_POST["fulltime"])) {
@@ -102,6 +105,11 @@
                 
                  ##The code is now safe to be displayed on a page or inside an e-mail.
             return $data;
+        }
+
+        function count_digit($number)
+        {
+            return strlen((string) $number);
         }
 
     ?>
@@ -172,7 +180,7 @@
         </table>
     </form>
     <br><br><br><br><br>
-    <a href="DUMMSMainPage.html"> DUMMS Home Page </a>
+    <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>
 

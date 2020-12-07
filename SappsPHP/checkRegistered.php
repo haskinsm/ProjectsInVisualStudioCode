@@ -12,6 +12,10 @@ session_start();
             background-color: cadetblue;
             color: #ffffff;
         }
+        h3{
+            background-color: pink;
+            width: fit-content;
+        }
         h4{
             background-color: aquamarine;
             width: fit-content;
@@ -19,27 +23,24 @@ session_start();
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUMSS Ticket form</title>
+    <title>DUMMS Check Registered Member Form</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>DUMSS Ticket Form (2/2)</h2>
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Ticket Form(1/2): Check if Registered Member</h2> 
+    <h3>
+        If you are a registered member you will be brought to the final ticket form, if not you will be brought to <br>
+        the membership registration form where you will need to register first.
+    </h3>
     
     <?php
         // define variables and set to empty values
         $eventid = $studnum = $ticketnum = "";
         $eventidErr = $studnumErr = $ticketnumErr = "";
+        $registeredMember = False;
+        $unregisteredMember = False;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
-            if (empty($_POST["eventid"])) {
-                $eventidErr = "Event ID is required";
-            } else {
-                $eventid = test_input($_POST["eventid"]);
-                if ( strlen($eventid) != 4) { 
-                    $eventidErr = "EventId must be 4 chars long";
-                }
-            }
-     /*       
             if (empty($_POST["studnum"])) {
                 $studnumErr = "Student Number is required";
             } else {
@@ -47,35 +48,27 @@ session_start();
                 if ( !is_numeric($studnum) ){
                     $studnumErr = "Invalid Student Number. Must contain numbers only.";
                 }
-            }
-        
-            if (empty($_POST["ticketnum"])) {
-                $ticketnumErr = "Must enter the ticket number";
-            } else {
-                $ticketnum = test_input($_POST["ticketnum"]);
-                if ( !is_numeric($ticketnum) ){
-                    $ticketnumErr = "Invalid Ticket Number. Must contain numbers only.";
+                if( count_digit($studnum) > 10 || count_digit($studnum) < 5){  
+                    $studnumErr = "Invalid Student Number. Must be between 5 and 10 digits in length.";
                 }
-            } */
+            }
 
-            if( $eventidErr == "" && $studnumErr == "" && $ticketnumErr == "" ){
+            if( $studnumErr == "" ){
                 include ("detail.php"); 
+                
+                $_SESSION["studnum"] = $studnum; ##Creates and sets session variable
 
-                $dataSubmitted = True;
-                ## Might need to rewrite below as $sql 
-                $studnum =  $_SESSION["studnum"];
+                $queryMember  = "SELECT * FROM member WHERE dbstud_num = '$studnum'";
 
-                $q  = "INSERT INTO ticket (";
-                $q .= "dbticket_num, dbstudent_num, dbevent_id";
-                $q .= ") VALUES (";
-                $q .= "'$ticketnum', '$studnum', '$eventid')"; ##ticketNum is auto-incremeneted in db
-
-                $result = $db->query($q);
-
-                ## Now destroy session and session variables
-                unset ($_SESSION["studnum"]);
-                ## To unset all at once: $_SESSION = array();
-                session_destroy();
+                $result = $db->query($queryMember);
+                $total_num_rows = $result->num_rows;
+                if($total_num_rows > 0){
+                    ##found
+                    $registeredMember = True;
+                } else{
+                    ##NotFound
+                    $unregisteredMember = True;
+                }
 
             }
         }
@@ -95,40 +88,36 @@ session_start();
             return $data;
         }
 
+        function count_digit($number)
+        {
+            return strlen((string) $number);
+        }
+
     ?>
 
     <script language="javascript">	
         
-        if( "<?php echo $dataSubmitted ?>"){
-             document.location.replace("FormCompletion.htm");
+        if( "<?php echo  $registeredMember ?>"){
+             document.location.replace("ticketForm.php");
+        } else if( "<?php echo  $unregisteredMember ?>"){
+             document.location.replace("studentMemberForm.php");
         }
 
     </script>
 
 
-    <h4>Event Details (*Required Fields)</h4>
+    <h4>Membership Check (*Required Fields)</h4>
   
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <table>
             <tr>
-                <td>Event ID (Must be 4 chars only)*:</td>
-                <td><input type="text" name ="eventid" id = "eventid" size = 10 value="<?php echo $eventid;?>"></td>
-                <span class="error"> <?php if(!empty($eventidErr)){ echo "Error: *".$eventidErr."<br>";}?></span>
-            </tr>
- <!--           <tr>
                 <td>Student Number*:</td>
                 <td><input type="text" name ="studnum" id = "studnum" size = 10 value="<?php echo $studnum;?>"></td>
-                <span class="error"> <********** ?php if(!empty($studnumErr)){ echo "Error: *".$studnumErr."<br>";}?></span>
-            </tr> -->
-          <!--  <tr>
-                <td>Ticket Number*:</td>
-                <td><input type="text" name ="ticketnum" id = "ticketnum" size = 10 value="<?php echo $ticketnum;?>"></td>
-                <span class="error"> <************** ?php if(!empty($ticketnumErr)){ echo "Error: *".$ticketnumErr."<br>";}?></span>
+                <span class="error"> <?php if(!empty($studnumErr)){ echo "Error: *".$studnumErr."<br>";}?></span>
             </tr>
-    	  -->
             <tr>
                 <td>
-                    <input type="submit" name = "Submit" value = "Submit Form to database">
+                    <input type="submit" name = "Submit" value = "Submit Entry">
                 </td>
             </tr>
         </table>
