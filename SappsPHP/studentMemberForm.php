@@ -1,3 +1,16 @@
+<?php
+// Start the session
+session_start();
+
+$_SESSION = array(); ## To unset all at once
+session_destroy();
+## Destroys any existing Session, as had problems when clicked into from form completion page without this.
+?>
+
+<?php
+session_start(); ## This should result in a 'fresh' session
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +53,7 @@
                 $emailErr = "Email is required";
             } else {
                 $email = test_input($_POST["email"]);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { ## Checks if entered email is valid. This is a basic check and will not guarentee the email is valid
                     $emailErr = "Invalid email format";
                 }
             }
@@ -79,8 +92,6 @@
                 include ("detail.php"); 
 
                 $dataSubmitted = True;
-                ## Might need to rewrite below as $sql 
-
 
                 $q  = "INSERT INTO member (";
                 $q .= "dbstud_num, dbfull_name, dbemail, dbfulltime_stud, dbgender, dbschool";
@@ -88,6 +99,8 @@
                 $q .= "'$studnum', '$fullname', '$email', '$fulltimestud', '$gender', '$faculty')";
 
                 $result = $db->query($q);
+
+                $_SESSION["studnum"] = $studnum; ## Stores student number if new member wants to go on a buy a ticket for example
 
             }
         }
@@ -107,6 +120,7 @@
             return $data;
         }
 
+        ## Used to count digits in user entered stud num
         function count_digit($number)
         {
             return strlen((string) $number);
@@ -116,15 +130,15 @@
 
     <script language="javascript">	
         
+        // If data has been submitted user will be redirected to form completion page
         if( "<?php echo $dataSubmitted ?>"){ 
-             document.location.replace("FormCompletion.htm");
+             document.location.replace("FormCompletion.php");
         }
 
     </script>
 
     <h4>Member Details (*Required Fields)</h4>
-   <!-- Will need to post it to another php yoke that I will have to create
-        Might have to use a php if statement to see if have any erros if do stays in this doc, if not goes to other php doc -->
+  
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <table>
             <tr>

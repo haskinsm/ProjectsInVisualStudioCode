@@ -1,3 +1,11 @@
+<?php
+// Start the session
+session_start();
+
+$_SESSION = array(); ## To unset all at once
+session_destroy();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,17 +34,17 @@
         $eventidErr = $organstudnumErr = $titleErr = $priceErr = $locationErr = $dateErr = $capacityErr =$starttimeErr = $durationminsErr = "";
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        	if (empty($_POST["title"])) {
+        	if (empty($_POST["title"])) {   ## If empty => error
                 $titleErr = "Title of event is required";
             } else {
-                $title = test_input($_POST["title"]);
+                $title = test_input($_POST["title"]); ## Uses a test input function written below
             }
             
             if (empty($_POST["eventid"])) {
                 $eventidErr = "Event ID is required";
             } else {
                 $eventid = test_input($_POST["eventid"]);
-                if ( strlen($eventid) != 4) { 
+                if ( strlen($eventid) != 4) {  ## I want event id to be 4 chars long only
                     $eventidErr = "EventId must be 4 chars long";
                 }
             }
@@ -48,9 +56,20 @@
                 if ( !is_numeric($organstudnum) ){
                     $organstudnumErr = "Invalid Organizer Student Number. Must contain numbers only.";
                 }
-                if( count_digit($organstudnum) > 10 || count_digit($organstudnum) < 5){  
+                if( count_digit($organstudnum) > 10 || count_digit($organstudnum) < 5){   ## Did this as think most valid student numbers are between 5 and 10 digits long
                     $organstudnumErr = "Invalid Student Number. Must be between 5 and 10 digits in length.";
+                } else { ## Checks if user has entered in a registered member.
+                    
+                    include ("detail.php"); 
+
+                    $queryReg = "SELECT * FROM member WHERE dbstud_num = '$organstudnum'";
+                    $resultQ = $db->query($queryReg);
+
+                    if ($resultQ->num_rows <= 0){  ## If no row is found then will have zero rows so will enter here and error message will be recorded
+                        $organstudnumErr = "There is no registered DUMSS member with this ID.";
+                    }
                 }
+
             }
         
             if (empty($_POST["price"])) {
@@ -92,33 +111,19 @@
             } else {
                 $date = date('Y-m-d', strtotime($_POST["date"])); ##https://stackoverflow.com/questions/30243775/get-date-from-input-form-within-php
             }
-            ## Validate the INPUT.
-            ##$time = strtotime($_POST['dateFrom']);
-             ##       if ($time) {
-             ##           $new_date = date('Y-m-d', $time);
-              ##          echo $new_date;
-               ##     } else {
-                ##        echo 'Invalid Date: ' . $_POST['dateFrom'];
-                        // fix it.
-                ##    }
-
+            
             if (empty($_POST["starttime"])) {
                 $starttimeErr = "Must enter the start time of the event";
             } else {
-                ##if( strtotime($_POST["starttime"]) ){ ##Returns false if not valid input I think
-               ##     $starttime = date('H-i-s', strtotime($_POST["starttime"]));
-               ## } else {
-               ##     $starttimeErr = "Must enter valid time in format format HH-MM-SS. i.e. Enter 8:45pm as 20:45:00";
-               ## }
+                
                $starttime = $_POST["starttime"];
             }
 
+            ## Will only enter if no discovered errors
             if( $eventidErr == "" && $organstudnumErr == "" && $titleErr == "" && $priceErr == "" && $locationErr == "" && $dateErr == "" && $capacityErr == "" && $starttimeErr == "" && $durationminsErr == "" ){
                 include ("detail.php"); 
 
                 $dataSubmitted = True;
-                ## Might need to rewrite below as $sql 
-
 
                 $q  = "INSERT INTO event (";
                 $q .= "dbevent_id, dborganizer_id, dbprice, dbtitle, dbdate, dbcapacity, dblocation, dbstart_time, dbduration_mins";
@@ -134,7 +139,7 @@
             $data = trim($data); ##Strip unnecessary characters (extra space, tab, newline) from the user input data (with the PHP trim() function)
             $data = stripslashes($data); ##Remove backslashes (\) from the user input data (with the PHP stripslashes() function)
             $data = htmlspecialchars($data); ##For security reasons I think
-                ##When we use the htmlspecialchars() function; then if a user tries to submit the following in a text field:
+                ## When we use the htmlspecialchars() function; then if a user tries to submit the following in a text field:
                 ## <script>location.href('http://www.hacked.com')</script>
                 
                 ##- this would not be executed, because it would be saved as HTML escaped code, like this:
@@ -145,6 +150,7 @@
             return $data;
         }
 
+        ## Used to count digits of entered stud num
         function count_digit($number)
         {
             return strlen((string) $number);
@@ -153,17 +159,16 @@
     ?>
 
     <script language="javascript">	
-        
+        // Will enter below condition if data has been submitted to database and user will be redirected to form completion page
         if( "<?php echo $dataSubmitted ?>"){
-             document.location.replace("FormCompletion.htm");
+             document.location.replace("FormCompletion.php");
         }
 
     </script>
 
     <h4>Event Details (*Required Fields)</h4>
-   <!-- Will need to post it to another php yoke that I will have to create
-        Might have to use a php if statement to see if have any erros if do stays in this doc, if not goes to other php doc -->
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+  
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
         <table>
             <tr>
                 <td>Event ID (Must be 4 chars only)*:</td>
@@ -192,7 +197,7 @@
             </tr>
             <tr>
                 <td>Date of Event*:</td>
-                <td><input type="date" name ="date" id = "date" size = 10 value="<?php echo $date;?>"></td> <!-- value="phptags echo date('Y-m-d'); phpend" -->
+                <td><input type="date" name ="date" id = "date" size = 10 value="<?php echo $date;?>"></td> 
                 <span class="error"> <?php if(!empty($dateErr)){ echo "Error: *".$dateErr."<br>";}?></span>
             </tr>
             <tr>
@@ -218,6 +223,7 @@
             </tr>
         </table>
     </form>
+    
     <br><br><br><br><br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>

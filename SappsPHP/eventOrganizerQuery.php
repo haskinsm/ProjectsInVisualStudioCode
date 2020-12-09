@@ -12,6 +12,10 @@ session_start();
             background-color: cadetblue;
             color: #ffffff;
         }
+        h3{
+            background-color: pink;
+            width: fit-content;
+        }
         h4{
             background-color: aquamarine;
             width: fit-content;
@@ -19,15 +23,21 @@ session_start();
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUMSS Ticket form</title>
+    <title>DUMMS Event Query</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>DUMSS Ticket Form (2/2)</h2>
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
+    <h2>Event Organizer Query</h2> 
+    <h3>
+        Enter in an existing DUMSS Event ID and Event Organizer info will be displayed
+    </h3>
     
     <?php
         // define variables and set to empty values
-        $eventid = $studnum = $ticketnum = "";
-        $eventidErr = $studnumErr = $ticketnumErr = "";
+        $eventid = "";
+        $eventidErr = "";
+        $eventExists = False;
+        $eventNotExist = False;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
@@ -40,38 +50,27 @@ session_start();
                 }
             }
 
-            if( $eventidErr == "" && $studnumErr == "" && $ticketnumErr == "" ){
+            if( $eventidErr == "" ){
                 include ("detail.php"); 
 
-                $dataSubmitted = True;
-                
-                ## On first pass through this doc will enter here and session var will be set
-                if( $studnum > 0){
-                    $_SESSION["studnum"] = $studnum;
+                $queryEv = "SELECT dbfull_name, dbemail, dbtitle, dbdate FROM event, member ";
+                $queryEv .= "WHERE dbstud_num = dborganizer_id && dbevent_id = '$eventid'"; 
+                  ## Due to the way data is entered the situation would never arise where a LEFT or RIGHT join would function any different
+                  ## to the EQUI-JOIN implemented here
+
+                $resultQuery = $db->query($queryEv);
+                if ($resultQuery->num_rows > 0){
+                    $eventExists = True;
+                    $row = $resultQuery -> fetch_assoc();
+                    $_SESSION["full_name"] = $row["dbfull_name"];
+                    $_SESSION["email"] = $row["dbemail"];
+                    $_SESSION["title"] = $row["dbtitle"];
+                    $_SESSION["date"] = $row["dbdate"];
+            
+                } else{
+                    $eventNotExist = True;
                 }
-                $studentNumberCurrentSession = $_SESSION["studnum"]; ## On Second pass it becomes essential that session var is used instead of $studnum
-                ## Need this as can't directly put $_SESSION["studnum"] in below SQL statement
 
-                $q  = "INSERT INTO ticket (";
-                $q .= "dbticket_num, dbstudent_num, dbevent_id";
-                $q .= ") VALUES (";
-                $q .= "'$ticketnum', '$studentNumberCurrentSession', '$eventid')"; ##ticketNum is auto-incremeneted in db, its value here doesnt matter (its 0 or "")
-
-                $result = $db->query($q);
-
-                ## Below code is used to give the user their ticket number in following page. 
-                ## The most recently generated ticket num for that student id is returned
-                $myQuery = "SELECT * FROM ticket WHERE dbstudent_num = '$studentNumberCurrentSession'";
-                $resultMyQuery = $db->query($myQuery);
-               
-                $lastTicketNum = 0;
-                if ($resultMyQuery->num_rows > 0){
-                  while($row = $resultMyQuery -> fetch_assoc()){ ##Purpose of this loop is to return most recently generated ticket num relating to a studnum
-                      $lastTicketNum = $row["dbticket_num"];
-                  }
-                }
-                $_SESSION["ticket_num"] = $lastTicketNum;
-               
             }
         }
 
@@ -93,14 +92,16 @@ session_start();
     ?>
 
     <script language="javascript">	
-        // Redirects userr to form completion page where ticket number is issued
-        if( "<?php echo $dataSubmitted ?>"){
-             document.location.replace("FormCompletion.php");
+        
+        if( "<?php echo $eventExists ?>" ){
+             document.location.replace("eventOrganizerInfo.php");
+        } else if( "<?php echo  $eventNotExist; ?>" ){
+            document.write("<h4> Error: Please Enter in an existing Event. To see a list of events go to the home page and select display events link.")
         }
+
     </script>
 
-
-    <h4>Event Details (*Required Fields)</h4>
+    <h4>(*Required Fields)</h4>
   
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <table>
@@ -111,7 +112,7 @@ session_start();
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name = "Submit" value = "Submit Form to database">
+                    <input type="submit" name = "Submit" value = "Submit Entry">
                 </td>
             </tr>
         </table>
