@@ -2,9 +2,9 @@
 module Ex04 where
 
 name, idno, username :: String
-name      =  "Myself, Me"  -- replace with your name
-idno      =  "01234567"    -- replace with your student id
-username  =  "memyselfi"   -- replace with your TCD username
+name      =  "Michael Haskins"  -- replace with your name
+idno      =  "18323076"    -- replace with your student id
+username  =  "haskinsm"   -- replace with your TCD username
 
 declaration -- do not modify this
  = unlines
