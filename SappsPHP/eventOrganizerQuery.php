@@ -23,13 +23,14 @@ session_start();
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUMMS Event Query</title>
+    <title>DUMMS Event Organizer Query</title>
 </head>
 <body>
     <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
-    <h2>Event Organizer Query</h2> 
+    <h2>Event Organizer Contact Information Query</h2> 
     <h3>
-        Enter in an existing DUMSS Event ID and Event Organizer info will be displayed
+        Enter in an existing DUMSS Event ID and Event Organizer info will be displayed. <br>
+        You can check the DUMSS Event Table to find the appropriate Event ID<a href="https://macneill.scss.tcd.ie/~haskinsm/displayEventTable.php"> here.</a>
     </h3>
     
     <?php
@@ -56,7 +57,7 @@ session_start();
                 $queryEv = "SELECT dbfull_name, dbemail, dbtitle, dbdate FROM event, member ";
                 $queryEv .= "WHERE dbstud_num = dborganizer_id && dbevent_id = '$eventid'"; 
                   ## Due to the way data is entered the situation would never arise where a LEFT or RIGHT join would function any different
-                  ## to the EQUI-JOIN implemented here
+                  ## to the EQUI-JOIN implemented here (as my forms don't allow for nulls).
 
                 $resultQuery = $db->query($queryEv);
                 if ($resultQuery->num_rows > 0){

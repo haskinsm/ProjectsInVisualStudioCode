@@ -67,7 +67,11 @@
     </table>
 
     <br><br><br><br><br>
+    <a href="eventCountQuery.php"> Tickets Sold to Event Query</a> <br>
+    <a href="eventOrganizerQuery.php"> Contact Event Organizer Query</a> <br>
+    <a href="cancelTicket.php"> Cancel Ticket Query</a> <br> <br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
+
 </body>
 </html>
 

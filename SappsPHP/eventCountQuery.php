@@ -28,7 +28,8 @@ session_start();
 <body>
     <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Event Query</h2> 
     <h3>
-        Enter in an existing DUMSS Event ID and Event info will be displayed
+        Enter in an existing DUMSS Event ID and Event info will be displayed. <br>
+        You can check the DUMSS Event Table to find the appropriate Event ID<a href="https://macneill.scss.tcd.ie/~haskinsm/displayEventTable.php"> here.</a>
     </h3>
     
     <?php

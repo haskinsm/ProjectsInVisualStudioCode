@@ -35,7 +35,8 @@ session_start();
         <br>
         Please contact the event organizer <a href="eventOrganizerQuery.php">here</a> to find out if you are entitled to a refund and wait for their response before cancelling.
         <br>
-        If you would like to procceed please enter in an a valid Student Number and the Event ID you want to cancel your ticket to.
+        If you would like to procceed please enter in an a valid Student Number and the Event ID you want to cancel your ticket to<br>
+        You can check the DUMSS Event Table to find the appropriate Event ID<a href="https://macneill.scss.tcd.ie/~haskinsm/displayEventTable.php"> here.</a>
     </h3>
     
     <?php
