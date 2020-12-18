@@ -20,13 +20,19 @@ session_destroy();
             background-color: aquamarine;
             width: fit-content;
         }
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUMMS Event form</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>DUMMS Event Form</h2>
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193">
+
+    <h2>DUMMS Event Form <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2>
     
     <?php
         // define variables and set to empty values
@@ -224,7 +230,7 @@ session_destroy();
         </table>
     </form>
     
-    <br><br><br><br><br>
+    <br><br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>

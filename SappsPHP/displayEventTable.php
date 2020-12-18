@@ -8,13 +8,9 @@
             background-color: cadetblue;
             color: #ffffff;
         }
-        h3{
-            background-color: pink;
-            width: fit-content;
-        }
-        h4{
-            background-color: aquamarine;
-            width: fit-content;
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
         }
     </style>
     <meta charset="UTF-8">
@@ -22,7 +18,15 @@
     <title>DUMMS Event Table</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Event Table</h2> 
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
+    
+    <h2>
+        Event Table
+        <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span>
+        <span class="tab"> <a href="eventCountQuery.php"> Tickets Sold to Event Query</a> </span>
+        <span class="tab"> <a href="eventOrganizerQuery.php"> Contact Event Organizer Query</a> </span>
+        <span class="tab"> <a href="cancelTicket.php"> Cancel Ticket Query</a> </span>
+    </h2> 
 
     <table>
         <tr> 
@@ -66,7 +70,7 @@
         ?>
     </table>
 
-    <br><br><br><br><br>
+    <br><br>
     <a href="eventCountQuery.php"> Tickets Sold to Event Query</a> <br>
     <a href="eventOrganizerQuery.php"> Contact Event Organizer Query</a> <br>
     <a href="cancelTicket.php"> Cancel Ticket Query</a> <br> <br>

@@ -9,13 +9,9 @@
             background-color: cadetblue;
             color: #ffffff;
         }
-        h3{
-            background-color: pink;
-            width: fit-content;
-        }
-        h4{
-            background-color: aquamarine;
-            width: fit-content;
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
         }
     </style>
     <meta charset="UTF-8">
@@ -23,7 +19,9 @@
     <title>DUMMS Ticket Table</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Ticket Table</h2> 
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
+    
+    <h2>Ticket Table <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2> 
 
     <table>
         <tr>
@@ -55,7 +53,7 @@
         ?>
     </table>
 
-    <br><br><br><br><br>
+    <br><br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>

@@ -20,14 +20,19 @@ session_start();
             background-color: aquamarine;
             width: fit-content;
         }
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUMMS Event Query</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Event Query</h2> 
-
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
+    
+    <h2>Event Query <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2> 
 
     <h4>Please Find Event info below:</h4>
   
@@ -58,7 +63,7 @@ session_start();
             </tr>
 
         </table>
-    <br><br><br><br><br>
+    <br><br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>

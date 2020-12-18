@@ -20,13 +20,20 @@ session_start();
             background-color: aquamarine;
             width: fit-content;
         }
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUMMS Check Registered Member Form</title>
 </head>
 <body>
-    <img src="dumms.png" alt="DUMMS" height="136" width = "193"> <h2>Ticket Form(1/2): Check if Registered Member</h2> 
+    <img src="dumms.png" alt="DUMMS" height="136" width = "193">
+    
+    <h2>Ticket Form(1/2): Check if Registered Member  <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2> 
+
     <h3>
         If you are a registered member you will be brought to the final ticket form, if not you will be brought to <br>
         the membership registration form where you will need to register first.
@@ -122,7 +129,7 @@ session_start();
             </tr>
         </table>
     </form>
-    <br><br><br><br><br>
+    <br><br><br>
     <a href="DUMSSMainPage.php"> DUMSS Home Page </a>
 </body>
 </html>
