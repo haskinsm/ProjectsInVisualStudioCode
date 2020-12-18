@@ -23,6 +23,7 @@
     <h2>
         Event Table
         <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span>
+        <span class="tab"> <a href="ticketForm.php"> DUMSS Ticket Form </a> </span>
         <span class="tab"> <a href="eventCountQuery.php"> Tickets Sold to Event Query</a> </span>
         <span class="tab"> <a href="eventOrganizerQuery.php"> Contact Event Organizer Query</a> </span>
         <span class="tab"> <a href="cancelTicket.php"> Cancel Ticket Query</a> </span>
@@ -71,6 +72,7 @@
     </table>
 
     <br><br>
+    <a href="ticketForm.php"> DUMSS Ticket Form </a> <br> <br>
     <a href="eventCountQuery.php"> Tickets Sold to Event Query</a> <br>
     <a href="eventOrganizerQuery.php"> Contact Event Organizer Query</a> <br>
     <a href="cancelTicket.php"> Cancel Ticket Query</a> <br> <br>

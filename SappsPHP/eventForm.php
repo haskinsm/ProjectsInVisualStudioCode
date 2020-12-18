@@ -24,6 +24,11 @@ session_destroy();
             display:inline-block; 
             margin-left: 40px; 
         }
+        .error {
+            background-color: red;
+            width: fit-content;
+            font-weight: bold;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +77,7 @@ session_destroy();
                     $resultQ = $db->query($queryReg);
 
                     if ($resultQ->num_rows <= 0){  ## If no row is found then will have zero rows so will enter here and error message will be recorded
-                        $organstudnumErr = "There is no registered DUMSS member with this ID.";
+                        $organstudnumErr = "There is no registered DUMSS member with the entered Student Number. Please register first before creating an event";
                     }
                 }
 
@@ -184,7 +189,7 @@ session_destroy();
             <tr>
                 <td>Organizer Student Number*:</td>
                 <td><input type="text" name ="organstudnum" id = "organstudnum" size = 10 value="<?php echo $organstudnum;?>"></td>
-                <span class="error"> <?php if(!empty($organstudnumErr)){ echo "Error: *".$organstudnumErr."<br>";}?></span>
+                <span class="error"> <?php if(!empty($organstudnumErr)){ echo "Error: *".$organstudnumErr."<a href='studentMemberForm.php'> here.</a>"."<br>";}?></span> <!-- Guides user to register as a member if not already -->
             </tr>
             <tr>
                 <td>Ticket Price*:</td>

@@ -12,6 +12,10 @@ session_start();
             background-color: cadetblue;
             color: #ffffff;
         }
+        h4{
+            background-color: aquamarine;
+            width: fit-content;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,13 +25,15 @@ session_start();
     <img src="dumms.png" alt="DUMMS" height="136" width = "193">
     <h2>DUMSS Completion Form Page</h2>
 
-    <h4> Thank you for completing the form! The data has been sent to the relevant DUMMS database.</h4>
     <h4>  
         <?php
             if( !empty($_SESSION["ticket_num"]) ){ 
                 echo "Thank you for ordering a ticket! Your ticket number is ";
                 echo  $_SESSION["ticket_num"];
-                echo ". Please keep a record of this number"; }
+                echo ". Please keep a record of this number";
+             } else{
+                 echo "Thank you for completing the form! The data has been sent to the relevant DUMMS database.";
+             }
                 unset ($_SESSION["ticket_num"]);
         ?>
     </h4>
@@ -38,14 +44,12 @@ session_start();
         <li><a href="studentMemberForm.php"> Student Member Registration Form </a> </li>
         <li><a href="eventForm.php"> Event Creation Form </a></li>
         <li><a href="ticketForm.php"> Ticket Form(2/2)* </a></li> 
-        *(If you have just completed the ticket or member registration form and <br>
-        want to order a ticket for the SAME MEMBER (i.e. Same Student Number) please click the 'Ticket Form' link <br>
-        which will take you to the second ticket Form where you only need to enter the event ID, you will not need to <br>
-        complete the first ticket form as your student number is currently saved in this session)
+        *If you want to order a ticket for the member with student num: <?php echo $_SESSION["studnum"]?> please follow this link. 
+        <br>
+        If there is no student number saved in this current session the above link will still redirect you to the correct page.
         <br>
         <li><a href="checkRegistered.php"> Ticket Form (1/2)**</a></li> 
-        **If you have just completed the Event Form and want to register for a ticket or want to get a ticket for ANOTHER MEMBER (i.e. Different Student Number) <br>
-        please click the following link: <br>
+        **If you would like to order a ticket for another member please follow this link.
         <br>  
     </OL>
 </body>

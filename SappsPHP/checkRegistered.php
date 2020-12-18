@@ -24,6 +24,11 @@ session_start();
             display:inline-block; 
             margin-left: 40px; 
         }
+        .error {
+            background-color: red;
+            width: fit-content;
+            font-weight: bold;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

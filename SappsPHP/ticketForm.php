@@ -20,6 +20,11 @@ session_start();
             display:inline-block; 
             margin-left: 40px; 
         }
+        .error {
+            background-color: red;
+            width: fit-content;
+            font-weight: bold;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,6 +48,19 @@ session_start();
                 $eventid = test_input($_POST["eventid"]);
                 if ( strlen($eventid) != 4) { 
                     $eventidErr = "EventId must be 4 chars long";
+                }
+            }
+
+            if( $eventidErr == "" ){ ## Check if event exists with entered event id
+                include ("detail.php"); 
+
+                $queryEvent  = "SELECT * FROM event WHERE dbevent_id = '$eventid'";
+
+                $resultThisQuery = $db->query($queryEvent);
+                if ($resultThisQuery->num_rows > 0){
+                    ## $eventExists = True;                 
+                } else{
+                    $eventidErr = "No event exists with the event ID you have entered. Please check the ";
                 }
             }
 
@@ -103,10 +121,20 @@ session_start();
         if( "<?php echo $dataSubmitted ?>"){
              document.location.replace("FormCompletion.php");
         }
+        // If user has entered from the display event table they skip the first form so may have no registered 
+        // student num in this session.
+        // If this is the case,this condition will redirect them to the first form where it is checked if 
+        // they are a registered member and the stud num is taken in and stored.
+        if( "<?php echo $studnum ?>" == "" && "<?php echo $_SESSION["studnum"] ?>" == ""){ 
+             document.location.replace("checkRegistered.php");
+        }
     </script>
 
-
-    <h4>Event Details (*Required Fields)</h4>
+    <h4>  
+        You can check the DUMSS Event Table to find the appropriate Event ID<a href="displayEventTable.php"> here.</a>
+        <br>        
+        Event Details (*Required Fields)
+    </h4>
   
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <table>

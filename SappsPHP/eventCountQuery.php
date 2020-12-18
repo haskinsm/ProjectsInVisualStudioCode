@@ -32,7 +32,7 @@ session_start();
 <body>
     <img src="dumms.png" alt="DUMMS" height="136" width = "193"> 
     
-    <h2>Event Query <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2> 
+    <h2>Tickets Sold to Event Query <span class="tab"> <a href="DUMSSMainPage.php"> DUMSS Home Page </a> </span> </h2> 
 
     <h3>
         Enter in an existing DUMSS Event ID and Event info will be displayed. <br>
