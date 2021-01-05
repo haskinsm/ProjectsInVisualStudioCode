@@ -45,7 +45,14 @@ ins k d (Branch left right key value)
 
 -- Implement:
 lkp :: (Monad m, Ord k) => BinTree k d -> k -> m d
-lkp _ _ = error "lkp NYI"
+lkp Empty k = fail ( "Couldn't find beacuse the tree was empty")
+lkp (Leaf key value) k 
+  | k == key = return value
+  | otherwise = fail ( "Couldn't find key in tree" )
+lkp (Branch left right key value) k
+  | k < key  = lkp left k
+  | k > key  = lkp right k
+  | k == key = return value
 
 -- Part 3 : Tail-Recursive Statistics
 
