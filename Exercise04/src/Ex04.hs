@@ -80,15 +80,20 @@ twobirdsonestone listsum sumofsquares len
 -}
 getLengthAndSums :: [Double] -> (Int,Double,Double)
 getLengthAndSums ds = getLASs init1 init2 init3 ds
-init1 = error "init1 not yet defined"
-init2 = error "init2 not yet defined"
-init3 = error "init3 not yet defined"
+init1 = 0
+init2 = 0.0
+init3 = 0.0
 
 {-
   Implement the following tail-recursive  helper function
 -}
 getLASs :: Int -> Double -> Double -> [Double] -> (Int,Double,Double)
-getLASs _ _ _ _ = error "getLASs NYI"
+getLASs a b c [] = (a,b,c)
+getLASs a b c (x:xs) = do
+    let init1 = a + 1
+    let init2 = b + x
+    let init3 = c + x*x
+    getLASs init1 init2 init3 xs
 
 -- Final Hint: how would you use a while loop to do this?
 --   (assuming that the [Double] was an array of double)
