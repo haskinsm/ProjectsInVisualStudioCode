@@ -31,7 +31,15 @@ data BinTree k d
 
 -- Implement:
 ins :: Ord k => k -> d -> BinTree k d -> BinTree k d
-ins _ _ _  = error "ins NYI"
+ins k d Empty  = Leaf k d
+ins k d (Leaf key value)
+      | k < key  = Branch (Leaf k d) (Empty) key value
+      | k > key  = Branch (Empty) (Leaf k d) key value
+      | k == key = Leaf k d
+ins k d (Branch left right key value)
+      | k < key  = Branch (ins k d left) right key value
+      | k > key  = Branch left (ins k d right) key value
+      | k == key = Branch left right k d
 
 -- Part 2 : Tree Lookup -------------------------------
 
