@@ -90,8 +90,8 @@ init3 = 0.0
 getLASs :: Int -> Double -> Double -> [Double] -> (Int,Double,Double)
 getLASs a b c [] = (a,b,c)
 getLASs a b c (x:xs) = do
-    let init1 = a + 1
-    let init2 = b + x
+    let init1 = a + 1 --The inits above are not in scope here I think, they are initially passed in and then the function is called again below with the new updated inits which will be updated again and so on 
+    let init2 = b + x --The arguments are storing the changes (think of them as the updated local variables that you'd have in a while loop)
     let init3 = c + x*x
     getLASs init1 init2 init3 xs
 
