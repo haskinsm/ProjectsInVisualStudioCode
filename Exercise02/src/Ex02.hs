@@ -59,7 +59,7 @@ v42 = Val 42 ; j42 = Just v42
 
 --Var is of type String and Val of type Double
 
-eval :: EDict -> Expr -> Either String Double --Might need to change the last to Maybe Double, but returns string on occasion so think its ok as is
+eval :: EDict -> Expr -> Either String Double 
 eval d (Var a) = find d a --Need Dict here
 eval _ (Val a) = Right a --Do not need the dict 
 

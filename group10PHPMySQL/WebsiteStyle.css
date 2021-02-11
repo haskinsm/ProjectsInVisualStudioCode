@@ -1,0 +1,26 @@
+/*
+    Purpose of this Script: Universal Style of website
+    Written by: Michael H
+    last updated: 11/02/21
+*/
+
+body { 
+    background-color: plum; /* Colour of background*/
+    color: rgb(119, 17, 252); /* Colour of body text*/
+    background-image: 
+        linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+        ),
+        url("images/partyRental.jpg"); /* image background */
+    background-repeat: no-repeat; /* image only used once */
+    background-size: cover;
+    color: white;
+    font-size: 20px;
+}
+h1{
+    color: white; /* Colour of text*/
+}
+h2{
+    color: white; /* Colour of text*/
+}

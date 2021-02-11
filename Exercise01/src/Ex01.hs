@@ -54,7 +54,7 @@ and reports the length of the prefix they have in common.
 
 -}
 commonLen :: Eq a => [a] -> [a] -> Int
-commonLen [] [] = 0
+commonLen [] [] = 0 -- better _ [] then below [] _
 commonLen [] (y:ys) = 0
 commonLen (x:xs) [] = 0
 commonLen (x:xs) (y:ys) | x == y = 1 + commonLen xs ys
@@ -98,3 +98,14 @@ runs xs = group xs  --Makes use of the Haskell prelude function 'group'
 {- check Hoogle when you're looking for a function 
    that might already exist -> can search by type, so in this case 
    search Eq a => [a] -> [[a]] -}
+
+{-
+runs [] = []
+runs (x1:x2:xs)
+       | x1 == x2 = [x1 : runs (x2:xs)]
+       | otherwise = [x1] : [runs(x2:xs)]
+runs [x1,x2]
+       | x1 == x2 = [x1:x2]
+       | otherwise = [x1] : [x2]
+runs [x1] = [x1]
+-}
