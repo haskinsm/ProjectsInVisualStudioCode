@@ -1,7 +1,7 @@
 /*
     Purpose of this Script: Universal Style of website
     Written by: Michael H
-    last updated: 11/02/21
+    last updated: Michael 12/02/21
 */
 
 body { 
@@ -9,7 +9,7 @@ body {
     color: rgb(119, 17, 252); /* Colour of body text*/
     background-image: 
         linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
-            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
             rgba(0, 0, 0, 0.5)
         ),
         url("images/partyRental.jpg"); /* image background */
