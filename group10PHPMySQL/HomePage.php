@@ -24,11 +24,13 @@
         crockery, cutlery, linens and also barbecues, gazebos, marquees etc. <br>
     </p>
 
+    <!-- 
     <h2> Learn about our business </h2>
 
     <p> 
         We are a new business that values customer satisfaction very highly and are quality focused. The owners of DPH are Conor and Cathy Kelly.
     </p>
+    -->
 
 </body>
 </html>
