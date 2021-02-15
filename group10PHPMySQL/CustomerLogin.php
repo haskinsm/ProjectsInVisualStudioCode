@@ -14,7 +14,6 @@
             style for something should be done in line like so: E.G:   <h1 style="color:blue;text-align:center;">  This is a heading </h1>       -->
 </head>
 <body>
-    <h1> Dublin Party Hire </h1>
 
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
 </body>

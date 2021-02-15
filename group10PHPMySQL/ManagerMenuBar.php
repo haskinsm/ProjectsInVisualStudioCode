@@ -1,5 +1,5 @@
 <!-- 
-    Purpose of Script: Universal Menu Bar to be used in every page
+    Purpose of Script: Manager Menu Bar to be used in every manager page
     Written by: Michael H
     last updated: Michael 12/02/21
 -->
@@ -7,18 +7,18 @@
 <!-- Was neccesary to have the below css in this file as makes reference to topnav class which is created in this file and is not in scope if css
      were to be included in the websiteStyle css file -->
 
-<style>
+     <style>
     /* 
        Reference : https://www.w3schools.com/howto/howto_js_topnav.asp
         Add a black background color to the top navigation 
     */
-    .topnav {
-        background-color: #333;
+    .topnavM {
+        background-color: lightseagreen;
         overflow: hidden;
     }
     
     /* Style the links inside the navigation bar */
-    .topnav a {
+    .topnavM a {
         float: left;
         color: #f2f2f2;
         text-align: center;
@@ -28,7 +28,7 @@
     }
     
     /* Change the color of links on hover */
-    .topnav a:hover {
+    .topnavM a:hover {
         background-color: #ddd;
         color: black;
     }
@@ -44,21 +44,14 @@
     
 </style>
 
-<!-- h1 contains the firms name and company logo -->
-<h1>  
-        Dublin Party Hire 
-        <img src="images/CompanyLogo.jpg" alt="Logo" style ="float:left;width:86px;height:86px;">
-        
-</h1>
 
-<br>
-
-<div class="topnav">
+<div class="topnavM">
   <!-- <a class="active" href="HomePage.php">Home</a>              This was commented out as having a diff colour for active tab reduces site maintability-->
-  <a href="HomePage.php">Home</a>
-  <a href="ProductsAndPricing.php"> Products & Pricing  </a>  
-  <a href="CustomerLogin.php"> Customer Login  </a> 
-  <a href="StaffLogin.php"> Staff Login </a>
-  <a href="ManagementLogin.php"> Manager Login </a>
-  <a href="ContactUs.php"> Contact us  </a> 
+  <a href="ManagerHomePage.php"> Manager Home </a>
+  <a href="DeliveryPickupSched.php"> Delivery & Pick up schedule </a>  
+  <a href="CustomerLogin.php"> Order Check  </a> 
+  <a href="StaffLogin.php"> Rental Frequency </a>
+  <a href="ManagementLogin.php"> Sales revenue by product </a>
+  <a href="ContactUs.php"> Employee Hours worked  </a> 
+  <a href="ContactUs.php"> Best Customers  </a> 
 </div>

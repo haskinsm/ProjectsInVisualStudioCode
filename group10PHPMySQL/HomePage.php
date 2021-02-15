@@ -14,8 +14,7 @@
 
 </head>
 <body>
-    <h1> Dublin Party Hire </h1>
-
+  
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
 
     <p> 

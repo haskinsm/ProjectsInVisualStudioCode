@@ -12,7 +12,7 @@ body {
             rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
             rgba(0, 0, 0, 0.5)
         ),
-        url("images/partyRental.jpg"); /* image background */
+        url("images/Background4.jpg"); /* image background */
     background-repeat: no-repeat; /* image only used once */
     background-size: cover;
     color: white;
@@ -20,7 +20,10 @@ body {
 }
 h1{
     color: white; /* Colour of text*/
+    padding: 5px; /* increase spaces around header */
+    margin-left: 50px; /* Indents it so its not right in the top left corner */
 }
 h2{
     color: white; /* Colour of text*/
 }
+

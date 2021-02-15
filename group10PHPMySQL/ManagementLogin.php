@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="WebsiteStyle.css"> <!-- All CSS should be added to the WebsiteStyle.css file and then it will be imported here. If want a unique 
             style for something should be done in line like so: E.G:   <h1 style="color:blue;text-align:center;">  This is a heading </h1>       -->
     <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
     form {border: 3px solid #f1f1f1;} /* Formatting for form */
 
     /* Format for the input fields */
@@ -88,14 +87,23 @@
 
 
 <body>
-    <h1> Dublin Party Hire </h1>
 
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
 
     <h2>Login Form</h2>
 
     <!-- Below is the code for the input form -->
-    <form action="/action_page.php" method="post"> 
+    <form action="ManagerHomePage.php" > <!-- Currently does not check if valid password & email combo, just redirects as long as something is entered -->
+    <!--
+        Will prob have to do something like 
+        <form action = "myFunction()" >
+        <script>
+        function myFunction() {
+            ***Code to check if password and emial belongs to a valid user***
+            window.location.href="ManagerHomePage.php";
+        }
+        </script>
+    -->
     <div class="imgcontainer">
         <img src="images/ManagerAvatar.jpg" alt="Avatar" class="avatar"> 
     </div>
@@ -107,8 +115,8 @@
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="psw" required>
             
-        <button type="submit">Login</button>
-        <span class="psw"> <a href="#" >Forgot password?</a></span>   <!-- Can ask if they want this, if do will need to add a link to a page where they can enter their manager id and then have their password emailed to them by a malito link (The email one) ***************************************************-->
+        <button type="submit" >Login</button>
+        <span class="psw"> <a href="##" >Forgot password?</a></span>   <!-- Can ask if they want this, if do will need to add a link to a page where they can enter their manager id and then have their password emailed to them by a malito link (The email one) ***************************************************-->
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
