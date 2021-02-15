@@ -110,7 +110,7 @@
             
                 //Access the SQL database
                 // This will only get results for deliveries
-                $sql = "SELECT Business_Name, Business_Address, Eircode, Business_Phone, Bookings.Booking_ID, Event_Start_Time, Product_Name, Product_QTY FROM Customers, Bookings, Order_Items, Products Where Event_Start_Date = '2021-02-24' && Customers.Business_ID = Bookings.Business_ID && Bookings.Booking_ID = Order_Items.Booking_ID && Order_Items.Product_ID = Products.Product_ID;";
+                $sql = "SELECT Business_Name, Business_Address, Eircode, Business_Phone, Bookings.Booking_ID, Event_Start_Time, Product_Name, Product_QTY FROM Customers, Bookings, Order_Items, Products Where Event_Start_Date ='$date'&& Customers.Business_ID = Bookings.Business_ID && Bookings.Booking_ID = Order_Items.Booking_ID && Order_Items.Product_ID = Products.Product_ID;";
                 $result = mysqli_query($link,$sql); 
                 // SELECT Business_Name, Business_Address, Eircode, Business_Phone, Bookings.Booking_ID, Event_Start_Time, Product_Name, Product_QTY FROM Customers, Bookings, Order_Items, Products Where Event_Start_Date = '2021-02-24' && Customers.Business_ID = Bookings.Business_ID && Bookings.Booking_ID = Order_Items.Booking_ID && Order_Items.Product_ID = Products.Product_ID
                 
@@ -148,7 +148,7 @@
 
 
                   // This will only get results for collections
-                  $sqlQ2 = "SELECT Business_Name, Business_Address, Eircode, Business_Phone, Bookings.Booking_ID, Event_Start_Time, Product_Name, Product_QTY FROM Customers, Bookings, Order_Items, Products Where Event_End_Date = '2021-02-24' && Customers.Business_ID = Bookings.Business_ID && Bookings.Booking_ID = Order_Items.Booking_ID && Order_Items.Product_ID = Products.Product_ID;";
+                  $sqlQ2 = "SELECT Business_Name, Business_Address, Eircode, Business_Phone, Bookings.Booking_ID, Event_Start_Time, Product_Name, Product_QTY FROM Customers, Bookings, Order_Items, Products Where Event_End_Date = '$date' && Customers.Business_ID = Bookings.Business_ID && Bookings.Booking_ID = Order_Items.Booking_ID && Order_Items.Product_ID = Products.Product_ID;";
                   $result2 = mysqli_query($link,$sqlQ2); 
                 
                   //Code adapted from Aideen's photo
@@ -182,6 +182,7 @@
                       echo '</tr>';
                       $previousBookingID = $currentBookingID;
                   }
+
             }
 
 
