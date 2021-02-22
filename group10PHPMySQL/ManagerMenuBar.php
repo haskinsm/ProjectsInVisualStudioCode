@@ -1,7 +1,8 @@
 <!-- 
     Purpose of Script: Manager Menu Bar to be used in every manager page
     Written by: Michael H
-    last updated: Michael 12/02/21
+    last updated: Michael 12/02/21, Jason 19/2/21, Jason 20/2/21, Michael 20/2/21
+    Added new links and removed the holidays, added new links, added create & delete acc links
 -->
 
 <!-- Was neccesary to have the below css in this file as makes reference to topnav class which is created in this file and is not in scope if css
@@ -48,10 +49,16 @@
 <div class="topnavM">
   <!-- <a class="active" href="HomePage.php">Home</a>              This was commented out as having a diff colour for active tab reduces site maintability-->
   <a href="ManagerHomePage.php"> Manager Home </a>
+  <a href="EmployeeRostering.php"> Employee Rostering </a>
   <a href="DeliveryPickupSched.php"> Delivery & Pick up schedule </a>  
-  <a href="CustomerLogin.php"> Order Check  </a> 
-  <a href="StaffLogin.php"> Rental Frequency </a>
-  <a href="ManagementLogin.php"> Sales revenue by product </a>
-  <a href="ContactUs.php"> Employee Hours worked  </a> 
-  <a href="ContactUs.php"> Best Customers  </a> 
+  <a href="OrderCheck.php"> Order Check  </a> 
+  <a href="RentalFreq.php"> Rental Frequency </a>
+  <a href="SalesRevenue.php"> Sales revenue by product </a>
+  <a href="EmployeeHours.php"> Employee Hours worked  </a>
+  <a href="BestCustomers.php"> Best Customers  </a> 
+  <a href="#"> Create New Manager Account  </a> 
+  <a href="#"> Create New Staff Account  </a> 
+  <a href="#"> Delete Manager or Staff Account  </a> 
+  <a href="#"> Log Out </a>
+
 </div>

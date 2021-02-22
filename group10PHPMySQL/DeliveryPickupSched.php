@@ -1,5 +1,5 @@
 <!-- 
-    Purpose of Script: Delivery Pick up schedule enter date page
+    Purpose of Script: Delivery Pick up schedule enter date and then display everything for that day
     Written by: Michael H
     last updated: Michael 15/02/21
 -->
@@ -18,7 +18,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Choose Date of Delivery/Collection Schedule</title>
+    <title> Delivery/Collection Schedule </title>
     <link rel="stylesheet" href="WebsiteStyle.css"> <!-- All CSS should be added to the WebsiteStyle.css file and then it will be imported here. If want a unique 
             style for something should be done in line like so: E.G:   <h1 style="color:blue;text-align:center;">  This is a heading </h1>       -->
     <style>
@@ -159,6 +159,7 @@
                       
                       $currentBookingID = $row["Booking_ID"];
   
+                      // This if block ensures customer details are not repeated multiple times for each booking
                       if( $previousBookingID != $currentBookingID){
                           echo '<td>'.$row["Business_Name"].'</td>';
                           echo '<td>'.$row["Business_Address"].'</td>';
@@ -167,7 +168,7 @@
                           echo '<td>'.$currentBookingID.'</td>';
                           echo '<td> Collection </td>';
                           echo '<td>'.$row["Event_Start_Time"].'</td>';
-                      } else {
+                      } else {   
                           echo '<td></td>';
                           echo '<td></td>';
                           echo '<td></td>';

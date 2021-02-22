@@ -1,7 +1,8 @@
 <!-- 
     Purpose of Script: Contact us page
     Written by: Michael H
-    last updated: Michael 12/02/21
+    last updated: Michael 12/02/21, Michael 19/02/21
+    Added malito link to my own email address
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -16,5 +17,15 @@
 <body>
 
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
+
+    <br>
+
+    <h1>
+        If you have any queries please 
+        <a href="mailto:michaelhaskins1999@gmail.com?body= Hello Michael, This is in relation to" style='color: white;'>Email us! </a>
+
+
+    </h1>
+
 </body>
 </html>

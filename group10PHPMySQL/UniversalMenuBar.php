@@ -1,7 +1,7 @@
 <!-- 
     Purpose of Script: Universal Menu Bar to be used in every page
     Written by: Michael H
-    last updated: Michael 12/02/21
+    last updated: Michael 16/02/21
 -->
 
 <!-- Was neccesary to have the below css in this file as makes reference to topnav class which is created in this file and is not in scope if css

@@ -1,7 +1,7 @@
 <!-- 
     Purpose of Script: Management Login
     Written by: Michael H
-    last updated: Michael 12/02/21
+    last updated: Michael 16/02/21
     Source for Login form: https://www.w3schools.com/howto/howto_css_login_form.asp
 -->
 
@@ -90,7 +90,7 @@
 
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
 
-    <h2>Login Form</h2>
+    <h2>Manager Login</h2>
 
     <!-- Below is the code for the input form -->
     <form action="ManagerHomePage.php" > <!-- Currently does not check if valid password & email combo, just redirects as long as something is entered -->

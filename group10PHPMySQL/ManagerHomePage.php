@@ -21,5 +21,14 @@
 
     <?php include 'ManagerMenuBar.php';?> <!-- Imports code for manager menu bar from another php file-->
 
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <h2>
+        Hello and welcome __________!
+    </h2>
+
 </body>
 </html>
