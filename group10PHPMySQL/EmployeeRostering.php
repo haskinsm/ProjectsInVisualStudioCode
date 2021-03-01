@@ -3,7 +3,7 @@
                             below that to display all bookings for the next month booking ID, assigned drivers or null (blank).
     Written by: Michael H
     last updated: Michael 22/02/21, 
-                    written report at the bootom works perfectly but yet to get insert (asssigning workets etc) to work, 
+                    written report at the bootom works perfectly but yet to get insert (asssigning workets etc) to work, insert now works
 -->
 
 <?php
@@ -86,7 +86,7 @@
             }
 
             ## Will only enter if no discovered errors
-            if( $bookingIDErr == "" && $workerIDErr == "" && $deliveryVanIDErr && $delivOrCollErr == "" ){
+            if( $bookingIDErr == "" && $workerIDErr == "" && $deliveryVanIDErr == "" && $delivOrCollErr == "" ){
                 $dataEntered = True;
 
                  //Connect to SQL database
@@ -94,20 +94,23 @@
             
                 //Access the SQL database
                 // This will insert the entered data into the roster table 
-                $sqlIns = "INSERT INTO Roster (Worker_ID, Booking_ID, Vehichle_ID, Function) Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
-                $result = mysqli_query($link,$sqlIns); 
+                $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
+                $resultIns = mysqli_query($link,$sqlIns);
+                while($rowIns=mysqli_fetch_assoc($resultIns)){
+
+                } 
             }
         }
     ?>
 
-    <!--
+    
     <script language="javascript">	
-        // Will enter below condition if date has been submitted and user will be redirected to the report page
-        if( "************************php echo $dateEntered ?>"){
-             document.location.replace("FormCompletion.php");
+        // Will enter below condition if date has been submitted 
+        if( "<?php echo $dateEntered ?>"){
+             document.location.replace("EmployeeRostering.php");  // This is needed to refresh the table below when data is entered
         }
     </script>
-    -->
+
 
     <h2> Enter relevant IDs to assign a worker & delivery driver to a booking: </h2>
        
@@ -145,8 +148,8 @@
         <tr> 
             <th> Booking ID </th>
             <th> Delivery/Collection </th>
-            <th> Date </th>
-            <th> Time </th>
+            <th> Date  </th>
+            <th> Time   </th>
             <th> Status </th>
             <th> Assigned Worker's ID</th>
             <th> Assigned Delivery Van's ID</th>
@@ -231,6 +234,8 @@
                         echo '<td>'.$prevCollStatus.'</td>';
                         echo '<td> Unassigned </td>';
                         echo '<td> Unassigned </td>';
+
+                        echo '</tr>'; ## End of row
 
                         ## Below are the entries for the current jobs delivery
                         echo '<td>'.$currBookingID.'</td>';

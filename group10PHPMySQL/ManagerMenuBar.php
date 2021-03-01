@@ -1,8 +1,8 @@
 <!-- 
     Purpose of Script: Manager Menu Bar to be used in every manager page
     Written by: Michael H
-    last updated: Michael 12/02/21, Jason 19/2/21, Jason 20/2/21, Michael 20/2/21
-    Added new links and removed the holidays, added new links, added create & delete acc links
+    last updated: Michael 12/02/21, Jason 19/2/21, Jason 20/2/21, Michael 20/2/21, Michael 22/02/21
+    Added new links and removed the holidays, added new links, added create & delete acc links, added Log out & change roster (both yet to be implemented)
 -->
 
 <!-- Was neccesary to have the below css in this file as makes reference to topnav class which is created in this file and is not in scope if css
@@ -56,6 +56,7 @@
   <a href="SalesRevenue.php"> Sales revenue by product </a>
   <a href="EmployeeHours.php"> Employee Hours worked  </a>
   <a href="BestCustomers.php"> Best Customers  </a> 
+  <a href="#"> Change Roster </a>
   <a href="#"> Create New Manager Account  </a> 
   <a href="#"> Create New Staff Account  </a> 
   <a href="#"> Delete Manager or Staff Account  </a> 

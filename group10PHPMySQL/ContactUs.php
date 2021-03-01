@@ -24,7 +24,6 @@
         If you have any queries please 
         <a href="mailto:michaelhaskins1999@gmail.com?body= Hello Michael, This is in relation to" style='color: white;'>Email us! </a>
 
-
     </h1>
 
 </body>

@@ -1,7 +1,8 @@
 /*
     Purpose of this Script: Universal Style of website
     Written by: Michael H
-    last updated: Michael 12/02/21
+    last updated: Michael 12/02/21, 22/02
+                    Written, added css to make tables columns more spread out
 */
 
 body { 
@@ -25,5 +26,10 @@ h1{
 }
 h2{
     color: white; /* Colour of text*/
+}
+table {
+    border-spacing: 10px 20px;  /* First number is the gap between rows, the second is the gap between columns */
+    border: 1px solid orange; /* This is the organge border */
+    /* src: https://www.tutorialspoint.com/Set-width-between-table-cells-with-CSS */
 }
 

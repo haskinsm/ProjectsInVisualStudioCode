@@ -45,7 +45,7 @@
         $date = "";
         $dateErr = "";
 
-        // Will enter here once submit has been hit, date will be stored as a session variable
+        // Will enter here once submit has been hit
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	
             ## echo(date('Y-m-d', strtotime('1999-12-31'))."<br>");  outputs:1999-12-31
@@ -61,15 +61,6 @@
             }
         }
     ?>
-
-    <!--
-    <script language="javascript">	
-        // Will enter below condition if date has been submitted and user will be redirected to the report page
-        if( "************************php echo $dateEntered ?>"){
-             document.location.replace("FormCompletion.php");
-        }
-    </script>
-    -->
 
     <h2>Choose date for delivery/collection schedule: </h2>
        
