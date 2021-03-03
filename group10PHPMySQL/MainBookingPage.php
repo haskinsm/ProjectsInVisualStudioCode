@@ -63,17 +63,19 @@
 
             $numProdsOrdered = 0; ## Will use to ensure that atleast one prod has been ordered
 
-            for($x = 0; $x <= $_SESSION["prodCount"]; $x++){
-                $temp = $x + 1;
-                $qty = $_POST[ "product".$temp ]; ## The 1st prod will be posted as 'product1'
+            for($x = 1; $x <= $_SESSION["prodCount"]; $x++){
+
+                $qty = $_POST[ "product".$x ]; ## The 1st prod will be posted as 'product1' so take this in and set it to qty
+               
                 if( $qty >= 1){
                     $numProdsOrdered = $numProdsOrdered + 1;
                 }
-                $_SESSION["product".$temp."qty"] = $qty; ## This will create a session variable storing the prod qty for product 1 as 'product1qty'
+                ## Now create a session variable for qty
+                $_SESSION["product".$x."qty"] = $qty; ## This will create a session variable storing the prod qty for product 1 as 'product1qty'
             }
 
             if($numProdsOrdered == 0){ ## Nothing has been ordered, so dont allow them to proceed
-                echo '<h3 style = "color:green; text-shadow: -1px -1px 0 #000;"> Warning: No items have been selected </h3>';
+                echo '<h3 style = "color:red; text-shadow: -1px -1px 0 #000;"> Warning: No items have been selected </h3>';
                  ## The styling here gives the font a green colour and outlines it will black to increase readability 
             } else {
                 $dataEnteredCorrectly = TRUE;
@@ -87,7 +89,7 @@
     <script language="javascript">	
         // Will enter below condition if dates have been submitted and user will be redirected to the next booking page
         if( "<?php echo $dataEnteredCorrectly ?>"){
-            document.location.replace("MainBookingPage.php"); // Redirect to next booking page
+            document.location.replace("BookingConfirmation.php"); // Redirect to next booking page
         } 
     </script>
 
@@ -164,7 +166,7 @@
                         echo '<td class = "dropdown">';
                             ## Below line will result in only 8 dropwdown options beeing displayed at a time and then you can scroll down 
                             ## The name for the first product will be product1. Cannot have name as product name as there are spaces in the prod names
-                            echo '<select name = product"'.$prodCount.'" onmousedown="if(this.options.length>8){this.size=8;}"  onchange="this.size=0;" onblur="this.size=0;" >' ; ## Src: https://stackoverflow.com/questions/8788245/how-can-i-limit-the-visible-options-in-an-html-select-dropdown
+                            echo '<select name = "product'.$prodCount.'" onmousedown="if(this.options.length>8){this.size=8;}"  onchange="this.size=0;" onblur="this.size=0;" >' ; ## Src: https://stackoverflow.com/questions/8788245/how-can-i-limit-the-visible-options-in-an-html-select-dropdown
                             $counter = 0;
                             while( $counter <= $prodAvailable ){ ## This will create a dropdown list from 0 to max Availability
                                 echo '<option value='.$counter.'>'. $counter.'</option>';  # Desired code for first iteration: <option value=0> 0 </option>
