@@ -2,7 +2,7 @@
     Purpose of Script: Users should only be broought here once they complete the MainBookingForm page. The avaialable qty with respect to their dates will be shown here
     Written by: Michael H
     last updated: Michael 03/03/21
-                Written as much as I can until Harry does the Guest Logins
+                Written as much as I can until Harry does the Guest Logins; Ordered items are displayed, vat is shown and have a drop down bar that works for deliv and set up costs.
 -->
 
 <?php
@@ -70,8 +70,41 @@
             $specialInstr = "";
             $delivSetupPickUp = "";
 
+            $delivSetupPickUp = $_POST["delivOrColl"];
+            $specialInstr = $_POST["specInstr"];
+
+            ## Prepare variables for insertion into bookings table
+            $deliveryStatus = "N/a";
+            $collStatus = "Not Collected"; ##Collection field doubles up as Collection of delivered items and collection of pick ups
+            $returnStatus = "N\a";
+            $setup = "N\a";
+
+            if( $delivSetupPickUp == "ClickCollect"){
+                $returnStatus = "Not Returned";
+            } elseif( $delivSetupPickUp == "DeliverySetup" ){
+                $setup = "Not set-up";
+                $deliveryStatus = "Not Delivered";
+            } else{ ## Delivery Only
+                $deliveryStatus = "Not Delivered";
+            }
+
+             ## Include database connect file
+             require_once "ServerDetail.php"; ## This will connect to db
+
+             ## Now Access the SQL database 
+             ## This query will 
+             $sql = "";
+             $result = mysqli_query($link,$sql); 
+
+             $prodCount = 0; ## Will be set to qty of products displayed. Need this to help with naming the relevant session variables
+
+             while($row = mysqli_fetch_assoc($result) ){
+             }
+
         }
     ?>
+
+    <h2> Basket: </h2>
 
     <table>
         <tr>
@@ -100,7 +133,7 @@
                         $prodPrice = $_SESSION["prod".$x."Price"];
 
                         echo '<td style="border: 1px solid black;">'.$prodName.'</td>'; ## Styling Adds border around data 
-                        echo '<td style="border: 1px solid black;">'.$prodPrice.'</td>';
+                        echo '<td style="border: 1px solid black;"> €'.$prodPrice.'</td>';
                         echo '<td style="border: 1px solid black;">'.$billingPeriods.'</td>';
 
                         ## Now output row total to table
@@ -129,13 +162,13 @@
             <td></td>
             <td> </td>
             <td> Subtotal (Excl. Deliv & Setup) </td>
-            <td style="border: 1px solid black;"> €<?php echo $subtotal ?> </td> <!-- Rounds to two places -->
+            <td style="border: 1px solid black;"> €<?php echo $subtotal ?> </td> 
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td> VAT at 23.5% </td>
+            <td> VAT at 23% </td>
             <td style="border: 1px solid black;"> €<?php echo $VAT ?>  </td>
         </tr>
         <tr>
@@ -161,22 +194,23 @@
         <table>
            <tr>
                 <td> Delivery or Click-and-Collect  </td>
-                <td class="dropdown">
+                <td class="dropdown" >
                     <select name="delivOrColl">
                         <!-- number_format((float)$totalSetupCost, 2, '.', ''); ## This will ensure 7 becomes 7.00 and 8.123 => 8.12 and 7.589 => 7.59. Note it is now a string    src: https://stackoverflow.com/questions/4483540/show-a-number-to-two-decimal-places -->
-                        <option value="DeliverySetup"> Delivery (incl. Setup) & Collection (Cost: €<?php echo number_format( (float)($deliveryCost + $totalSetupCost), 2, '.', '' ); ?> ) </option>
-                        <option value="Delivery"> Delivery (excl. Setup) & Collection (Cost: €<?php echo number_format( (float)($deliveryCost), 2, '.', '' ); ?> ) </option>
-                        <option value="ClickCollect"> Click-and-Collect & Return (Free) </option>
+                        <option value="DeliverySetup" > Delivery (incl. Setup) & Collection (Additional Cost: €<?php echo number_format( (float)($deliveryCost + $totalSetupCost), 2, '.', '' ); ?> ) </option>
+                        <option value="Delivery" > Delivery (excl. Setup) & Collection (Additional Cost: €<?php echo number_format( (float)($deliveryCost), 2, '.', '' ); ?> ) </option>
+                        <option value="ClickCollect" > Click-and-Collect & Return (Free) </option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td> Special Instructions </td>    
-                <td> <input type="text" name="specInst" ></td>      
+                <td> <input type="text" name="specInst" style="height:60%; width:90%;" ></td>      
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name = "Submit" value = "Confirm Order">
+                    <!-- Added a lot of styling so was easily visible to users -->
+                    <input type="submit" name = "Submit" value = "Confirm Order" style="height:20%; width:40%; background-color:aqua; color:black; font-size: 20px; font-weight: bold;">
                 </td>
             </tr>
         </table>   
