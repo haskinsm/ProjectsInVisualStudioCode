@@ -1,7 +1,8 @@
 <!-- 
     Purpose of Script: Users should only be broought here once they have selceted dates in the PickBookingDetails.php page. The avaialable qty with respect to their dates will be shown here
     Written by: Michael H
-    last updated: Michael 01/03/21
+    last updated: Michael 01/03/21, Michael 02/03/21
+                Form partially complete; Has dropdown bars showing availability of each item, Fixed N/a and wrote code for session vars,
 -->
 
 <?php
@@ -28,14 +29,70 @@
     <h2> Booking Form </h2>
 
     <?php 
+
+        ## Store dates as session variables and output to user
         $startDate = $_SESSION["startDate"];
         $endDate = $_SESSION["endDate"];
         ## Now display start and end dates selceted to user 
         echo '<h3> Start date selected:  '.date('d-m-Y', strtotime($startDate) ).'. <br> End date selected:  '.date('d-m-Y', strtotime($endDate) ).'. </h3>'; 
         ## Code above also converts the dates back to more common d-m-Y format
+       
+
+        ## Now will calculate how many 48hr periods their booking is for
+        ## Convert dates to unix timestamps then substract one from another which will give diff in seconds. Then divide by 86400 (num of seconds in a day)
+        $start = strtotime($startDate);
+        $end  = strtotime($endDate);
+        $diffBetweenDates = ceil(abs($end - $start) / 86400);  ## Note the ceil function rounds up and abs gets the absolute value
+        $mod = ( $diffBetweenDates%2 ); ## Should only ever be 1 or 0. Eg: (2)%2=0, (3)%2=1 
+        ## Floor is used to round down to nearest integer. Eg: floor(5/2) => floor(2.5) = 2
+        $num48hrPeriods = ( floor($diffBetweenDates/2) + $mod ); ## If differnce between dates is 5, should result in 2 + 1 = 3 '48hr' periods
+        $_SESSION["num48hrPeriods"] = $num48hrPeriods; ## Stores it as a session variable to be used on next page
+        echo '<h3> Number of Billing periods for dates selected: '. $num48hrPeriods.'</h3>'; ## Tell the user the number of billable periods for their dates selected
+
+
+         $dataEnteredCorrectly = FALSE;
+        ## Will enter here once submit has been hit 
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+            ## Since all of the data coming in is from dropdowns dont need to check if data is valid or empty
+            $startTime  = $_POST["startTime"];
+            $_SESSION["startTime"] = $startTime;
+
+            $endTime = $_POST["endTime"];
+            $_SESSION["endTime"] = $endTime;
+
+            $numProdsOrdered = 0; ## Will use to ensure that atleast one prod has been ordered
+
+            for($x = 0; $x <= $_SESSION["prodCount"]; $x++){
+                $temp = $x + 1;
+                $qty = $_POST[ "product".$temp ]; ## The 1st prod will be posted as 'product1'
+                if( $qty >= 1){
+                    $numProdsOrdered = $numProdsOrdered + 1;
+                }
+                $_SESSION["product".$temp."qty"] = $qty; ## This will create a session variable storing the prod qty for product 1 as 'product1qty'
+            }
+
+            if($numProdsOrdered == 0){ ## Nothing has been ordered, so dont allow them to proceed
+                echo '<h3 style = "color:green; text-shadow: -1px -1px 0 #000;"> Warning: No items have been selected </h3>';
+                 ## The styling here gives the font a green colour and outlines it will black to increase readability 
+            } else {
+                $dataEnteredCorrectly = TRUE;
+            }
+           
+        }
     ?>
 
-     <!-- Now create booking form -->
+
+    <!-- Now redirect user to following page if data has been entered -->
+    <script language="javascript">	
+        // Will enter below condition if dates have been submitted and user will be redirected to the next booking page
+        if( "<?php echo $dataEnteredCorrectly ?>"){
+            document.location.replace("MainBookingPage.php"); // Redirect to next booking page
+        } 
+    </script>
+
+
+     <!-- Create booking form -->
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
         <table>
             <tr>
@@ -45,7 +102,7 @@
                 <th> Optional Set-up Cost per item </th>
             </tr>
             <tr>
-                <td> Event Start Time</td>
+                <td> Event Delivery or Pickup Time </td>
                 <td class="dropdown">
                     <select name="startTime">
                         <option value="Morning"> Morning </option>
@@ -54,7 +111,7 @@
                 </td>
             </tr>
             <tr>
-                <td> Event End Time</td>
+                <td> Event Collection or Return Time </td>
                 <td class="dropdown">
                     <select name="endTime">
                         <option value="Morning"> Morning </option>
@@ -75,7 +132,8 @@
                 $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Quantity From Products Where Quantity > 0";
                 $result = mysqli_query($link,$sql); 
 
-            
+                $prodCount = 0; ## Will be set to qty of products displayed. Need this to help with naming the relevant session variables
+
                 while($row = mysqli_fetch_assoc($result) ){
                     
                     $prodId = $row["Product_ID"];
@@ -99,37 +157,50 @@
                     $prodName = $row["Product_Name"];
                     $price = $row["Rental_Fee"];
                     $setupCost = $row["Setup_Cost"];
+                    $prodCount = $prodCount + 1;
                     ## Now add to booking form
                     echo '<tr>';
                         echo '<td>'.$prodName.'</td>';
                         echo '<td class = "dropdown">';
                             ## Below line will result in only 8 dropwdown options beeing displayed at a time and then you can scroll down 
-                            echo '<select name ="'.$prodName.'" onmousedown="if(this.options.length>8){this.size=8;}"  onchange="this.size=0;" onblur="this.size=0;" >' ; ## Src: https://stackoverflow.com/questions/8788245/how-can-i-limit-the-visible-options-in-an-html-select-dropdown
+                            ## The name for the first product will be product1. Cannot have name as product name as there are spaces in the prod names
+                            echo '<select name = product"'.$prodCount.'" onmousedown="if(this.options.length>8){this.size=8;}"  onchange="this.size=0;" onblur="this.size=0;" >' ; ## Src: https://stackoverflow.com/questions/8788245/how-can-i-limit-the-visible-options-in-an-html-select-dropdown
                             $counter = 0;
                             while( $counter <= $prodAvailable ){ ## This will create a dropdown list from 0 to max Availability
                                 echo '<option value='.$counter.'>'. $counter.'</option>';  # Desired code for first iteration: <option value=0> 0 </option>
                                 $counter = $counter + 1;
                             }
                         echo '</td>';
+
+                        ## Now show price and setup cost to the side
                         echo '<td> €'.$price.' </td>';
-                        echo '<td> €'.$setupCost.' </td>';
+                        if( $setupCost == 0){
+                            echo '<td> N/a </td>';
+                        } else{
+                            echo '<td> €'.$setupCost.' </td>'; ## If have time will alow them to select yes or no for set up here for whatever items they want*******************************
+                        }
+
                     echo '</tr>';
+
+                    ## Now create Session variables for each products details.
+                    $_SESSION["prod".$prodCount."Price"] = $price; ## For 1st product this should result in the creation of a sesssion var called "prod1Price"
+                    $_SESSION["prod".$prodCount."Setup"] = $setupCost; ## For 1st product this should result in the creation of a sesssion var called "prod1Setup"
+
                 }
+
+                $_SESSION["prodCount"] = $prodCount; ## Set total count of products as a session variable
             ?>
+            
+            <tr>
+                <td>
+                    <input type="submit" name = "Submit" value = "Submit">
+                </td>
+            </tr>
+
         </table>
     </form>
     
 </body>
 
-        <!-- Code for dropdown:
-            <tr>
-                <td> Test TestTest</td>
-                <td class="dropdown">
-                    <select name="testDrop">
-                        <option value="1">  1 </option>
-                        <option value="2">  2 </option>
-                        <option value="3">  3 </option>
-                    </select>
-                </td>
-            </tr> -->
+        
 </html>

@@ -59,18 +59,18 @@
 
             ## Now check if end date is before or on the same day as the event
             if ( $endDate <= $startDate){
-                $endDateErr = "Error: End date must be atleast 1 day after start date of event. Please try again.";
+                $endDateErr = "Error: End date must be at least 1 day after start date of event. Please try again.";
                 ## Now print this error out as a header 
                 echo '<h2 style = "color:red; text-shadow: -1px -1px 0 #000;">'.$endDateErr.'</h2>'; 
                 ## The styling here gives the font a red colour and outlines it will black to increase readability 
             }
 
             $todaysDate = date('Y-m-d');  ## date('Y-m-d') should get todays date. If today was 1st March 2021 it will be formatted 2021-03-01 
-            ## Code below will set the earliest dates that bookings will be taken for. At the moment it is set so that company receives min of 1 day notice
-            $earliestStartDate = date('Y-m-d', strtotime($todaysDate. ' + 1 days') );
+            ## Code below will set the earliest dates that bookings will be taken for. At the moment it is set so that company receives min of 2 days notice
+            $earliestStartDate = date('Y-m-d', strtotime($todaysDate. ' + 2 days') );
            
-            if(  $earliestStartDate >=  $startDate ){
-                $startDateErr = "Error: Start date must be atleast one day from todays date.";
+            if(  $earliestStartDate >  $startDate ){
+                $startDateErr = "Error: Start date must be at least one full working day from todays date.";
                 ## Now print this error out as a header 
                 echo '<h2 style = "color:red; text-shadow: -1px -1px 0 #000;">'.$startDateErr.' Earliest possible order start date is '.date('d-m-Y', strtotime($earliestStartDate) ).'</h2>'; 
                 ## The styling here gives the font a red colour and outlines it will black to increase readability
@@ -99,8 +99,14 @@
     <h2>
         Please select Event start and end dates below. 
         <br> 
-        When slecting event dates please bear in mind that we charge a flat 48hr rental fee.
     </h2>
+
+    <h5>
+        Note: The event start date is the dates your order will be delivered or picked-up, and the event end date is the date your order will be collected or returned. 
+        <br>
+        You can decide if you want deivery or click-and-collect on a subsequent page. 
+        If you select delivery there is an option to have your ordered items set up for you.
+    </h5>
 
      <!-- Below is the fom where the user enters dates -->  
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
