@@ -50,7 +50,7 @@
         echo '<h3> Number of Billing periods for dates selected: '. $num48hrPeriods.'</h3>'; ## Tell the user the number of billable periods for their dates selected
 
 
-         $dataEnteredCorrectly = FALSE;
+        $dataEnteredCorrectly = FALSE;
         ## Will enter here once submit has been hit 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
@@ -60,6 +60,9 @@
 
             $endTime = $_POST["endTime"];
             $_SESSION["endTime"] = $endTime;
+
+            $kmOutsideDublin = $_POST["kmFromDublin"];
+            $_SESSION["kmOutsideDublin"] = $kmOutsideDublin;
 
             $numProdsOrdered = 0; ## Will use to ensure that atleast one prod has been ordered
 
@@ -118,6 +121,48 @@
                     <select name="endTime">
                         <option value="Morning"> Morning </option>
                         <option value="Afternoon"> Afternoon </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+            <!-- Get user to enter county of event  -->
+            <td> County of Event </td>
+                <td class="dropdown">
+                    <select name="kmFromDublin">
+                        <!-- Below values are km distance between that County and Dublin -->
+                        <option value="0"> Dublin </option>
+                        <option value="45"> Meath </option> 
+                        <option value="81.6"> Louth </option>
+                        <option value="92"> Westmeath </option>
+                        <option value="60.3"> Kildare </option>
+                        <option value="66.4"> Wicklow </option>
+                        <option value="113.2"> Cavan </option>
+                        <option value="130.8"> Monaghan </option>
+                        <option value="121.4"> Offaly </option>
+                        <option value="120.3"> Longford </option>
+                        <option value="96.0"> Laois </option>
+                        <option value="90.6"> Carlow </option>
+                        <option value="154.9"> Wexford</option>
+                        <option value="129.3"> Kilkenny </option>
+                        <option value="170.9"> Waterford </option>
+                        <option value="188.4"> Tipperary </option>
+                        <option value="259.2"> Cork </option>
+                        <option value="296.2"> Kerry </option>
+                        <option value="202.9"> Limerick </option>
+                        <option value="243.7"> Clare </option>
+                        <option value="208.4"> Galway </option>
+                        <option value="255"> Mayo </option>
+                        <option value="209.2"> Sligo </option>
+                        <option value="155.4"> Roscommon </option>
+                        <option value="156.8"> Leitrim </option>
+                        <option value="130.8"> Monaghan </option>
+                        <option value="224.4"> Donegal </option>
+                        <option value="133.8"> Armagh </option>
+                        <option value="160"> Down </option>
+                        <option value="161.6"> Fermanagh </option>
+                        <option value="179.3"> Tyrone </option>
+                        <option value="233.5"> Derry </option>
+                        <option value="194.2"> Antrim </option>
                     </select>
                 </td>
             </tr>
@@ -187,6 +232,7 @@
                     ## Now create Session variables for each products details.
                     $_SESSION["prod".$prodCount."Price"] = $price; ## For 1st product this should result in the creation of a sesssion var called "prod1Price"
                     $_SESSION["prod".$prodCount."Setup"] = $setupCost; ## For 1st product this should result in the creation of a sesssion var called "prod1Setup"
+                    $_SESSION["prod".$prodCount."Name"] = $prodName; ## For 1st product this should result in the creation of a sesssion var called "prod1Name"
 
                 }
 
