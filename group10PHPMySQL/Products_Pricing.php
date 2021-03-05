@@ -7,14 +7,6 @@
       Update Notes: written, , Added discount % & setUp cost 
 -->
 
-<?php
-    // Start the session
-    session_start();
-
-    $_SESSION = array(); ## To unset all at once
-    session_destroy();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +24,10 @@
             color: #ffffff;
             padding: 10px;
         }
+        td{
+                text-align: center; 
+                vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -43,13 +39,14 @@
     <h2> Products & Pricing: </h2>
 
     <h3> All our products are rented over 48 hour periods. This means for example that if you would like to rent our products for 3 days you will be charged for two billing periods.</h3>
+    <h3> Please note that these prices do not include VAT. </h3>
 
     <table>
         <tr> 
 
             <th> Product ID </th>
             <th> Product Name </th>
-            <th> Normal cost / 48hr Rental (in Euros)</th>
+            <th> Normal cost / 48hr Rental </th>
             <th> Currently Discounted by </th>
             <th> Price after discount </th>
             <th> Optional Set-up Cost</th>
@@ -78,7 +75,7 @@
                     echo '<td> €'.$normalPrice.'</td>';
                     ## If there is no dicount just output '-', if there is calc the discount %. This rly improves readability
                     if( $euroDiscount == 0.00){
-                        echo '<td style="text-align: center; vertical-align: middle;"> - </td>';
+                        echo '<td> - </td>';
                     } else {
                         ## Below number_format function rounds to two places so 8-> 8.00, 9.768 -> 9.77 etc
                         echo '<td>'.number_format( (float)( ($euroDiscount/$normalPrice)*100), 2, '.', '' ).'% </td>'; ## Get % dicount

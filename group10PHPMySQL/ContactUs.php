@@ -1,8 +1,8 @@
 <!-- 
     Purpose of Script: Contact us page
     Written by: Michael H
-    last updated: Michael 12/02/21, Michael 19/02/21
-        Added malito link to my own email address, changed link to fictional DPH email (As Im sure Aideen would not want her email linked)
+    last updated: Michael 12/02/21, Michael 19/02/21, Michael 05/03/21
+        Added malito link to my own email address, changed link to fictional DPH email (As Im sure Aideen would not want her email linked), added accounts payable malito link
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +21,22 @@
     <br>
 
     <h1>
-        If you have any queries please 
-        <a href="mailto:DublinPartyHireQueries@gmail.com?body= Hello, This is in relation to ..." style='color: white;'>Email us! </a>
-
+        General Queries:
     </h1>
+
+    <h2>
+        If you have any general queries please 
+        <a href="mailto:DublinPartyHireQueries@gmail.com?body= Hello, This is in relation to ..." style='color: white;'>Email us! </a>
+    </h2>
+
+    <h1>
+        Payment or Order Queries
+    </h1>
+
+    <h2> 
+        Please note orders must be paid for before the delivery/pick-up date. Please contact Accounts Payable, 01 756 1113, <a href="mailto:accounts@dph.ie?body=" style="color: white;"> accounts@dph.ie </a> 
+    </h2>
+
 
 </body>
 </html>

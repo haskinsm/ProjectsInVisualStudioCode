@@ -147,6 +147,8 @@
                         $prodSetupCost = $_SESSION["prod".$x."Setup"];
                         $prodPrice = $_SESSION["prod".$x."Price"];
 
+                        $prodPrice = number_format( (float)($prodPrice), 2, '.', '' ); ## Make sure price has is to two decimal places
+
                         echo '<td style="border: 1px solid black;">'.$prodName.'</td>'; ## Styling Adds border around data 
                         echo '<td style="border: 1px solid black;"> €'.$prodPrice.'</td>';
                         echo '<td style="border: 1px solid black;">'.$billingPeriods.'</td>';
