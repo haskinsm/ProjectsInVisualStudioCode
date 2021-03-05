@@ -57,10 +57,10 @@
 <div class="topnav">
   <!-- <a class="active" href="HomePage.php">Home</a>              This was commented out as having a diff colour for active tab reduces site maintability-->
   <a href="HomePage.php">Home</a>
-  <a href="ProductsAndPricing.php"> Products & Pricing  </a>  
+  <a href="Products_Pricing.php"> Products & Pricing  </a>  
+  <a href="PickBookingDates.php"> Make a Booking </a>
   <a href="CustomerLogin.php"> Customer Login  </a> 
   <a href="StaffLogin.php"> Staff Login </a>
   <a href="ManagementLogin.php"> Manager Login </a>
   <a href="ContactUs.php"> Contact us  </a> 
-  <a href="PickBookingDates.php">Just so I can test my stuff</a>
 </div>

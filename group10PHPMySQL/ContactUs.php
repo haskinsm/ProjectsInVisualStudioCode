@@ -2,7 +2,7 @@
     Purpose of Script: Contact us page
     Written by: Michael H
     last updated: Michael 12/02/21, Michael 19/02/21
-    Added malito link to my own email address
+        Added malito link to my own email address, changed link to fictional DPH email (As Im sure Aideen would not want her email linked)
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +22,7 @@
 
     <h1>
         If you have any queries please 
-        <a href="mailto:michaelhaskins1999@gmail.com?body= Hello Michael, This is in relation to" style='color: white;'>Email us! </a>
+        <a href="mailto:DublinPartyHireQueries@gmail.com?body= Hello, This is in relation to ..." style='color: white;'>Email us! </a>
 
     </h1>
 

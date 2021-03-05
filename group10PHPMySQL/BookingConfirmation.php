@@ -56,12 +56,27 @@
         $endDate = $_SESSION["endDate"];
         ## Now display start and end dates selceted to user 
         echo '<h3> Start date selected:  '.date('d-m-Y', strtotime($startDate) ).'. <br> End date selected:  '.date('d-m-Y', strtotime($endDate) ).'. </h3>'; 
-        echo '<h3> Please note your order must be paid for before '.date('d-m-Y', strtotime($startDate) ).'. Please contact Accounts Payable, 01 756 1113, accounts@dph.ie. </h3>'; 
+        echo '<h3> Please note your order must be paid for before '.date('d-m-Y', strtotime($startDate) ).'. Please contact Accounts Payable, 01 756 1113, <a href="mailto:accounts@dph.ie?body=" style="color: white;"> accounts@dph.ie </a> </h3>'; 
         ## Code above also converts the dates back to more common d-m-Y format
+
+        ## Will now write a query to get the current VAT, delivery rate for dublin and deliv charge per km outside of dublin
+        // Connect to SQL database
+        include ("ServerDetail.php");
+            
+        // Access the SQL database
+        // This will get Flat delivery Fare (for Dublin), the additional Delivery Fee and the Vat Rate 
+        $sql = "SELECT Flat_Delivery_Fee, Additional_Delivery_Fee, VAT_Rate FROM Other_Data ";
+        $result = mysqli_query($link,$sql); 
+       
+        $row = mysqli_fetch_assoc($result);
+        $dublinDelivRate = $row["Flat_Delivery_Fee"];
+        $delivChargePerKm = $row["Additional_Delivery_Fee"];
+        $VATRate = $row["VAT_Rate"]; ## This will be used when outputting VAT figure to table
+        
 
         ## Take in km distance outside dublin from session variable and then calculate Delivery Cost
         $kmDistFromDublin = $_SESSION["kmOutsideDublin"];
-        $deliveryCost = 75.00 + $kmDistFromDublin*0.50;  ## If Dublin: deliveryCost = 75 + 0*(0.50) = 75
+        $deliveryCost = $dublinDelivRate + $kmDistFromDublin*$delivChargePerKm;  ## If Dublin: deliveryCost = 75 + 0*(0.50) = 75. Note these numbers can for deliv charges can be changed in the DB
 
         $dataEnteredCorrectly = FALSE;
         // Will enter here once submit has been hit
@@ -110,7 +125,7 @@
         <tr>
             <th> Quantity </th>
             <th> Description </th>
-            <th> Unit Price per rental period </th>
+            <th> Unit Price per rental period (Incl. any discounts) </th>
             <th> Rental Periods </th>
             <th> Total </th>
         </tr>
@@ -151,7 +166,7 @@
                      echo '</tr>';
                 }
             }
-            $VAT = number_format( (float)( $subtotal*0.23 ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
+            $VAT = number_format( (float)( $subtotal*$VATRate ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
             $totalDueBeforeDeliv = number_format( (float)( $subtotal + $VAT ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
         
         ?>
@@ -168,7 +183,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td> VAT at 23% </td>
+            <td> VAT at <?php echo ($VATRate*100) ?>% </td>
             <td style="border: 1px solid black;"> €<?php echo $VAT ?>  </td>
         </tr>
         <tr>

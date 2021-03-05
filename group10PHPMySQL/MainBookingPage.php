@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="WebsiteStyle.css"> 
 
 </head>
+
 <body>
 
     <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
@@ -103,8 +104,11 @@
             <tr>
                 <th></th>
                 <th></th>
-                <th> Rental price per 48hr period </th>
-                <th> Optional Set-up Cost per item </th>
+                <!-- Styling here gives headers with text a black background and white text and adds some padding to increase readability -->
+                <th style="background-color:black; padding:10px; color: #ffffff;"> Rental price for your selected dates </th>
+                <th style="background-color:black; padding:10px; color: #ffffff;"> Discount </th>
+                <th style="background-color:black; padding:10px; color: #ffffff;"> Rental Price after discount for your selected dates </th>
+                <th style="background-color:black; padding:10px; color: #ffffff;"> Optional Set-up Cost per item </th>
             </tr>
             <tr>
                 <td> Event Delivery or Pickup Time </td>
@@ -175,8 +179,8 @@
                 require_once "ServerDetail.php"; ## This will connect to db
 
                 ## Now Access the SQL database 
-                ## This query will 
-                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Quantity From Products Where Quantity > 0";
+                ## This query will get each products ID, Name, Rental fee, setup cost, qty, discount in euro where qty>0
+                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Quantity, Euro_Discount From Products Where Quantity > 0";
                 $result = mysqli_query($link,$sql); 
 
                 $prodCount = 0; ## Will be set to qty of products displayed. Need this to help with naming the relevant session variables
@@ -203,6 +207,7 @@
                     
                     $prodName = $row["Product_Name"];
                     $price = $row["Rental_Fee"];
+                    $euroDiscount = $row["Euro_Discount"];
                     $setupCost = $row["Setup_Cost"];
                     $prodCount = $prodCount + 1;
                     ## Now add to booking form
@@ -213,24 +218,43 @@
                             ## The name for the first product will be product1. Cannot have name as product name as there are spaces in the prod names
                             echo '<select name = "product'.$prodCount.'" onmousedown="if(this.options.length>8){this.size=8;}"  onchange="this.size=0;" onblur="this.size=0;" >' ; ## Src: https://stackoverflow.com/questions/8788245/how-can-i-limit-the-visible-options-in-an-html-select-dropdown
                             $counter = 0;
-                            while( $counter <= $prodAvailable ){ ## This will create a dropdown list from 0 to max Availability
-                                echo '<option value='.$counter.'>'. $counter.'</option>';  # Desired code for first iteration: <option value=0> 0 </option>
-                                $counter = $counter + 1;
+                            ## Will enter first if statement if there is no product available for selected dates, will enter following if statement if there is product avaialable
+                            if( $counter > $prodAvailable){
+                                echo '<option value='.$counter.'> Unavailable </option>';
+                            } else{
+                                while( $counter <= $prodAvailable ){ ## This will create a dropdown list from 0 to max Availability
+                                    echo '<option value='.$counter.'>'. $counter.'</option>';  # Desired code for first iteration: <option value=0> 0 </option>
+                                    $counter = $counter + 1;
+                                }
                             }
                         echo '</td>';
 
-                        ## Now show price and setup cost to the side
-                        echo '<td> €'.$price.' </td>';
+                        ## Now show price for their booking, discount, price after discount for their booking and setup cost to the side
+                        $itemPriceForTheirBooking = number_format( (float)( $price*$num48hrPeriods ), 2, '.', '' ); ## number_format function rounds to two places so 8-> 8.00, 9.768 -> 9.77 etc
+                        echo '<td style="text-align: center; vertical-align: middle;"> €'.($itemPriceForTheirBooking).' </td>'; ## Price per 48hr rental * num of 48 periods of booking
+                        ## The styling align texts in the middle of the cell to increase readability
+                       
+                            ## If there is no dicount just output '-', if there is calc the discount %. This rly improves readability
+                        if( $euroDiscount == 0.00){
+                            echo '<td style="text-align: center; vertical-align: middle;"> - </td>';
+                        } else {
+                            ## Below number_format function rounds to two places so 8-> 8.00, 9.768 -> 9.77 etc
+                            echo '<td style="text-align: center; vertical-align: middle;">'.number_format( (float)( ($euroDiscount/$price)*100), 2, '.', '' ).'% </td>'; ## Gets % dicount
+                        }
+                        
+                        ## Now output price for their booking after discount
+                        echo '<td style="text-align: center; vertical-align: middle;"> €'.number_format( (float)( ($price - $euroDiscount)*$num48hrPeriods), 2, '.', '' ).'</td>';
+
                         if( $setupCost == 0){
-                            echo '<td> N/a </td>';
+                            echo '<td style="text-align: center; vertical-align: middle;"> N/a </td>';
                         } else{
-                            echo '<td> €'.$setupCost.' </td>'; ## If have time will alow them to select yes or no for set up here for whatever items they want*******************************
+                            echo '<td style="text-align: center; vertical-align: middle;"> €'.$setupCost.' </td>'; ## If have time will alow them to select yes or no for set up here for whatever items they want*******************************
                         }
 
                     echo '</tr>';
 
                     ## Now create Session variables for each products details.
-                    $_SESSION["prod".$prodCount."Price"] = $price; ## For 1st product this should result in the creation of a sesssion var called "prod1Price"
+                    $_SESSION["prod".$prodCount."Price"] = ($price - $euroDiscount); ## For 1st product this should result in the creation of a sesssion var called "prod1Price". This includes any discount
                     $_SESSION["prod".$prodCount."Setup"] = $setupCost; ## For 1st product this should result in the creation of a sesssion var called "prod1Setup"
                     $_SESSION["prod".$prodCount."Name"] = $prodName; ## For 1st product this should result in the creation of a sesssion var called "prod1Name"
 
@@ -241,7 +265,8 @@
             
             <tr>
                 <td>
-                    <input type="submit" name = "Submit" value = "Submit">
+                    <input type="submit" name = "Submit" value = "Submit" style="height:20%; width:40%; background-color:aqua; color:black; font-size: 20px; font-weight: bold;">
+                    <!-- The styling increases the prominence of the submit button -->
                 </td>
             </tr>
 
