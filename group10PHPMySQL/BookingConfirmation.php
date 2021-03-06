@@ -3,6 +3,8 @@
     Written by: Michael H
     last updated: Michael 03/03/21
                 Written as much as I can until Harry does the Guest Logins; Ordered items are displayed, vat is shown and have a drop down bar that works for deliv and set up costs.
+                Michael 06/03/21
+                    Hardcoded the SQL insertion statements for customer with ID = 9. They appear to work now. Will change once Guest Login stuff is completed. Fixed bug where String with spaces in special instructions field caused a query failure.
 -->
 
 <?php
@@ -49,6 +51,13 @@
 
     <h2> Booking Confirmation </h2>
 
+    <script language="javascript">	
+        // Will enter below condition if user has returned to this page from the completed bookings page
+        if( "<?php echo $_SESSION["BookingComplete"] ?>"){
+            document.location.replace("HomePage.php"); // Redirect to home page. Did this so user does not accidently make multiple orders 
+        } 
+    </script>
+
     <?php 
 
         ## Take in dates stored as session variables and output to user
@@ -87,7 +96,9 @@
 
             $delivSetupPickUp = $_POST["delivOrColl"];
             $specialInstr = $_POST["specInst"];
+            $specialInstr = mysqli_real_escape_string($link, $specialInstr); ## Need this or insert query completely fails if user enters in a string with spaces in special instructions field. This was just a tad infuriating to figure out
 
+            
             ## Prepare variables for insertion into bookings table
             $deliveryStatus = "N/a";
             $collStatus = "Not Collected"; ##Collection field doubles up as Collection of delivered items and collection of pick ups
@@ -124,7 +135,7 @@
              $prodCount = $_SESSION["prodCount"];
 
              ## 1st need to get the auto generated Booking ID for this booking
-             $sqlQ2 = "SELECT Booking_ID FROM Bookings WHERE Total_Price_Incl_VAT_Del_Setup = '$cost' && Business_ID = 9 ORDER BY Date_Of_Order DESC "; ## Should have enough checks here ensuring its the right booking
+             $sqlQ2 = "SELECT Booking_ID FROM Bookings WHERE Business_ID = 9 ORDER BY Date_Of_Order DESC "; ## Only need to select Booking_IDs for the customer nd then order them by order date which will give the correct booking ID first
              //******************************************************************************* Businees ID HARDCODED
              $resultQ2 = mysqli_query($link,$sqlQ2); 
 
@@ -137,8 +148,11 @@
                 $thisProdID =  $_SESSION["prod".$x."ID"];
 
                 ## Now insert into table the item that was ordered, the qty and the booking ID
-                $sqlQ3 = "INSERT INTO Order_Items (Booking_ID, Product_ID, Product_Qty) VALUES ('$thisBookingID','$thisProdID','$thisProdQty' )";
-                $resultQ3 = mysqli_query($link,$sqlQ3); 
+                ## Should only do this if the qty the cutomer has ordered is greater than 0
+                if( $thisProdQty > 0){
+                    $sqlQ3 = "INSERT INTO Order_Items (Booking_ID, Product_ID, Product_Qty) VALUES ('$thisBookingID','$thisProdID','$thisProdQty' )";
+                    $resultQ3 = mysqli_query($link,$sqlQ3); 
+                }
              }
 
              ## Create a session variable storing this Booking ID. This will be used in displaying the invoice
@@ -234,6 +248,7 @@
 
     <!-- Now redirect user to following page if data has been entered -->
     <script language="javascript">	
+
         // Will enter below condition if dates have been submitted and user will be redirected to the next booking page
         if( "<?php echo $dataEnteredCorrectly ?>"){
             document.location.replace("BookingCompleted.php"); // Redirect to next booking page

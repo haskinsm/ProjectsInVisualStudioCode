@@ -7,6 +7,8 @@
 <?php
     // Start the session
     session_start();
+    $_SESSION["BookingComplete"] = FALSE; ## This will later be used so the customer cannot go back once an order has been confirmed/completed and data sent to the tables.
+    ## This was done to ensure the user does not accidently make multiple orders
 ?>
 
 <!DOCTYPE html>
