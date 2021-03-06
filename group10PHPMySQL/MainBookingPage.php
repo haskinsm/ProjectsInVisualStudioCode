@@ -257,6 +257,7 @@
                     $_SESSION["prod".$prodCount."Price"] = ($price - $euroDiscount); ## For 1st product this should result in the creation of a sesssion var called "prod1Price". This includes any discount
                     $_SESSION["prod".$prodCount."Setup"] = $setupCost; ## For 1st product this should result in the creation of a sesssion var called "prod1Setup"
                     $_SESSION["prod".$prodCount."Name"] = $prodName; ## For 1st product this should result in the creation of a sesssion var called "prod1Name"
+                    $_SESSION["prod".$prodCount."ID"] = $prodId; ## For 1st product this should result in the creation of a sesssion var called "prod1ID"
 
                 }
 

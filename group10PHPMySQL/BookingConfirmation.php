@@ -82,39 +82,69 @@
         // Will enter here once submit has been hit
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $specialInstr = "";
+            $specialInstr = ""; 
             $delivSetupPickUp = "";
 
             $delivSetupPickUp = $_POST["delivOrColl"];
-            $specialInstr = $_POST["specInstr"];
+            $specialInstr = $_POST["specInst"];
 
             ## Prepare variables for insertion into bookings table
             $deliveryStatus = "N/a";
             $collStatus = "Not Collected"; ##Collection field doubles up as Collection of delivered items and collection of pick ups
-            $returnStatus = "N\a";
+            $returnStatus = "N/a";
             $setup = "N\a";
+            $delivOrPickUp = "Delivery";
 
             if( $delivSetupPickUp == "ClickCollect"){
                 $returnStatus = "Not Returned";
+                $delivOrPickUp = "Collection"; ## User is collecting order
+                $cost = $_SESSION["totalBeforeDeliv"]; ## Needed to use session variables as couldnt access $totalDueBeforeDeliv up here
             } elseif( $delivSetupPickUp == "DeliverySetup" ){
                 $setup = "Not set-up";
                 $deliveryStatus = "Not Delivered";
+                $cost = $deliveryCost + $_SESSION["totalSetupCost"] +  $_SESSION["totalBeforeDeliv"];
             } else{ ## Delivery Only
                 $deliveryStatus = "Not Delivered";
+                $cost = $deliveryCost +  $_SESSION["totalBeforeDeliv"];
             }
 
-             ## Include database connect file
-             require_once "ServerDetail.php"; ## This will connect to db
+            $startTime =  $_SESSION["startTime"];
+            $endTime =  $_SESSION["endTime"];
+
+            // Connect to SQL database
+            include ("ServerDetail.php");
 
              ## Now Access the SQL database 
-             ## This query will 
-             $sql = "";
-             $result = mysqli_query($link,$sql); 
+             ## This query will insert all relevant info into the bookings table
+             $sql = "INSERT INTO Bookings (Total_Price_Incl_VAT_Del_Setup, Business_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Set_Up, Delivery_Status, Collection_Status, Return_Status, Delivery_Or_Collection, Special_Instructions)";
+             $sql.= "VALUES ('$cost', 9, '$startDate', '$endDate', '$startTime', '$endTime', '$setup', '$deliveryStatus', '$collStatus', '$returnStatus', '$delivOrPickUp', '$specialInstr')";
+             $result = mysqli_query($link,$sql); //******************************************************************************* Businees ID HARDCODED
 
              $prodCount = 0; ## Will be set to qty of products displayed. Need this to help with naming the relevant session variables
+             $prodCount = $_SESSION["prodCount"];
 
-             while($row = mysqli_fetch_assoc($result) ){
+             ## 1st need to get the auto generated Booking ID for this booking
+             $sqlQ2 = "SELECT Booking_ID FROM Bookings WHERE Total_Price_Incl_VAT_Del_Setup = '$cost' && Business_ID = 9 ORDER BY Date_Of_Order DESC "; ## Should have enough checks here ensuring its the right booking
+             //******************************************************************************* Businees ID HARDCODED
+             $resultQ2 = mysqli_query($link,$sqlQ2); 
+
+             $rowQ2 = mysqli_fetch_assoc($resultQ2);
+             $thisBookingID = $rowQ2["Booking_ID"]; 
+
+             for($x = 1; $x <= $_SESSION["prodCount"]; $x++){
+
+                $thisProdQty = $_SESSION["product".$x."qty"];
+                $thisProdID =  $_SESSION["prod".$x."ID"];
+
+                ## Now insert into table the item that was ordered, the qty and the booking ID
+                $sqlQ3 = "INSERT INTO Order_Items (Booking_ID, Product_ID, Product_Qty) VALUES ('$thisBookingID','$thisProdID','$thisProdQty' )";
+                $resultQ3 = mysqli_query($link,$sqlQ3); 
              }
+
+             ## Create a session variable storing this Booking ID. This will be used in displaying the invoice
+             $_SESSION["Booking_ID"] = $thisBookingID;
+
+             $dataEnteredCorrectly = TRUE;  ## When this is true some code in a JavaScript block will redirect user to Booking confirmed page
 
         }
     ?>
@@ -170,6 +200,10 @@
             }
             $VAT = number_format( (float)( $subtotal*$VATRate ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
             $totalDueBeforeDeliv = number_format( (float)( $subtotal + $VAT ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
+
+            ## Now need to create a session variable for totalDueBeforeDelivery and totalSetupCost. Need to do this as my insertion statement for the booking is in the first php code black above.
+            $_SESSION["totalBeforeDeliv"] = $totalDueBeforeDeliv;
+            $_SESSION["totalSetupCost"] = $totalSetupCost;
         
         ?>
     </table>
@@ -214,9 +248,9 @@
                 <td class="dropdown" >
                     <select name="delivOrColl">
                         <!-- number_format((float)$totalSetupCost, 2, '.', ''); ## This will ensure 7 becomes 7.00 and 8.123 => 8.12 and 7.589 => 7.59. Note it is now a string    src: https://stackoverflow.com/questions/4483540/show-a-number-to-two-decimal-places -->
-                        <option value="DeliverySetup" > Delivery (incl. Setup) & Collection (Additional Cost: €<?php echo number_format( (float)($deliveryCost + $totalSetupCost), 2, '.', '' ); ?> ) </option>
-                        <option value="Delivery" > Delivery (excl. Setup) & Collection (Additional Cost: €<?php echo number_format( (float)($deliveryCost), 2, '.', '' ); ?> ) </option>
-                        <option value="ClickCollect" > Click-and-Collect & Return (Free) </option>
+                        <option value="DeliverySetup" > Delivery (incl. Setup) & Collection (Total Booking Cost: €<?php echo number_format( (float)($deliveryCost + $totalSetupCost + $totalDueBeforeDeliv), 2, '.', '' ); ?> )</option>
+                        <option value="Delivery" > Delivery (excl. Setup) & Collection (Total Booking Cost: €<?php echo number_format( (float)($deliveryCost + $totalDueBeforeDeliv), 2, '.', '' ); ?> ) </option>
+                        <option value="ClickCollect" > Click-and-Collect & Return (Total Booking Cost: €<?php echo number_format( (float)($totalDueBeforeDeliv), 2, '.', '' ); ?> ) </option>
                     </select>
                 </td>
             </tr>
