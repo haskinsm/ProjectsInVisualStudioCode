@@ -2,9 +2,9 @@
     Purpose of Script: Products and Pricing
     Written by: Jason Yang
     last updated: Jason 18/02/21, 19/2/21, Michael 05/05/21
-    Does not account for items that are currently out of inventory. 
-    Would be nice to show the available quantities of each item
       Update Notes: written, , Added discount % & setUp cost 
+      Michael 07/03/21
+         Making sure products displayed are in stock. i.e quantity > 0. They can see availability for selected dates when they are making a booking so no need to do it here. If have time I might do it, but prob wont.
 -->
 
 <!DOCTYPE html>
@@ -57,8 +57,8 @@
                 include ("ServerDetail.php");
             
                 //Access the SQL database
-                // This will get product ID, name, qty (stock) 
-                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Euro_Discount FROM Products ";
+                // This will get product ID, name, rental fee, any discounts applied, setup cost and only get products that are in stock i.e. qty>0
+                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Euro_Discount FROM Products WHERE Quantity > 0";
                 $result = mysqli_query($link,$sql); 
               
                 //Code adapted from Aideen's photo
@@ -87,7 +87,7 @@
                     if( $setUpCost == 0.00){
                         echo '<td> N/a </td>';
                     } else {
-                        echo '<td>'.$row["Setup_Cost"].'</td>';
+                        echo '<td> + €'.$row["Setup_Cost"].'</td>';
                     }
 
                     echo '</tr>';

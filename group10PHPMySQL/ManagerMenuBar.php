@@ -3,7 +3,27 @@
     Written by: Michael H
     last updated: Michael 12/02/21, Jason 19/2/21, Jason 20/2/21, Michael 20/2/21, Michael 22/02/21
     Added new links and removed the holidays, added new links, added create & delete acc links, added Log out & change roster (both yet to be implemented)
+    Jason 1/3/21
+    Removed the create new manager, create new staff, and delete manager tabs. Added functions tab
+    Jason 4/3/21 Removed add manager and add staff and put them under 'Other Functions'
 -->
+<?php
+session_start();
+include "ServerDetail.php"; 
+     if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Manager)){
+    	header("location: ManagementLogin.php");
+    	exit;
+     }
+ global $link;
+
+ $Email=$_SESSION['Email'];
+ $update=false;
+ $sql = "SELECT * FROM Managers WHERE Business_Email = '$Email'";
+ $result = mysqli_query($link,$sql);
+ if(mysqli_num_rows($result) > 0){
+    $update=true;
+ }
+?>
 
 <!-- Was neccesary to have the below css in this file as makes reference to topnav class which is created in this file and is not in scope if css
      were to be included in the websiteStyle css file -->
@@ -49,17 +69,19 @@
 <div class="topnavM">
   <!-- <a class="active" href="HomePage.php">Home</a>              This was commented out as having a diff colour for active tab reduces site maintability-->
   <a href="ManagerHomePage.php"> Manager Home </a>
-  <a href="EmployeeRostering.php"> Employee Rostering </a>
+  <a href="EmployeeRosterAlterations.php"> Employee Rostering </a>
   <a href="DeliveryPickupSched.php"> Delivery & Pick up schedule </a>  
   <a href="OrderCheck.php"> Order Check  </a> 
   <a href="RentalFreq.php"> Rental Frequency </a>
   <a href="SalesRevenue.php"> Sales revenue by product </a>
   <a href="EmployeeHours.php"> Employee Hours worked  </a>
   <a href="BestCustomers.php"> Best Customers  </a> 
-  <a href="#"> Change Roster </a>
-  <a href="#"> Create New Manager Account  </a> 
-  <a href="#"> Create New Staff Account  </a> 
-  <a href="#"> Delete Manager or Staff Account  </a> 
-  <a href="#"> Log Out </a>
+  <a href="Functions.php"> Other Functions </a>
+<?php if ($update){ ?>
+ <a href="AddManagerInfo.php">Change Details</a>
+<?php } else { ?>
+  <a href="AddManagerInfo.php"> Add my Info </a>
+<?php } ?>
+  <a href="LogOut.php"> Log Out </a>
 
 </div>

@@ -4,7 +4,8 @@
     Written by: Michael H
     last updated: 
                 Michael 07/03/21
-                    Written. Temp commented out the line of code importing managerMenuBar while Harry fixes it so I can work here.
+                    Written. Temp commented out the line of code importing managerMenuBar while Harry fixes it so I can work here. This page is the image of employeeeRostering just with relevant variables & names changed.
+                    Also added delete feature.
 -->
 
 <!DOCTYPE html>
@@ -35,33 +36,40 @@
 
     <br>
 
-   <!-- < ?php include 'ManagerMenuBar.php';?> --> <!-- Imports code for manager menu bar from another php file-->
+    <?php include 'ManagerMenuBar.php';?> <!-- Imports code for manager menu bar from another php file-->
 
 
     <?php
-        $deliveryVanID = 0; // Set to 0 as irrelevant 
+        $deliveryVanID = 0; // Set to 0 as irrelevant for Pickups and returns by customers
 
-        // Will enter here once submit has been hit, will take in the bookingID, workerID, deliveryVanID and record any obs errors such as there being nothing entered or the IDS being non-numeric
+        // Will enter here once submit has been hit, will take in the function (Assign or Delete) bookingID, workerID, deliveryVanID from the submitted form
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	
-            ## No checks needed as using dropdowns
-            $bookingID = $_POST["bookingID"];
-            $workerID = $_POST["workerID"];
-            $delivOrColl = $_POST["delivOrColl"]; ## Should Either be 'Pickup' or 'Return'
+            ## As using dropdowns only need to check that Booking ID & worker ID are not empty (i.e. no worker or booking after todays date in the db)
+            if (!empty($_POST["bookingID"]) && !empty($_POST["workerID"])) { 
+                $function = $_POST["function"];
+                $bookingID = $_POST["bookingID"];
+                $workerID = $_POST["workerID"];
+                $delivOrColl = $_POST["delivOrColl"]; ## Should Either be 'Pickup' or 'Return'
 
-            $dataEntered = True;
+                $dataEntered = True;
 
-            //Connect to SQL database
-            include ("ServerDetail.php");
-        
-            // Access the SQL database
-            // This will insert the entered data into the roster table 
-            $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
-            $resultIns = mysqli_query($link,$sqlIns);
-            while($rowIns=mysqli_fetch_assoc($resultIns)){
-
-            } 
-            
+                //Connect to SQL database
+                include ("ServerDetail.php");
+                
+                ## If Assign make a new assignment, if delete then delete a specified assignment
+                if( $function == "Assign"){
+                    // Access the SQL database
+                    // This will insert the entered data into the roster table 
+                    $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
+                    $resultIns = mysqli_query($link,$sqlIns);
+                }   else{
+                    // Delete specified booking. If there is no match will do nothing.
+                    $sqlDel = "DELETE FROM Roster WHERE Worker_ID = '$workerID' && Booking_ID = '$bookingID' && Vehicle_ID = '$deliveryVanID' && Function = '$delivOrColl'";
+                    $resultDel = mysqli_query($link,$sqlDel);
+                }   
+                // Table refreshes so user can see the result of their assignment or deletion, so I think there is no need to output result of the sql query e.g. if assignment has been deleted or not 
+            }
         }
     ?>
 
@@ -75,7 +83,7 @@
 
     <h2> This is for Customer pickup and return bookings only.  </h2>
 
-    <h2> Assign a worker to a bookings pickup or return job: </h2>
+    <h2> Assign a worker to a bookings pickup or return job or delete a previously made assignment: </h2>
        
     <!-- 
         The below form lets a manager assign an employee and Van to a booking. There is no check for van or employee availbaility, as it would take too much time to do this given time constraints of the project
@@ -84,13 +92,23 @@
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
         <table>
             <tr>
+                <!-- Will allow user to decide if they want to delete a roster assignment or make a new assignment -->
+                <td> Function: </td>
+                <td class="dropdown" >
+                    <select name="function">
+                       <option value="Assign"> Assign </option>
+                       <option value="Delete"> Delete </option>
+                    </select>       
+                </td>  
+            </tr>
+            <tr>
                 <td> Booking ID: </td> 
                 <td class="dropdown" >
                     <select name="bookingID">
                         <?php
                             // Connect to SQL database
                             include ("ServerDetail.php");
-                            // This query will get all booking IDS their start and end dates and only display bookings who have an end date that is greater than or equal to todays date
+                            // This query will get all booking IDS their start and end dates and only display bookings who have an end date that is greater than or equal to todays date and only Bookings that are to be picked up and returned by the user
                             $sqlQ2 = "Select Booking_ID, Event_Start_Date, Event_End_Date FROM Bookings Where Event_End_Date >= CURRENT_DATE() && Delivery_Status = 'N/a' ORDER BY Event_Start_Date ASC";
                             $resultQ2 = mysqli_query($link,$sqlQ2); 
 
@@ -126,7 +144,7 @@
                 </td>            
             </tr>
             <tr>
-                <td> Function: </td>  
+                <td> Activity: </td>  
                 <td class="dropdown" >
                     <select name="delivOrColl">
                         <option value="Pickup" > Pickup </option>
@@ -141,6 +159,12 @@
             </tr>
         </table>   
     </form> 
+
+    <h3> 
+        Please note that you are allowed assign multiple workers to a booking's pickup & return jobs and these will appear as seperate rows in the below table. 
+        <br>
+        This means for example that a booking may have multiple rows of pickups.
+    </h3>
 
     <br>
 
@@ -165,8 +189,8 @@
             // This will get BookingID, start & end date & time, delivery & collection status, assigned employees & delivery vans (if any assigned).
             // A left join was used so that every entry from Bookings was included even if there was no matching entries in the Roster table.
             //  Only bookings who have an end date after todays date are included.
-            // This means that deliverys which may have already happended will be included in the report the way it is formmated atm 06/03/21
-            // Bookings which are being pickedup/returned by the user will not appear in this report as ignores bookings where Delivery_Status = 'N/a' i.e. Pickup/return bookings
+            // This means that deliverys which may have already happended and have a booking end date after todays date will be included in the report the way it is formmated atm 06/03/21
+            // Bookings which are being pickedup/returned by the cutsomer will only appear in this report as ignores bookings where Delivery_Status != 'N/a' i.e. Delivery/Collection by DPH bookings
             // The query is ordered by event_end_date, Booking_ID and Function (which is a field in our table)
             $sql = "SELECT Bookings.Booking_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Return_Status, Collection_Status, Worker_ID, Function FROM Bookings Left JOIN Roster on Bookings.Booking_ID = Roster.Booking_ID WHERE Event_End_Date >= Current_Date() && Delivery_Status = 'N/a' ORDER BY Event_Start_Date ASC, Booking_ID ASC, Function ASC";
             // Note is it essential that the above query is ordered by Booking_ID or the below formatting will not work

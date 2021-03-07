@@ -9,7 +9,7 @@
                 Michael 06/03/21
                     Fixed the report so now it only contains Bookings that are not being collected/returned by customers. Also added dropdowns.
                 Michael 07/03/21
-                    Temp commented out the line of code importing managerMenuBar while Harry fixes it
+                    Temp commented out the line of code importing managerMenuBar while Harry fixes it. Removed data entry checks as no need now that it uses dropdown bars for input. Also added the ability to delete a previously made assignment
 -->
 
 <!DOCTYPE html>
@@ -40,60 +40,37 @@
 
     <br>
 
-   <!-- < ?php include 'ManagerMenuBar.php';?> --> <!-- Imports code for manager menu bar from another php file-->
+    <?php include 'ManagerMenuBar.php';?>  <!-- Imports code for manager menu bar from another php file-->
 
 
     <?php
 
-        // Will enter here once submit has been hit, will take in the bookingID, workerID, deliveryVanID and function/activity(e.g. delivery, collection, delivery(incl setup))
+        // Will enter here once submit has been hit, will take in the function (Assign or delete) bookingID, workerID, deliveryVanID and activity(e.g. delivery, collection, delivery(incl setup))
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	
-            if (empty($_POST["bookingID"])) {
-                $bookingIDErr = "Booking ID is required";
-            } else {
-                $bookingID = $_POST["bookingID"];
-                if ( !is_numeric($bookingID) ){
-                    $bookingIDErr = "Invalid Booking ID. Must contain numbers only.";
-                }
-            }
-
-            if (empty($_POST["workerID"])) {
-                $workerIDErr = "Worker ID is required";
-            } else {
+            ## As using dropdowns only need to check that Booking ID & worker ID & Delivery Van ID are not empty (i.e. no worker or van or booking after todays date in the db)
+            if (!empty($_POST["bookingID"]) && !empty($_POST["workerID"]) && !empty($_POST["deliveryVanID"])) { 
+                $function = $_POST["function"];
+                $bookingID = $_POST["bookingID"];     
                 $workerID = $_POST["workerID"];
-                if ( !is_numeric($workerID) ){
-                    $workerIDErr = "Invalid Worker ID. Must contain numbers only.";
-                }
-            }
-
-            if (empty($_POST["deliveryVanID"])) {
-                $deliveryVanIDErr = "Delivery van ID is required";
-            } else {
-                $deliveryVanID = $_POST["deliveryVanID"];
-                if ( !is_numeric($deliveryVanID) ){
-                    $deliveryVanIDErr = "Invalid Delivery Van ID. Must contain numbers only.";
-                }
-            }
-            if (empty($_POST["delivOrColl"])) {
-                $delivOrCollErr = "Delelivery/Collection is required";
-            } else {
+                $deliveryVanID = $_POST["deliveryVanID"];       
                 $delivOrColl = $_POST["delivOrColl"];
-            }
-
-            ## Will only enter if no discovered errors
-            if( $bookingIDErr == "" && $workerIDErr == "" && $deliveryVanIDErr == "" && $delivOrCollErr == "" ){
+            
                 $dataEntered = True;
 
-                 //Connect to SQL database
-                 include ("ServerDetail.php");
-            
-                //Access the SQL database
-                // This will insert the entered data into the roster table 
-                $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
-                $resultIns = mysqli_query($link,$sqlIns);
-                while($rowIns=mysqli_fetch_assoc($resultIns)){
+                //Connect to SQL database
+                include ("ServerDetail.php");
 
-                } 
+                ## If Assign make a new assignment, if delete then delete a specified assignment
+                if( $function == "Assign"){
+                    //Access the SQL database
+                    // This will insert the entered data into the roster table 
+                    $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
+                    $resultIns = mysqli_query($link,$sqlIns);
+                } else{
+                    $sqlDel = "DELETE FROM Roster WHERE Worker_ID = '$workerID' && Booking_ID = '$bookingID' && Vehicle_ID = '$deliveryVanID' && Function = '$delivOrColl'";
+                    $resultDel = mysqli_query($link,$sqlDel);
+                }    
             }
         }
     ?>
@@ -108,7 +85,7 @@
 
     <h2> This is for delivery (may include setup) and collection bookings only.  </h2>
 
-    <h2> Assign a worker to a bookings delivery or collection job: </h2>
+    <h2> Assign a worker to a bookings delivery or collection job Or delete a previously made assignment: </h2>
        
     <!-- 
         The below form lets a manager assign an employee and Van to a booking. There is no check for van or employee availbaility, as it would take too much time to do this given time constraints of the project
@@ -116,6 +93,16 @@
     -->
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
         <table>
+            <tr>
+                <!-- Will allow user to decide if they want to delete a roster assignment or make a new assignment -->
+                <td> Function: </td>
+                <td class="dropdown" >
+                    <select name="function">
+                       <option value="Assign"> Assign </option>
+                       <option value="Delete"> Delete </option>
+                    </select>       
+                </td>  
+            </tr>
             <tr>
                 <td> Booking ID: </td> 
                 <td class="dropdown" >
@@ -178,7 +165,7 @@
                 </td>         
             </tr>
             <tr>
-                <td> Function: </td>  
+                <td> Activity: </td>  
                 <td class="dropdown" >
                     <select name="delivOrColl">
                         <option value="Delivery" > Delivery </option>
@@ -194,6 +181,12 @@
             </tr>
         </table>   
     </form> 
+
+    <h3> 
+        Please note that you are allowed assign multiple drivers and vans to a booking and these will appear as seperate rows in the below table. 
+        <br>
+        This means for example that a booking may have multiple rows of deliveries.
+    </h3>
 
     <br>
 
