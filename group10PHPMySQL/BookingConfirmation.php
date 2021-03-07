@@ -103,7 +103,7 @@
             $deliveryStatus = "N/a";
             $collStatus = "Not Collected"; ##Collection field doubles up as Collection of delivered items and collection of pick ups
             $returnStatus = "N/a";
-            $setup = "N\a";
+            $setup = "N/a";
             $delivOrPickUp = "Delivery";
 
             if( $delivSetupPickUp == "ClickCollect"){

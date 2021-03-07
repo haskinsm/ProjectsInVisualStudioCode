@@ -1,15 +1,10 @@
 <!-- 
-    Purpose of Script: Employee Rostering, the aim for this page is to have an area at the top where managers can assign employees and delivery drivers to bookings (hopefully with dropdown bars) and 
+    Purpose of Script: Employee Rostering, the aim for this page is to have an area at the top where managers can assign employees and delivery drivers to pickup & return bookings (hopefully with dropdown bars) and 
                             below that to display all bookings for the next month booking ID, assigned drivers or null (blank).
     Written by: Michael H
-    last updated: Michael 22/02/21, 23/02/21
-                    written report at the bottom works perfectly but yet to get insert (asssigning workets etc) to work, insert now works
-                Jason 26/2/21
-                    order table by date and changed date format
-                Michael 06/03/21
-                    Fixed the report so now it only contains Bookings that are not being collected/returned by customers. Also added dropdowns.
+    last updated: 
                 Michael 07/03/21
-                    Temp commented out the line of code importing managerMenuBar while Harry fixes it
+                    Written. Temp commented out the line of code importing managerMenuBar while Harry fixes it so I can work here.
 -->
 
 <!DOCTYPE html>
@@ -18,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Employee Rostering </title>
+    <title> Employee Rostering for pickup & return bookings </title>
     <link rel="stylesheet" href="WebsiteStyle.css"> <!-- All CSS should be added to the WebsiteStyle.css file and then it will be imported here. If want a unique 
             style for something should be done in line like so: E.G:   <h1 style="color:blue;text-align:center;">  This is a heading </h1>       -->
     <style>
@@ -44,57 +39,29 @@
 
 
     <?php
+        $deliveryVanID = 0; // Set to 0 as irrelevant 
 
-        // Will enter here once submit has been hit, will take in the bookingID, workerID, deliveryVanID and function/activity(e.g. delivery, collection, delivery(incl setup))
+        // Will enter here once submit has been hit, will take in the bookingID, workerID, deliveryVanID and record any obs errors such as there being nothing entered or the IDS being non-numeric
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	
-            if (empty($_POST["bookingID"])) {
-                $bookingIDErr = "Booking ID is required";
-            } else {
-                $bookingID = $_POST["bookingID"];
-                if ( !is_numeric($bookingID) ){
-                    $bookingIDErr = "Invalid Booking ID. Must contain numbers only.";
-                }
-            }
+            ## No checks needed as using dropdowns
+            $bookingID = $_POST["bookingID"];
+            $workerID = $_POST["workerID"];
+            $delivOrColl = $_POST["delivOrColl"]; ## Should Either be 'Pickup' or 'Return'
 
-            if (empty($_POST["workerID"])) {
-                $workerIDErr = "Worker ID is required";
-            } else {
-                $workerID = $_POST["workerID"];
-                if ( !is_numeric($workerID) ){
-                    $workerIDErr = "Invalid Worker ID. Must contain numbers only.";
-                }
-            }
+            $dataEntered = True;
 
-            if (empty($_POST["deliveryVanID"])) {
-                $deliveryVanIDErr = "Delivery van ID is required";
-            } else {
-                $deliveryVanID = $_POST["deliveryVanID"];
-                if ( !is_numeric($deliveryVanID) ){
-                    $deliveryVanIDErr = "Invalid Delivery Van ID. Must contain numbers only.";
-                }
-            }
-            if (empty($_POST["delivOrColl"])) {
-                $delivOrCollErr = "Delelivery/Collection is required";
-            } else {
-                $delivOrColl = $_POST["delivOrColl"];
-            }
+            //Connect to SQL database
+            include ("ServerDetail.php");
+        
+            // Access the SQL database
+            // This will insert the entered data into the roster table 
+            $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
+            $resultIns = mysqli_query($link,$sqlIns);
+            while($rowIns=mysqli_fetch_assoc($resultIns)){
 
-            ## Will only enter if no discovered errors
-            if( $bookingIDErr == "" && $workerIDErr == "" && $deliveryVanIDErr == "" && $delivOrCollErr == "" ){
-                $dataEntered = True;
-
-                 //Connect to SQL database
-                 include ("ServerDetail.php");
+            } 
             
-                //Access the SQL database
-                // This will insert the entered data into the roster table 
-                $sqlIns = "INSERT INTO Roster Values ( '$workerID', '$bookingID', '$deliveryVanID', '$delivOrColl' )";
-                $resultIns = mysqli_query($link,$sqlIns);
-                while($rowIns=mysqli_fetch_assoc($resultIns)){
-
-                } 
-            }
         }
     ?>
 
@@ -102,13 +69,13 @@
     <script language="javascript">	
         // Will enter below condition if date has been submitted 
         if( "<?php echo $dateEntered ?>"){
-             document.location.replace("EmployeeRostering.php");  // This is needed to refresh the table below when data is entered
+             document.location.replace("EmployeePickUpReturnRostering.php");  // This is needed to refresh the table below when data is entered
         }
     </script>
 
-    <h2> This is for delivery (may include setup) and collection bookings only.  </h2>
+    <h2> This is for Customer pickup and return bookings only.  </h2>
 
-    <h2> Assign a worker to a bookings delivery or collection job: </h2>
+    <h2> Assign a worker to a bookings pickup or return job: </h2>
        
     <!-- 
         The below form lets a manager assign an employee and Van to a booking. There is no check for van or employee availbaility, as it would take too much time to do this given time constraints of the project
@@ -123,8 +90,8 @@
                         <?php
                             // Connect to SQL database
                             include ("ServerDetail.php");
-                            // This query will get all booking IDS their start and end dates and only display DPH delivered/collected bookings who have an end date that is greater than or equal to todays date
-                            $sqlQ2 = "Select Booking_ID, Event_Start_Date, Event_End_Date FROM Bookings Where Event_End_Date >= CURRENT_DATE()  && Delivery_Status != 'N/a' ORDER BY Event_Start_Date ASC";
+                            // This query will get all booking IDS their start and end dates and only display bookings who have an end date that is greater than or equal to todays date
+                            $sqlQ2 = "Select Booking_ID, Event_Start_Date, Event_End_Date FROM Bookings Where Event_End_Date >= CURRENT_DATE() && Delivery_Status = 'N/a' ORDER BY Event_Start_Date ASC";
                             $resultQ2 = mysqli_query($link,$sqlQ2); 
 
                             while($rowQ2 = mysqli_fetch_assoc($resultQ2)){
@@ -159,31 +126,11 @@
                 </td>            
             </tr>
             <tr>
-                <td> Assign Delivery Van: </td>  
-                <td class="dropdown" >
-                    <select name="deliveryVanID">
-                        <?php
-                
-                            $sqlQ4 = "Select  Vehicle_ID, Vehicle_Reg FROM Vehicles";
-                            $resultQ4 = mysqli_query($link,$sqlQ4); 
-
-                            while($rowQ4 = mysqli_fetch_assoc($resultQ4)){
-                                $vehicleID = $rowQ4["Vehicle_ID"];
-                                $vehicleReg = $rowQ4["Vehicle_Reg"];
-                                echo '<option value='.$vehicleID.'> Vehicle Reg: '.$vehicleReg.' (Vehicle ID:'.$vehicleID.')</option>';
-                            }
-
-                        ?>
-                    </select>
-                </td>         
-            </tr>
-            <tr>
                 <td> Function: </td>  
                 <td class="dropdown" >
                     <select name="delivOrColl">
-                        <option value="Delivery" > Delivery </option>
-                        <option value="Delivery&Setup" > Delivery & Setup </option>
-                        <option value="Collection" > Collection </option>
+                        <option value="Pickup" > Pickup </option>
+                        <option value="Return" > Return </option>
                     </select>
                 </td>        
             </tr>
@@ -207,7 +154,6 @@
             <th> Time   </th>
             <th> Status </th>
             <th> Assigned Worker's ID</th>
-            <th> Assigned Delivery Van's ID</th>
         
         </tr>
         <?php
@@ -222,7 +168,7 @@
             // This means that deliverys which may have already happended will be included in the report the way it is formmated atm 06/03/21
             // Bookings which are being pickedup/returned by the user will not appear in this report as ignores bookings where Delivery_Status = 'N/a' i.e. Pickup/return bookings
             // The query is ordered by event_end_date, Booking_ID and Function (which is a field in our table)
-            $sql = "SELECT Bookings.Booking_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Set_Up, Delivery_Status, Collection_Status, Worker_ID, Vehicle_ID, Function FROM Bookings Left JOIN Roster on Bookings.Booking_ID = Roster.Booking_ID WHERE Event_End_Date >= Current_Date() && Delivery_Status != 'N/a' ORDER BY Event_Start_Date ASC, Booking_ID ASC, Function ASC";
+            $sql = "SELECT Bookings.Booking_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Return_Status, Collection_Status, Worker_ID, Function FROM Bookings Left JOIN Roster on Bookings.Booking_ID = Roster.Booking_ID WHERE Event_End_Date >= Current_Date() && Delivery_Status = 'N/a' ORDER BY Event_Start_Date ASC, Booking_ID ASC, Function ASC";
             // Note is it essential that the above query is ordered by Booking_ID or the below formatting will not work
             $result = mysqli_query($link,$sql); 
             
@@ -240,10 +186,7 @@
                 echo '<tr>';
 
                 $currBookingID = $row["Booking_ID"];
-                $currDelivOrColl = $row["Function"]; ## Can have values NULL, Delivery or Collection or Delivery&Setup
-                if( $currDelivOrColl == "Delivery&Setup"){
-                    $currDelivOrColl = "Delivery"; ## Will have less checks if I group these together and then can change back when outputting to table
-                }
+                $currDelivOrColl = $row["Function"]; ## Can have values NULL, Pickup or Return 
 
                 //specify the format of our dates
                 $datestep1 = $row["Event_Start_Date"];
@@ -253,132 +196,116 @@
                 $datestep3 = $row["Event_End_Date"];
                 $datestep4  = strtotime($datestep3);
                 $datefinal2 = date("d M Y", $datestep4); 
-
-                $delivSetup = "Delivery"; ## Will either have the value 'Delivery' or 'Delivery & Setup'
-                $setup = $row["Set_Up"]; ## If 'N/a' setup is not applicable to this booking
-                if( $setup != "N/a"){
-                    $delivSetup = "Delivery & Setup";
-                }
-
+    
                 if( empty($currDelivOrColl) ){ ## i.e. NULL, this only occurs when neither delivery or collection has been assigned for a booking
 
                     ## Below if statement is need if there is no record for collection for previous booking
-                    if( $currBookingID != $prevBookingID && ($prevDelivOrColl == "Delivery" )){ ## Will enter if there has been no collection assigned for a previous job.e. $prevDelivOrColl == "Delivery" 
-                        ## Will display the previous jobs collections (details will not be same to current job so need to use 'prev' varaibels) 
+                    if( $currBookingID != $prevBookingID && ($prevDelivOrColl == "Pickup" )){ ## Will enter if there has been no return job assigned for a previous job.e. $prevDelivOrColl == "Pickup" 
+                        ## Will display the previous jobs returns (details will not be same to current job so need to use 'prev' varaibels) 
                         echo '<td>'.$prevBookingID.'</td>';
-                        echo '<td> Collection </td>';
+                        echo '<td> Return </td>';
                         echo '<td>'.$prevEndDate.'</td>';
                         echo '<td>'.$prevEndTime.'</td>';
                         echo '<td>'.$prevCollStatus.'</td>';
-                        echo '<td> Unassigned </td>';
                         echo '<td> Unassigned </td>';
 
                         echo '</tr>'; ## End of row
                     }
 
 
-                    ## Delivery row of current booking
+                    ## Pickup row of current booking
                     echo '<td>'.$currBookingID.'</td>';
-                    echo '<td>'.$delivSetup.'</td>';
+                    echo '<td> Pickup </td>';
                     echo '<td>'.$datefinal1.'</td>';
                     //echo '<td>'.$row["Event_Start_Date"].'</td>';
                     echo '<td>'.$row["Event_Start_Time"].'</td>';
-                    echo '<td>'.$row["Delivery_Status"].'</td>';
+                    echo '<td>'.$row["Collection_Status"].'</td>'; ## The collection_status is pick_up status field
                     echo '<td> Unassigned </td>';
-                    echo '<td> Unassigned </td>';
-                    $a = $row["Worker_ID"]; ## a and b here are used to empty the workerID and Vehicle ID of the null values, may cause errors check when running********************************************
-                    $b = $row["Vehicle_ID"];
-                    $a = $b = "";
+                    $a = $row["Worker_ID"]; ## a here is used to empty the workerID of the null values
+                    $a = "";
 
                     echo '</tr>'; ## End of row
 
-                    ## Collection row
+                    ## Return row
                     echo '<td>'.$currBookingID.'</td>';
-                    echo '<td> Collection </td>';
+                    echo '<td> Return </td>';
                     echo '<td>'.$datefinal2.'</td>';
                     //echo '<td>'.$row["Event_End_Date"].'</td>';
                     echo '<td>'.$row["Event_End_Time"].'</td>';
-                    echo '<td>'.$row["Collection_Status"].'</td>';
+                    echo '<td>'.$row["Return_Status"].'</td>';
                     echo '<td> Unassigned </td>';
-                    echo '<td> Unassigned </td>';
-                    $currDelivOrColl = "Collection"; ## Need to set this here in order to achieve desired formating. This variable will set the prevDelivOrColl variable to equal this at the end of the loop and
+                    $currDelivOrColl = "Return"; ## Need to set this here in order to achieve desired formating. This variable will set the prevDelivOrColl variable to equal this at the end of the loop and
                                                                ## then that will be used in if statements.
 
-                } elseif( $currDelivOrColl == "Delivery"){  ## Enters if delivery
-                    if( $currBookingID != $prevBookingID && $currDelivOrColl == $prevDelivOrColl){ ## Will enter if there has been no collection assigned for a previous job.e. $prevDelivOrColl == "Delivery"
-                        ## Will display the previous jobs collections (details will not be same to current job so need to use 'prev' varaibels) 
+                } elseif( $currDelivOrColl == "Pickup"){  ## Enters if delivery
+                    if( $currBookingID != $prevBookingID && $currDelivOrColl == $prevDelivOrColl){ ## Will enter if there has been no return assigned for a previous job.e. $prevDelivOrColl == "Pickup"
+                        ## Will display the previous jobs returns (details will not be same to current job so need to use 'prev' varaibels) 
                         echo '<td>'.$prevBookingID.'</td>';
-                        echo '<td> Collection </td>';
+                        echo '<td> Return </td>';
                         echo '<td>'.$prevEndDate.'</td>';
                         echo '<td>'.$prevEndTime.'</td>';
                         echo '<td>'.$prevCollStatus.'</td>';
                         echo '<td> Unassigned </td>';
-                        echo '<td> Unassigned </td>';
 
                         echo '</tr>'; ## End of row
 
-                        ## Below are the entries for the current jobs delivery
+                        ## Below are the entries for the current jobs pickup
                         echo '<td>'.$currBookingID.'</td>';
-                        echo '<td>'.$delivSetup.'</td>';
+                        echo '<td> Pickup </td>';
                         echo '<td>'.$datefinal1.'</td>';
                         //echo '<td>'.$row["Event_Start_Date"].'</td>';
                         echo '<td>'.$row["Event_Start_Time"].'</td>';
-                        echo '<td>'.$row["Delivery_Status"].'</td>';
+                        echo '<td>'.$row["Collection_Status"].'</td>';
                         echo '<td>'.$row["Worker_ID"].'</td>';
-                        echo '<td>'.$row["Vehicle_ID"].'</td>';
 
-                    } else{ ## Will enter here if there has been an entry for the privious jobs collection (i.e. not missing a collection)
+                    } else{ ## Will enter here if there has been an entry for the privious jobs return (i.e. not missing a return)
                         echo '<td>'.$currBookingID.'</td>';
-                        echo '<td>'.$delivSetup.'</td>';
+                        echo '<td> Pickup </td>';
                         echo '<td>'.$datefinal1.'</td>';
                         //echo '<td>'.$row["Event_Start_Date"].'</td>';
                         echo '<td>'.$row["Event_Start_Time"].'</td>';
-                        echo '<td>'.$row["Delivery_Status"].'</td>';
+                        echo '<td>'.$row["Collection_Status"].'</td>';
                         echo '<td>'.$row["Worker_ID"].'</td>';
-                        echo '<td>'.$row["Vehicle_ID"].'</td>';
 
-                        ## Need to assign session variables in case this booking is missing its collection job
+                        ## Need to assign session variables in case this booking is missing its return job
                         $prevEndDate = $datefinal2;
                         //$prevEndDate = $row["Event_End_Date"];
                         $prevEndTime = $row["Event_End_Time"];
-                        $prevCollStatus =  $row["Collection_Status"];
+                        $prevCollStatus =  $row["Return_Status"];
                     }    
 
-                } elseif( $currDelivOrColl == "Collection"){ ##Enters if Collection
+                } elseif( $currDelivOrColl == "Return"){ ##Enters if Return
                    if( $currBookingID == $prevBookingID){ ## Will enter if row entry above was not the same. If it is the same have two or more workers/vans assigned to a booking so need to fromat accordingly 
                         echo '<td>'.$currBookingID.'</td>';
                         echo '<td>'.$currDelivOrColl.'</td>';
                         echo '<td>'.$datefinal2.'</td>';
                         //echo '<td>'.$row["Event_End_Date"].'</td>';
                         echo '<td>'.$row["Event_End_Time"].'</td>';
-                        echo '<td>'.$row["Collection_Status"].'</td>';
+                        echo '<td>'.$row["Return_Status"].'</td>';
                         echo '<td>'.$row["Worker_ID"].'</td>';
-                        echo '<td>'.$row["Vehicle_ID"].'</td>';
-                        $datefinal1 = $row["Event_Start_Time"] = $row["Delivery_Status"] = "";
+                        $datefinal1 = $row["Event_Start_Time"] = $row["Collection_Status"] = "";
                         //$row["Event_Start_Date"] = $row["Event_Start_Time"] = $row["Delivery_Status"] = ""; ## Dont need these entries in this row so take and discard 
 
-                    } else{     ## if current booking id is not equal to prev booking id it means that there is no entry for delivery for this job in the roster table
-                        ## First enter missing Delivery job
+                    } else{     ## if current booking id is not equal to prev booking id it means that there is no entry for pickup for this job in the roster table
+                        ## First enter missing pickup job
                         echo '<td>'.$currBookingID.'</td>';
-                        echo '<td>'.$delivSetup.'</td>';
+                        echo '<td> Pickup </td>';
                         echo '<td>'.$datefinal1.'</td>';
                         //echo '<td>'.$row["Event_Start_Date"].'</td>';
                         echo '<td>'.$row["Event_Start_Time"].'</td>';
-                        echo '<td>'.$row["Delivery_Status"].'</td>';
-                        echo '<td> Unassigned </td>';
+                        echo '<td>'.$row["Collection_Status"].'</td>';
                         echo '<td> Unassigned </td>';
 
                         echo '</tr>'; ## End of row
 
-                        ## Then the collection job
+                        ## Then the return job
                         echo '<td>'.$currBookingID.'</td>';
                         echo '<td>'.$currDelivOrColl.'</td>';
                         echo '<td>'.$datefinal2.'</td>';
                         //echo '<td>'.$row["Event_End_Date"].'</td>';
                         echo '<td>'.$row["Event_End_Time"].'</td>';
-                        echo '<td>'.$row["Collection_Status"].'</td>';
+                        echo '<td>'.$row["Return_Status"].'</td>';
                         echo '<td>'.$row["Worker_ID"].'</td>';
-                        echo '<td>'.$row["Vehicle_ID"].'</td>';
                         
                     }  
                 }

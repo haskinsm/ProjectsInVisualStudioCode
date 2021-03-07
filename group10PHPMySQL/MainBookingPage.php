@@ -243,12 +243,12 @@
                         }
                         
                         ## Now output price for their booking after discount
-                        echo '<td style="text-align: center; vertical-align: middle;"> €'.number_format( (float)( ($price - $euroDiscount)*$num48hrPeriods), 2, '.', '' ).'</td>';
+                        echo '<td style="text-align: center; vertical-align: middle;"> <b> €'.number_format( (float)( ($price - $euroDiscount)*$num48hrPeriods), 2, '.', '' ).' </b> </td>'; ## Using bold text tags within the td tags
 
                         if( $setupCost == 0){
                             echo '<td style="text-align: center; vertical-align: middle;"> N/a </td>';
                         } else{
-                            echo '<td style="text-align: center; vertical-align: middle;"> €'.$setupCost.' </td>'; ## If have time will alow them to select yes or no for set up here for whatever items they want*******************************
+                            echo '<td style="text-align: center; vertical-align: middle;"> + €'.$setupCost.' </td>'; ## If have time will alow them to select yes or no for set up here for whatever items they want*******************************
                         }
 
                     echo '</tr>';

@@ -63,4 +63,6 @@
   <a href="StaffLogin.php"> Staff Login </a>
   <a href="ManagementLogin.php"> Manager Login </a>
   <a href="ContactUs.php"> Contact us  </a> 
+  <a href="EmployeeRostering.php"> Temp: Just so i can work on manager stuff rn </a>
+  <a href="EmployeePickUpReturnRostering.php">Temp2</a>
 </div>
