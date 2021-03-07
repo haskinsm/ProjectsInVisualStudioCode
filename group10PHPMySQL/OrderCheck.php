@@ -3,15 +3,9 @@
     Written by: Michael H
     last updated: Michael 17/02/21, Michael 22/02/21
                     written, minor comment update
+                  Michael 07/03/21
+                    Fixed this report up so it now works for pick up & return bookings too
 -->
-
-<?php
-    // Start the session
-    session_start();
-
-    $_SESSION = array(); ## To unset all at once
-    session_destroy();
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,19 +37,16 @@
 
     <?php
         // define variables and set to empty values
-        $bookingID = "";
+        $selectedBookingID = "";
         $bookingIDErr = "";
 
-        // Will enter here once submit has been hit, BookingID will be stored as a session variable and any obv errors will be recorded
+        // Will enter here once submit has been hit, BookingID will be stored as a session variable and will check if the bookings ID field is not empty. This will only occur if there are no bookings with end dates after todays date
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	
             if (empty($_POST["bookingID"])) {
                 $bookingIDErr = "Booking ID is required";
             } else {
-                $bookingID = $_POST["bookingID"];
-                if ( !is_numeric($bookingID) ){
-                    $bookingIDErr = "Invalid Booking ID. Must contain numbers only.";
-                }
+                $selectedBookingID = $_POST["bookingID"];
             }
 
             ## Will only enter if no discovered errors
@@ -78,10 +69,27 @@
        
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
         <table>
-            <tr>
-                <td> Booking ID: </td>
-                <td> <input type="text" name="bookingID" required> </td>           
-            </tr>
+            <td> Booking ID: </td> 
+                <td class="dropdown" >
+                    <select name="bookingID">
+                        <?php
+                            // Connect to SQL database
+                            include ("ServerDetail.php");
+                            // This query will get all booking IDS their start and end dates and only display DPH delivered/collected bookings who have an end date that is greater than or equal to todays date
+                            $sqlQ2 = "Select Booking_ID, Event_Start_Date, Event_End_Date FROM Bookings Where Event_End_Date >= CURRENT_DATE() ORDER BY Event_Start_Date ASC";
+                            $resultQ2 = mysqli_query($link,$sqlQ2); 
+
+                            while($rowQ2 = mysqli_fetch_assoc($resultQ2)){
+                                $bookingID = $rowQ2["Booking_ID"];
+                                $start = $rowQ2["Event_Start_Date"];
+                                $end = $rowQ2["Event_End_Date"];
+                                echo '<option value='.$bookingID.'> Booking ID: '.$bookingID.' (Starts: '. date("d M Y", strtotime($start)).', Ends: '.date("d M Y", strtotime($end) ).')</option>';
+                                // Dates are formmated nicely above so 2021-03-05 would read 5 Mar 2021
+                            }
+
+                        ?>
+                    </select>
+                </td>         
             <tr>
                 <td>
                     <input type="submit" name = "Submit" value = "Submit">
@@ -99,38 +107,62 @@
             <th> Booking ID </th>
             <th> Date </th>
             <th> Time </th>
+            <th> Set-up Status</th>
             <th> Status </th>
+            <th> Special Instructions </th>
         
         </tr>
         <?php
             if( $iDEntered){
-                //Connect to SQL database
-                $link = mysqli_connect("localhost","group_10","Ugh3Aiko","stu33001_2021_group_10_db");
             
                 //Access the SQL database
-                // This will get the bookingID, start & end date & time, the delivery status for the entered booking above
-                $sql = "SELECT Booking_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Delivery_Status, Collection_Status FROM Bookings Where Booking_ID ='$bookingID' ";
+                // This will get the bookingID, start & end date & time, the Setup & delivery & return & collection (Doubles up as pickup status too) status for the entered booking above
+                $sql = "SELECT Booking_ID, Event_Start_Date, Event_End_Date, Event_Start_Time, Event_End_Time, Set_Up, Delivery_Status, Collection_Status, Return_Status, Special_Instructions FROM Bookings Where Booking_ID ='$selectedBookingID' ";
                 $result = mysqli_query($link,$sql); 
               
-                //Code adapted from Aideen's photo
                 while($row=mysqli_fetch_assoc($result)){
                     echo '<tr>';
 
+                    ## In the first row the delivery/pickup info will be displayed
                     echo '<td>'.$row["Booking_ID"].'</td>';
                     echo '<td>'.$row["Event_Start_Date"].'</td>';
                     echo '<td>'.$row["Event_Start_Time"].'</td>';
-                    echo '<td>'.$row["Delivery_Status"].'</td>';
+                    echo '<td>'.$row["Set_Up"].'</td>';
+
+                    $deliveryStatus = $row["Delivery_Status"];
+                    $collectionStatus = $row["Collection_Status"]; ## This field doubles up as collection and pickup status. So like for a dlivered by DPH booking this will be like when the worker collects the order from the customer
+                    ## And for a customer picked up booking this will be the stsatus of whether the customer has collected their order from dph
+
+                    ## Enters below if statement if product is being delivered by DPH and the else if booking is being collected by user
+                    if( $deliveryStatus != "N/a"){ 
+                        echo '<td>'.$deliveryStatus.'</td>';
+                    } else{
+                        echo '<td>'.$collectionStatus.'</td>';
+                    }
+                    echo '<td>'.$row["Special_Instructions"].'</td>';
 
                     echo '</tr>';
 
-                    echo '<td></td>';
+
+                    ## In the 2nd row the collection/return info will be displayed
+                    echo '<td></td>'; ## Don't output booking ID twice
                     echo '<td>'.$row["Event_End_Date"].'</td>';
                     echo '<td>'.$row["Event_End_Time"].'</td>';
-                    echo '<td>'.$row["Collection_Status"].'</td>';
+                    echo '<td></td>'; ## Don't outputSet up status twice
+
+                    $returnStatus = $row["Return_Status"];
+                    ## Enters below if statement if product is being delivered by DPH and the else if booking is being collected by user
+                    if( $deliveryStatus != "N/a"){ 
+                        echo '<td>'.$collectionStatus.'</td>';
+                    } else{
+                        echo '<td>'.$returnStatus.'</td>';
+                    }
+                    echo '<td> </td>'; ## No special instructions for collection
 
                     echo '</tr>';
                 }
             }
+            $iDEntered = FALSE;
 
 
         ?>

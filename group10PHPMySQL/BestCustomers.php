@@ -1,16 +1,22 @@
 <!-- 
     Purpose of Script: Best Customers Report
-    Written by: Michael H
+    Written by: Michael Haskins
     last updated: Michael 19/02/21
+                    Written
+                  Michael 07/03/21
+                    
 -->
 
 <?php
     // Start the session
     session_start();
 
-    $_SESSION = array(); ## To unset all at once
-    session_destroy();
+     if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Manager)){
+    	header("location: ManagerLogin.php");
+    	exit;
+     }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,19 +51,19 @@
     <table>
         <tr> 
 
-            <th> Business ID </th>
-            <th> Business Name </th>
+            <th> Customer ID </th>
+            <th> Customer Name </th>
             <th> Email </th>
             <th> Revenue (incl. fufilled and future bookings) </th>
         
         </tr>
         <?php
-                //Connect to SQL database
-                $link = mysqli_connect("localhost","group_10","Ugh3Aiko","stu33001_2021_group_10_db");
+                // Connect to SQL database
+                include ("ServerDetail.php");
             
                 //Access the SQL database
                 // This will get data for all the bookings: will get business ID, business Name, Business Email and booking ID for each booking  (Business relates to the customer here)
-                $sql = "Select Bookings.Business_ID, Business_Name, Business_Email, Booking_ID FROM Customers, Bookings WHERE Bookings.Business_ID = Customers.Business_ID";
+                $sql = "SELECT Business_ID, Business_Name, Bookings.Business_Email, Booking_ID FROM Customers, Bookings WHERE Bookings.Business_Email = Customers.Business_Email";
                 $result = mysqli_query($link,$sql); 
 
                 // Need to establish variables and set to zero. These are necessary to ensure all of the revenue from each customers booking is added to give the overall revenue from the customers, rather than just giving revnue per booking

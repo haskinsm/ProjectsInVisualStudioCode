@@ -61,6 +61,18 @@
                 //Connect to SQL database
                 include ("ServerDetail.php");
 
+                ## First if it is a delivery query whether the delivery includes setup. If it does enter the roster job as Delivery&Setup
+                if( $delivOrColl == "Delivery"){
+                    $sql = "SELECT Set_Up FROM Bookings WHERE Booking_ID = '$bookingID'"; 
+                    $result = mysqli_query($link,$sql);
+                    while($row = mysqli_fetch_assoc($result)){
+                        $delivStatus = $row["Set_Up"];
+                        if( $delivStatus != 'N/a'){
+                            $delivOrColl = "Delivery&Setup";
+                        }
+                    }
+                }
+
                 ## If Assign make a new assignment, if delete then delete a specified assignment
                 if( $function == "Assign"){
                     //Access the SQL database
@@ -169,7 +181,6 @@
                 <td class="dropdown" >
                     <select name="delivOrColl">
                         <option value="Delivery" > Delivery </option>
-                        <option value="Delivery&Setup" > Delivery & Setup </option>
                         <option value="Collection" > Collection </option>
                     </select>
                 </td>        
@@ -186,6 +197,8 @@
         Please note that you are allowed assign multiple drivers and vans to a booking and these will appear as seperate rows in the below table. 
         <br>
         This means for example that a booking may have multiple rows of deliveries.
+        <br>
+        Please also note that when you select delivery as the activity in the above form there are checks in place to ensure if the delivery includes setup that this is entered correctly in the database.
     </h3>
 
     <br>

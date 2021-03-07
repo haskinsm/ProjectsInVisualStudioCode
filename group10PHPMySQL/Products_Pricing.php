@@ -81,7 +81,7 @@
                         echo '<td>'.number_format( (float)( ($euroDiscount/$normalPrice)*100), 2, '.', '' ).'% </td>'; ## Get % dicount
                     }
                     
-                    echo '<td> €'.number_format( (float)( $normalPrice - $euroDiscount), 2, '.', '' ).'</td>';
+                    echo '<td> <b> €'.number_format( (float)( $normalPrice - $euroDiscount), 2, '.', '' ).' </b> </td>'; ## This will be in bold
 
                     $setUpCost = $row["Setup_Cost"];
                     if( $setUpCost == 0.00){
