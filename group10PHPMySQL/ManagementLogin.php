@@ -1,17 +1,16 @@
-
-<!--
-    Purpose of Script: Customer Login, will need to add create account link
+<!-- 
+    Purpose of Script: Management Login
     Written by: Harry O'Brien
-    last updated: Harry 21/02/21
-    Source for Login form: https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php-->
+    last updated: Harry 3/3/21
+   Source for Login form: https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php-->
 
 <?php
 // Initialize the session
 session_start();
-
+ 
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Customer){
-    header("location: CustomerHomePage.php");
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Manager){
+    header("location: ManagerHomePage.php");
     exit;
 }
  
@@ -21,7 +20,7 @@ require_once "ServerDetail.php";
 // Define variables and initialize with empty values
 $Email = $password = "";
 $username_err = $password_err = "";
-
+ 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
@@ -42,7 +41,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT Email,Firstname, Password FROM Passwords WHERE Email = ? AND Position = 'Customer'";
+        $sql = "SELECT Email,Firstname, Password FROM Passwords WHERE Email = ? AND Position = 'Manager'";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -50,6 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             // Set parameters
             $param_Email = $Email;
+	    
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -67,16 +67,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
-                            $_SESSION["Email"] = $Email;
+                            $_SESSION["Email"] = $Email; 
 			    $_SESSION["Firstname"] = $Firstname;
-			    $_SESSION["Position"] = Customer;                            
+			    $_SESSION["Position"] = Manager;                           
                             
-                            // Redirect user to welcome page/booking page
-			    if ($_SESSION['history']=='Booking'){
-				header("location: BookingConfirmation.php");
-				exit;
-			    }
-                            header("location: CustomerHomePage.php");
+                            // Redirect user to welcome page
+                            header("location: ManagerHomePage.php");
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
@@ -108,28 +104,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
        body { 
-/* background-color: plum; /* Colour of background*/
-color: rgb(119, 17, 252); /* Colour of body text*/
-background-image: 
-    linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
-        rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
-        rgba(0, 0, 0, 0.5)
-    ),
-    url("images/Background4.jpg"); /* image background */
-background-repeat: no-repeat; /* image only used once */
-background-size: cover;
-color: white;
-font: 20px sans-serif;
-}
+            /* background-color: plum; /* Colour of background*/
+            color: rgb(119, 17, 252); /* Colour of body text*/
+            background-image: 
+                linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
+                    rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
+                    rgba(0, 0, 0, 0.5)
+                    ),
+                    url("images/Background4.jpg"); /* image background */
+            background-repeat: no-repeat; /* image only used once */
+            background-size: cover;
+            color: white;
+            font: 20px sans-serif;
+        }
 
         .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>
 <body>
 
+
 <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
+
     <div class="wrapper">
-        <h2>Customer Login</h2>
+        <h2>Manager Login</h2>
         <p>Please fill in your credentials to login.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
@@ -144,8 +142,7 @@ font: 20px sans-serif;
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
-            </div>
-            <p>Don't have an account? <a href="CustomerSignUp.php">Sign up now</a>.</p>
+            
         </form>
     </div>    
 </body>

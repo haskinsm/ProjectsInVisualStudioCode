@@ -1,15 +1,13 @@
 <!-- 
     Purpose of Script: Hours worked per employee
     Written by: Jason Yang
-    last updated: Jason 20/2/21, 25/2/21
+    last updated: Jason 20/2/21, 25/2/21, 7/3/21
 -->
 
 <?php
     // Start the session
     session_start();
 
-    $_SESSION = array(); ## To unset all at once
-    session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +32,7 @@
 
     <?php include 'UniversalMenuBar.php';
     echo '<br>';
-    include 'ManagerMenuBar.php';?> <!-- Imports code for manager menu bar from another php file-->
+    include 'ManagerMenuBar.php';?>
 
     <h2> Employee Hours Summary: </h2>
     <table>
@@ -58,7 +56,7 @@
                 while($row1=mysqli_fetch_assoc($result1)){
                     echo '<tr>';
 
-                    
+                    ## Code below will hopefully create an array  eg. $workerID[0].... etc
                     $workerID[$counter] = $row1["Worker_ID"];
                     $workerName[$counter] = $row1["Worker_Name"];
 

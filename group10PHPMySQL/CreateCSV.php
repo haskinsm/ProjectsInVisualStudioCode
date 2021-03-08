@@ -1,7 +1,7 @@
 <!-- 
     Purpose of Script: create csv
     Written by: Jason Yang
-    last updated: 6/3/21
+    last updated: 6/3/21, 7/3/21
 -->
 
 <?php
@@ -33,32 +33,9 @@
     <?php include 'UniversalMenuBar.php';
     echo '<br>';
     include 'ManagerMenuBar.php';
-    include ("ServerDetail.php");
-
-    $id = $_POST["employee_list"];
-
-    $query = "SELECT * FROM Employees, Shifts WHERE Worker_ID like '%".$id."%'";
-    $result = mysqli_query($link,$query);
-
-    while($row = mysqli_fetch_array($result)){
-        $name = $row['Worker_Name'];
-            
-        $datestep1 = $row["Date_Of_Entry"];
-        $datestep2  = strtotime($datestep1);
-        $datefinal = date("d M Y", $datestep2); 
-            
-        $timestep1 = $row["Clock_In_Time"];
-        $timestep2 = $row["Clock_Out_Time"];
-        $timestep3  = strtotime($timestep1);
-        $timestep4  = strtotime($timestep2);
-        $timefinal = date("H", $timestep4 - $timestep3); 
-    }
     ?>
     
 <!--https://www.webslesson.info/2016/10/export-mysql-table-data-to-csv-file-in-php.html-->
-    <form method='post' action='Export.php'>
-        <input type="submit" name="export" value="CSV_Export" class="btn btn-success" />  
-    </form> 
     <div class="table-responsive" id="employee_table">  
         <table class="table table-bordered">  
             <tr>
@@ -68,10 +45,12 @@
                 <th> Hours Worked </th>
             </tr>
             <?php  
+            include ("ServerDetail.php");
+            
             $id = $_POST["employee_list"];
             $_SESSION["id"]=$id;
             
-            $query = "SELECT * FROM Employees, Shifts WHERE Worker_ID like '%".$id."%'";
+            $query = "SELECT * FROM Employees, Shifts WHERE Employees.Worker_ID = $id AND Shifts.Worker_ID = $id";
             $result = mysqli_query($link,$query);
             
             while($row = mysqli_fetch_array($result))  
@@ -94,11 +73,13 @@
                     echo '<td>'.$name.'</td>';
                     echo '<td>'.$datefinal.'</td>';
                     echo '<td>'.$timefinal.' hours</td>'; 
-                echo '<tr>';    
-                
+                echo '<tr>';   
             }  
             ?>  
         </table>  
     </div>
+    <form method='post' action='Export.php'>
+        <input type="submit" name="export" value="Download as CSV" class="btn btn-success" />  
+    </form> 
 </body>
 </html>

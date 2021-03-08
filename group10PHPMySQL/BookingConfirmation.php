@@ -10,7 +10,7 @@
                 Michael 08/03/21 
                     Added session variables which will be used in creating the downloadable invoice on the next page
                 Michael 08/03/21
-                    Fixed big bug in code. Number formatting with commas was causing orders over 1000 to fail. Fixed now
+                    Fixed big bug in code. Number formatting with commas was causing orders over 1000 to fail.
 -->
 
 <?php
