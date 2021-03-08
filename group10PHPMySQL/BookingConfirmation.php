@@ -2,9 +2,11 @@
     Purpose of Script: Users should only be broought here once they complete the MainBookingForm page. The avaialable qty with respect to their dates will be shown here
     Written by: Michael H
     last updated: Michael 03/03/21
-                Written as much as I can until Harry does the Guest Logins; Ordered items are displayed, vat is shown and have a drop down bar that works for deliv and set up costs.
+                    Written as much as I can until Harry does the Guest Logins; Ordered items are displayed, vat is shown and have a drop down bar that works for deliv and set up costs.
                 Michael 06/03/21
                     Hardcoded the SQL insertion statements for customer with ID = 9. They appear to work now. Will change once Guest Login stuff is completed. Fixed bug where String with spaces in special instructions field caused a query failure.
+                Harry 07/03/21
+                    Added the guest login stuff
 -->
 
 <?php
@@ -81,11 +83,13 @@
         $dublinDelivRate = $row["Flat_Delivery_Fee"];
         $delivChargePerKm = $row["Additional_Delivery_Fee"];
         $VATRate = $row["VAT_Rate"]; ## This will be used when outputting VAT figure to table
+        $_SESSION["VATRate"] = $VATRate; ## This will be used in generating the downloadable invoice
         
 
         ## Take in km distance outside dublin from session variable and then calculate Delivery Cost
         $kmDistFromDublin = $_SESSION["kmOutsideDublin"];
         $deliveryCost = $dublinDelivRate + $kmDistFromDublin*$delivChargePerKm;  ## If Dublin: deliveryCost = 75 + 0*(0.50) = 75. Note these numbers can for deliv charges can be changed in the DB
+        $_SESSION["delivCost"] = $deliveryCost; ## This will be used in generating the downloadable invoice
 
         $dataEnteredCorrectly = FALSE;
         // Will enter here once submit has been hit
@@ -121,6 +125,8 @@
 
             $startTime =  $_SESSION["startTime"];
             $endTime =  $_SESSION["endTime"];
+
+            $_SESSION["delivMethod"] = $delivSetupPickUp; ## This will be used in generating the downloadable invoice
 
             // Connect to SQL database
             include ("ServerDetail.php");

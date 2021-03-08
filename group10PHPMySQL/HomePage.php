@@ -16,11 +16,17 @@
   
     <?php include 'UniversalMenuBar.php';?>  <!-- Imports code for menu bar from another php file -->
 
-    <p> 
-        Welcome to Dublin Party Hire! We have party rental equipment for any event at competitive prices. <br>
+    <h1> 
+        Welcome to Dublin Party Hire! 
+    </h1> 
+    
+    <h2> 
+        We have party rental equipment for any event at competitive prices.
+        <br>
         The company can supply everything you would need for a party such as furniture, glassware,
-        crockery, cutlery, linens and also barbecues, gazebos, marquees etc. <br>
-    </p>
+        crockery, cutlery, linens and also barbecues, gazebos, marquees etc. 
+        <br>
+    </h2>
 
     <!-- 
     <h2> Learn about our business </h2>
