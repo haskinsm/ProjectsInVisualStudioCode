@@ -108,7 +108,7 @@
 
             <th> Product ID </th>
             <th> Product Name </th>
-            <th> Sales Revenue of Prod (incl. fufilled and future bookings) </th>
+            <th> Sales Revenue of Prod </th>
         
         </tr>
         <?php
@@ -131,9 +131,9 @@
                     echo '<td>'.$row["Product_Name"].'</td>';
                    
 
-                     //Access the SQL database
+                    //Access the SQL database
                     // This will get the number of times the relevant product has been ordered
-                     $sql2Q = "SELECT count(Product_ID) FROM Order_Items, Bookings WHERE Product_ID = '$productID' && Event_End_Date <= '$eventEndDate' && Event_Start_Date >= '$eventStartDate' && Bookings.Booking_ID = Order_Items.Booking_ID";
+                    $sql2Q = "SELECT count(Product_ID) FROM Order_Items, Bookings WHERE Product_ID = '$productID' && Event_End_Date <= '$eventEndDate' && Event_Start_Date >= '$eventStartDate' && Bookings.Booking_ID = Order_Items.Booking_ID";
                 
                     $result2Q = mysqli_query($link,$sql2Q); 
 
@@ -165,7 +165,7 @@
                                 $rev = $rev + $rentalFee*$qty*$num48hrPeriods;
                             }
                             ## Now format rev nicely before outputting
-                            $rev = number_format( (float)( $rev ), 2, '.', '' ); ## number_format function rounds to two places so 8-> 8.00, 9.768 -> 9.77 etc
+                            $rev = number_format( (float)( $rev ), 2, '.', ',' ); ## number_format function rounds to two places so 8-> 8.00, 9.768 -> 9.77 etc 4000 -> 4,000.00
                             echo  '<td> <b> €'.$rev.' </b> </td>'; ## Added bold text tags
                         }
                     }

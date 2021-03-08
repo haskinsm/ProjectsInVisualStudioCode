@@ -4,7 +4,9 @@
     last updated: Michael 06/03/21
       Written
             Michael 08/03'21
-                Im just adding the invoice stuff myself. Have everything working perfectly. There are currenlty problems with the Guest & Customer Login, but all of my stuff works perfectly if you hardcode the guest email.
+                Im just adding the invoice stuff myself. Have everything working perfectly. There are currenlty small problems with the Guest & Customer Login, but all of my stuff works perfectly.
+            Michael 08/03/21
+                Fixed big bug with number formatting. Commas were cuasing additions to fail.
                 
         
 -->
@@ -82,8 +84,8 @@
         $returnOrCollection = "Collection";
 
         ## Now format DeliveryCost and setup cost nicely
-        $deliveryCost = number_format( (float)($deliveryCost), 2, '.', '' ); ## Makes sure price is to two decimal places
-        $totalSetupCost = number_format( (float)($totalSetupCost), 2, '.', '' ); ## Make sure price has is to two decimal places
+        $deliveryCost = number_format( (float)($deliveryCost), 2, '.', ',' ); ## Makes sure price is to two decimal places
+        $totalSetupCost = number_format( (float)($totalSetupCost), 2, '.', ',' ); ## Make sure price has is to two decimal places
 
         if( $delivSetupPickUp == "ClickCollect"){
 
@@ -105,7 +107,7 @@
         }
 
         ## Now format Cost nicely:
-        $cost = number_format( (float)($cost), 2, '.', '' ); ## Makes sure price is to two decimal places
+        $cost = number_format( (float)($cost), 2, '.', ',' ); ## Makes sure price is to two decimal places
     ?>
 
     <table id="tblCustomers" cellspacing="0" cellpadding="0">
@@ -149,7 +151,7 @@
                 }
             }
             $VAT = number_format( (float)( $subtotal*$VATRate ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
-            $totalDueBeforeDeliv = number_format( (float)( $subtotal + $VAT ), 2, '.', '' ); ## Rounds to two places so 8-> 8.00 etc
+            $totalDueBeforeDeliv = number_format( (float)( $subtotal + $VAT ), 2, '.', ',' ); ## Rounds to two places so 8-> 8.00 etc
 
         
         ?>
@@ -158,14 +160,14 @@
             <td></td>
             <td></td>
             <td> Subtotal (Excl. Deliv & Setup) </td>
-            <td style="border: 1px solid black;"> €<?php echo $subtotal ?> </td> 
+            <td style="border: 1px solid black;"> €<?php echo number_format( (float)( $subtotal ), 2, '.', ',' ) ?> </td> 
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
             <td> VAT at <?php echo ($VATRate*100) ?>% </td>
-            <td style="border: 1px solid black;"> €<?php echo $VAT ?>  </td>
+            <td style="border: 1px solid black;"> €<?php echo number_format( (float)( $VAT ), 2, '.', ',' ) ?>  </td>
         </tr>
         <tr>
             <td></td>
