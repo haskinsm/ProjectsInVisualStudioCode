@@ -94,8 +94,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: CustomerLogin.php");
+		session_start();
+                            
+                 // Store data in session variables
+                 $_SESSION["loggedin"] = true;
+                 $_SESSION["Email"] = $Email; 
+		 $_SESSION["Firstname"] = $firstname;
+		 $_SESSION["Position"] = Customer; 
+
+                header("location: AddCustomerInfo.php");
             } else{
                 echo "Something went wrong. Please try again later.";
             }

@@ -58,7 +58,7 @@
             
                 //Access the SQL database
                 // This will get product ID, name, rental fee, any discounts applied, setup cost and only get products that are in stock i.e. qty>0
-                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Euro_Discount FROM Products WHERE Quantity > 0";
+                $sql = "SELECT Product_ID, Product_Name, Rental_Fee, Setup_Cost, Euro_Discount FROM Products WHERE Quantity > 0 ORDER BY Euro_Discount DESC";
                 $result = mysqli_query($link,$sql); 
               
                 //Code adapted from Aideen's photo

@@ -141,30 +141,30 @@ font: 20px sans-serif;
 <body>
  <?php include 'UniversalMenuBar.php';
  echo '<br>';
- include 'ManagerMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
+ ?> <!-- Imports code for menu bar from another php file-->
     <div class="wrapper">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account for a new member of staff.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Email</label>
-                <input type="text" name="Email" class="form-control" value="<?php echo $Email; ?>">
+                <input type="text" name="Email" class="form-control" value="">
                 <span class="help-block"><?php echo $username_err; ?></span>
             </div>
             <div class="form-group <?php echo (!empty($firstname_err)) ? 'has-error' : ''; ?>">
                 <label>First Name</label>
-                <input type="text" name="firstname" class="form-control" value="<?php echo $firstname; ?>">
+                <input type="text" name="firstname" class="form-control" value="">
                 <span class="help-block"><?php echo $firstname_err; ?></span>
             </div>
 
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
+                <input type="password" name="password" class="form-control" value="">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+                <input type="password" name="confirm_password" class="form-control" value="">
                 <span class="help-block"><?php echo $confirm_password_err; ?></span>
             </div>
             <div class="form-group">

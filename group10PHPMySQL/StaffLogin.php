@@ -1,130 +1,148 @@
 
-<!-- 
-    Purpose of Script: Staff Login
-    Written by: Michael H
-    last updated: Michael 16/02/21
-    Source for Login form: https://www.w3schools.com/howto/howto_css_login_form.asp
--->
+<!--
+    Purpose of Script: staff Login,
+    Written by: Harry O'Brien
+    last updated: Harry 3/3/21
+    Source for Login form: https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php-->
 
+<?php
+// Initialize the session
+session_start();
+ 
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Worker){
+    header("location: StaffHomePage.php");
+    exit;
+}
+ 
+// Include database connect file
+require_once "ServerDetail.php";
+ 
+// Define variables and initialize with empty values
+$Email = $password = "";
+$username_err = $password_err = "";
+ 
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Check if username is empty
+    if(empty(trim($_POST["Email"]))){
+        $username_err = "Please enter Email.";
+    } else{
+        $Email = trim($_POST["Email"]);
+    }
+    
+    // Check if password is empty
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Please enter your password.";
+    } else{
+        $password = trim($_POST["password"]);
+    }
+    
+    // Validate credentials
+    if(empty($username_err) && empty($password_err)){
+        // Prepare a select statement
+        $sql = "SELECT Email,Firstname, Password FROM Passwords WHERE Email = ? AND Position = 'Worker'";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_Email);
+            
+            // Set parameters
+            $param_Email = $Email;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                
+                // Check if Email exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $Email,$Firstname, $hashed_password);
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
+                            session_start();
+                            
+                            // Store data in session variables
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["Email"] = $Email;
+			    $_SESSION["Firstname"] = $Firstname;
+			    $_SESSION["Position"] = Worker;                            
+                            
+                            // Redirect user to welcome page
+                            header("location: StaffHomePage.php");
+                        } else{
+                            // Display an error message if password is not valid
+                            $password_err = "The password you entered was not valid.";
+                        }
+                    }
+                } else{
+                    // Display an error message if Email doesn't exist
+                    $username_err = "No account found with that email.";
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
+    }
+    
+    // Close connection
+    mysqli_close($link);
+}
+?>
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Staff Login </title>
-    <link rel="stylesheet" href="WebsiteStyle.css"> <!-- All CSS should be added to the WebsiteStyle.css file and then it will be imported here. If want a unique 
-            style for something should be done in line like so: E.G:   <h1 style="color:blue;text-align:center;">  This is a heading </h1>       -->
-    <style>
-    form {border: 3px solid #f1f1f1;} /* Formatting for form */
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <style type="text/css">
+       body { 
+/* background-color: plum; /* Colour of background*/
+color: rgb(119, 17, 252); /* Colour of body text*/
+background-image: 
+    linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
+        rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
+        rgba(0, 0, 0, 0.5)
+    ),
+    url("images/Background4.jpg"); /* image background */
+background-repeat: no-repeat; /* image only used once */
+background-size: cover;
+color: white;
+font: 20px sans-serif;
+}
 
-    /* Format for the input fields */
-    input[type=text], input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    }
-
-    button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    }
-
-    /* Makes button change colour when hover mouse over it */
-    button:hover {
-    opacity: 0.8;
-    }
-
-    /* Formatiing for create account button */
-    .newAccountbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: blue;
-    }
-    /* Formats the manager avatar image */
-    .imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-    }
-    /* Scales the managaer avatar image */
-    img.avatar {
-    width: 20%;
-    border-radius: 50%;
-    }
-
-    .container {
-    padding: 16px;
-    }
-    /* This is the formatting for the forgot password bit */
-    span.psw {
-    float: right;
-    padding-top: 16px;
-    }
-
-    /* Change styles for span and cancel button on extra small screens */
-     @media screen and (max-width: 300px) {
-        span.psw {
-            display: block;
-            float: none;
-        }
-        .cancelbtn {
-            width: 100%;
-        }
-    }
-    /* visited link styling */
-    a:visited {
-    color: black;
-    }
+        .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>
-
-
 <body>
 
-    <?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
-
-    <h2>Staff Login</h2>
-
-    <!-- Below is the code for the input form -->
-    <form action="StaffHomePage.php" > <!-- Currently does not check if valid password & email combo, just redirects as long as something is entered -->
-    <!--
-        Will prob have to do something like 
-        <form action = "myFunction()" >
-        <script>
-        function myFunction() {
-            ***Code to check if password and emial belongs to a valid user***
-            window.location.href="ManagerHomePage.php";
-        }
-        </script>
-    -->
-    <div class="imgcontainer">
-        <img src="images/workersAvatar.jpg" alt="Avatar" class="avatar"> 
-    </div>
-
-    <div class="container">
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" required>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-            
-        <button type="submit" >Login</button>
-        <span class="psw"> <a href="##" >Forgot password?</a></span>   <!-- Can ask if they want this, if do will need to add a link to a page where they can enter their manager id and then have their password emailed to them by a malito link (The email one) ***************************************************-->
-    </div>
-
-    <div class="container" style="background-color:#f1f1f1">
-       <!-- <button type="button" class="newAccountbtn">Create Account</button>  -->
-    
-    </div>
-    </form>
-
+<?php include 'UniversalMenuBar.php';?> <!-- Imports code for menu bar from another php file-->
+    <div class="wrapper">
+        <h2>Staff Login</h2>
+        <p>Please fill in your credentials to login.</p>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>Username</label>
+                <input type="text" name="Email" class="form-control" value="<?php echo $Email; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>    
+            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control">
+                <span class="help-block"><?php echo $password_err; ?></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Login">
+            </div>
+           
+        </form>
+    </div>    
 </body>
 </html>

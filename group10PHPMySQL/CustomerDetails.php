@@ -98,6 +98,5 @@ font: 20px sans-serif;
 	<a href="AddCustomerInfo.php">Please add your customer details</a>
     <?php } ?>
 <br>
- <a href="CustomerLogOut.php" class="btn btn-danger">Sign Out of your Account</a>
     </body>
 </html>

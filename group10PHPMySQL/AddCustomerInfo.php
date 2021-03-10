@@ -41,12 +41,8 @@
 </head>
 <?php 
      session_start();
-     include "ServerDetail.php"; 
-     if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Customer)){
-    	header("location: CustomerLogin.php");
-    	exit;
-     }
-
+     require_once "ServerDetail.php"; 
+     
     
 ?>
 <body>

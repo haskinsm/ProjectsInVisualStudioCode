@@ -47,7 +47,7 @@
 </head>
 <?php 
      session_start();
-     include "ServerDetail.php"; 
+     include "ServerDetail.php"; //Checks if 
      if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["Position"]) && $_SESSION["Position"] === Manager)){
     	header("location: ManagementLogin.php");
     	exit;
@@ -109,7 +109,7 @@
                       Please fill in your details below. <br>
                  </p>
                 
-                 <form method="post" action="StaffInfoCode.php">
+                 <form method="post" action="ManagerInfoCode.php">
 
                     <div class="row">
                         <div class="col-lg-2 col-md-2">
