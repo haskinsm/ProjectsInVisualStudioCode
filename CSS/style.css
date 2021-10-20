@@ -1,0 +1,64 @@
+body {
+    background-color: #EEE;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a{
+    text-decoration: none; /* targets the iks on the page to get rid of underline */
+    color: red;
+}
+
+h1, h2, h3{
+    margin: 0;
+}
+/* The # targets ids: #<idname> */
+/* Anything with the ID 'container' will have the following styles applied to it in the curly brackets */
+#container {
+    background-color: white;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    /* above will centre div hrizontally, oes not work vertically. */
+}
+
+#header {
+    background-color: aqua;
+    color: white; /* text colour */ 
+    text-align: center;
+    padding: 10px;
+}
+
+#content {
+    padding: 10px 10px 10px 10px; /* Padding top, right, bottom, left. Can shorten this to padding: 10px and will apply to all*/
+}
+
+#nav {
+    width: 180px;
+    float: left;
+}
+
+/* The .<classname> targets classes. If have multiple classes can differentiate these by adding the id of the container that the class you want to target is in*/
+/* Could just do .selected but want to be more specific so use (NOTE the need to seperate with a space: */
+#nav .selected {
+    font-weight: bold;
+}
+
+/* Target the unordered list in the nav div. Remove bullet points*/
+#nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#main {
+    width: 600px;
+    float: right;
+}
+/* Divs always appear on new lines, but here we want them to float together, so can have multiple on the same row */ 
+
+#footer {
+    clear: both; /* must be clear of any floating elements before footer is displayed */
+    padding: 10px;
+    background-color: #9999;
+    color: white;
+    text-align: right;
+}

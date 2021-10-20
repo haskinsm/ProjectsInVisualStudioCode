@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base JS help file</title>
+</head>
+<body>
+    <script>
+        document.write("Hello, World!!"); // Simple statement. Remember to add ';' at end of each line
+
+        // Variables
+        var myvariable; // var declaration. Weakly typed -> dont declare type
+        myvariable = 5;
+        myvariable ++; // myv == 6
+        mytotal = myvariable ++; // myv == 7, total == 6   --> increment here does not take effect on total as after myvar 
+        mytotal = ++ myvariable; // myv == 8, total == 8   --> increment here takes effect on total as before myvar
+        document.write("<br>", myvariable);
+        document.write("<br>", mytotal);
+        var othervariable = false;
+
+        // Concat Strings
+        var words = "Can the real slim shady";
+        var moreWords = "please stand up";
+        var sentence = words + moreWords
+        document.write("<br>", sentence);
+
+        // Vars are stored as objects in JS and can access some properties of the objects
+        var alpha = "ABCDEFG";
+        var length = alpha.length;
+        document.write("<br>", length);
+        var result = alpha.substring(3, 5); // Gets DE, does not include element at index 5
+        document.write("<br>", result);
+
+        // Arrays
+        var a = new Array(4); // array that will hold 4 items
+        a[0] = "cat";
+        a[1] = "dog";
+        a[2] = 95;
+        a[3] = true;
+        document.write("<br>", a[1]);
+           // or create like so 
+        var b = new Array("cat", "dog", 95, true);
+        document.write("<br>", b[3]);
+            // or
+        var c = ["cat", "dog", 95, true];
+
+        // Define your own functions
+        function sayHello(who){
+            document.write("<br>", "Hello, " + who);
+            // Can put these in the head section to tidy things up 
+        }
+        sayHello("Fred");
+
+        // conditions
+        var a = 7;
+        if (a>10) {
+            alert("A is smaller or equal to 10. A is " + a); // sends a JS alert and out puts the var 
+        } else{
+            //alert("A is greater than 10. A is " + a);
+        }
+
+        // Loops 
+        for (i=0; i<5; i++) {
+            document.write("<br>" + "This is iteration " + i)
+        }
+
+    </script>
+</body>
+</html>

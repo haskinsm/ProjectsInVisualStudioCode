@@ -7,27 +7,6 @@
   (major1) == 4 && (major2) <  8 || \
   (major1) == 4 && (major2) == 8 && (minor) <= 2)
 
-/* package HUnit-1.3.1.2 */
-#define VERSION_HUnit "1.3.1.2"
-#define MIN_VERSION_HUnit(major1,major2,minor) (\
-  (major1) <  1 || \
-  (major1) == 1 && (major2) <  3 || \
-  (major1) == 1 && (major2) == 3 && (minor) <= 1)
-
-/* package test-framework-0.8.1.1 */
-#define VERSION_test_framework "0.8.1.1"
-#define MIN_VERSION_test_framework(major1,major2,minor) (\
-  (major1) <  0 || \
-  (major1) == 0 && (major2) <  8 || \
-  (major1) == 0 && (major2) == 8 && (minor) <= 1)
-
-/* package test-framework-hunit-0.3.0.2 */
-#define VERSION_test_framework_hunit "0.3.0.2"
-#define MIN_VERSION_test_framework_hunit(major1,major2,minor) (\
-  (major1) <  0 || \
-  (major1) == 0 && (major2) <  3 || \
-  (major1) == 0 && (major2) == 3 && (minor) <= 0)
-
 /* tool gcc-5.2.0 */
 #define TOOL_VERSION_gcc "5.2.0"
 #define MIN_TOOL_VERSION_gcc(major1,major2,minor) (\
@@ -77,5 +56,5 @@
   (major1) == 2 && (major2) <  25 || \
   (major1) == 2 && (major2) == 25 && (minor) <= 0)
 
-#define CURRENT_PACKAGE_KEY "ex01_DAmIZvqlGfO1en5WWmRvQz"
+#define CURRENT_PACKAGE_KEY "ex01_4Ch4nA9uNhZIfM66l3U3CC"
 

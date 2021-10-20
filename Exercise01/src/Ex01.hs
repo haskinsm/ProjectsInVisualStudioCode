@@ -109,3 +109,13 @@ runs [x1,x2]
        | otherwise = [x1] : [x2]
 runs [x1] = [x1]
 -}
+{-
+       findNumber arr k = do
+       -- Write your code here
+          myFunc arr k
+       
+       myFunc :: Eq a => [a] -> a -> String  
+       myFunc [] k = "NO"
+       myFunc (x:xs) k | x == k = "YES"
+                       | otherwise = myFunc xs k
+-}

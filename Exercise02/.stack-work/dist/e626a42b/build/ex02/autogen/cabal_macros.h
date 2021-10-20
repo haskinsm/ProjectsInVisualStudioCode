@@ -55,6 +55,17 @@
   (major1) == 8 && (major2) == 6 && (minor) <= 4)
 #endif /* MIN_TOOL_VERSION_ghc_pkg */
 
+/* tool happy-1.19.9 */
+#ifndef TOOL_VERSION_happy
+#define TOOL_VERSION_happy "1.19.9"
+#endif /* TOOL_VERSION_happy */
+#ifndef MIN_TOOL_VERSION_happy
+#define MIN_TOOL_VERSION_happy(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  19 || \
+  (major1) == 1 && (major2) == 19 && (minor) <= 9)
+#endif /* MIN_TOOL_VERSION_happy */
+
 /* tool hpc-0.67 */
 #ifndef TOOL_VERSION_hpc
 #define TOOL_VERSION_hpc "0.67"
@@ -100,7 +111,7 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "ex02-0.1.0.0-L2yrBJX1zVd6OTCxeHvQnj-ex02"
+#define CURRENT_COMPONENT_ID "ex02-0.1.0.0-AhExcsFbY9TC0QrBvy6N08-ex02"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

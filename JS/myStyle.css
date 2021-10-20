@@ -1,0 +1,22 @@
+body { 
+    /* background-color: plum; /* Colour of background*/
+     color: rgb(119, 17, 252); /* Colour of body text*/
+     background-image: 
+         linear-gradient(              /* This code is used to tint the background image to ensure that text is visible */
+             rgba(0, 0, 0, 0.5),     /* source: https://css-tricks.com/design-considerations-text-images/ */
+             rgba(0, 0, 0, 0.5)
+         ),
+         url("images/myBackground.jpg"); /* image background */
+     background-repeat: no-repeat; /* image only used once */
+     background-size: cover;
+     color: white;
+     font-size: 20px;
+ }
+ h1{
+     color: white; /* Colour of text*/
+     padding: 5px; /* increase spaces around header */
+     margin-left: 50px; /* Indents it so its not right in the top left corner */
+ }
+ h2{
+     color: white; /* Colour of text*/
+ }

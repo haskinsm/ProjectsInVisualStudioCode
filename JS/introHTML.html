@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- To view changes right click and select open with live server extension -->
+<!-- Remember cant write php unnless file ends in .php -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base HTML helpfile</title>
+    <link rel="stylesheet" href="myStyle.css"> <!-- Import stylesheet -->
+    <style>
+        form, table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color:blue; text-align:left;"> This is a little tester Doc  </h1>
+    <p>
+        <br>
+        <blockquote>"This is my quote"</blockquote>
+        <b> Yo </b>
+        <strong> Yo </strong>
+        <i> Yoyo </i>
+        <em> Yoyo </em>
+        <sub> ey </sub>
+        <sup> ey </sup>
+
+        <!-- Emmet Abrv: ol>li*2>ul*1>li*3 will construct below table -->
+        ol>li*2>ul*1>li*3
+        <OL>
+            <li>Apple
+                <UL>
+                    <li>Green</li>
+                    <li>Red</li>
+                    <li>Granny Smith</li>
+                    
+                </UL>
+            </li>
+            <li>Orange
+                <UL>
+                    <li>Big</li>
+                    <li>Fecking massive</li>
+                </UL>
+            </li>
+        </OL>
+
+        <img src = "images/pic.png" alt = "Whoops pic didn't load right" width="300" height="200">
+        <br>
+        <a href="https://github.com/haskinsm" target="_blank"> MyGitHub</a>
+        <a href="mailto:haskinms@tcd.ie">My Email</a>
+        <a href="HTMLEmmetCheatSheet.pdf" target="_blank">HTML Emmet Abrv Cheat Sheet</a>
+        <!-- <embed src="HTMLEmmetCheatSheet.pdf" width="800px" height="2100px" /> -->
+
+        <!-- Can use emmet abrievation to construct tables. type: table>((tr>th*2)+(tr>td*2))  to contruct a below table -->
+        <table>
+            <tr>
+                <th> Heady1 </th>
+                <th> Heady2 </th>
+            </tr>
+            <tr>
+                <td> Data1 </td>
+                <td> Data2 </td>
+            </tr>
+        </table>
+        <br>
+        
+
+        <form action="http://127.0.0.1:5500/JS/intro.HTML"> <!-- In future labs, the form will be calling .php scripts and writing the data to a database.
+            Here the Action attribute calls the URL for the registration form-->
+            <label for="student_name">Name:</label>
+            <input type="text" name="student_name" id="student_name" size=30> <br><br>
+    
+            <label for="student_number">Staff/Student Number:</label>
+            <input type="text" name="student_number" id="student_number" size=8> <br> <br> <!-- Note prob better to use tables to space the form elements-->
+    
+            <label for="email_address">E-Mail address:</label>
+            <input type="text" name="email_address" id="email_address"> <br> <br>
+    
+            <label for="department">Department:</label>
+            <input type="text" name = "department" id = "department"> <br> <br>
+    
+            <label for="office_phone_num">Office phone number:</label>
+            <input type="text" name = "office_phone_num" id ="office_phone_num"> <br> <br>
+    
+            <label for="gender">Gender:</label> <br>
+            <input type="radio" name = "gender" id="male" >
+            <label for="male">Male</label>                     <!-- Radio button-> onty one can be selected -->
+            <input type="radio" name = "gender" id="female" >
+            <label for="female">Female</label><br> <br>
+    
+            <label for="checkbox">Faculty:</label> <br>
+            <input type="checkbox" name="fems" id = "fems">
+            <label for="fems">FEMS</label>
+            <input type="checkbox" name ="fahss" id = "fahss"> <!-- checkbox-> multiple can be selected -->
+            <label for="fahss">FAHSS</label>
+            <input type="checkbox" name ="fhs" id="fhs">
+            <label for="fhs">FHS</label> <br><br>
+    
+            <label for="status">Status:</label> <br>
+            <select name="status" id="status">
+                <option value="1">Staff</option>           <!-- Dropdown List -->
+                <option value="2">Postgrad</option>
+                <option value="3">Undergrad</option>
+            </select> <br> <br>
+    
+            <label for="course">Course:</label> <br>
+            <select name="course" id="course">
+                <option value="1">MSISS</option>           <!-- Dropdown List -->
+                <option value="2">CS</option>
+                <option value="3">BESS</option>
+                <option value="4">ENG</option>
+                <option value="0">None of above</option>
+            </select> <br> <br>
+    
+            <input type="Submit" value="Submit">
+            <input type="Reset" value= "Reset">
+        </form>
+        
+        
+
+    </p>
+</body>
+</html>
