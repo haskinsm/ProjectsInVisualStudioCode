@@ -10,7 +10,7 @@
     <script>
         document.write("Hello, World!!"); // Simple statement. Remember to add ';' at end of each line
 
-        // Variables
+    // Variables
         var myvariable; // var declaration. Weakly typed -> dont declare type
         myvariable = 5;
         myvariable ++; // myv == 6
@@ -18,22 +18,116 @@
         mytotal = ++ myvariable; // myv == 8, total == 8   --> increment here takes effect on total as before myvar
         document.write("<br>", myvariable);
         document.write("<br>", mytotal);
-        var othervariable = false;
 
-        // Concat Strings
+        var othervariable = false;
+        var x; // value of x is undefined
+        var y = undefined; // we can also set the value of a variable as undefined
+        var z = null;
+
+        typeof "John Doe" // Returns "string"
+        typeof 3.14 // Returns "number"
+        typeof true // Returns "boolean"
+        typeof 234567890123456789012345678901234567890n // Returns bigint
+        typeof undefined // Returns "undefined"
+        typeof null // Returns "object" (kind of a bug in JavaScript)
+
+        // Collection of data in key-value pairs
+        var obj1 = {
+            x:  43,
+            y:  "Hello world!",
+            z: function(){
+                return this.x;
+            }
+        } 
+       
+    // Implicit Type Coercion (JS is weakly typed)
+        // String coercion
+        // With + operator (converts int type to string and concatenates)
+        var x = 3
+        var y = "3"
+        x + y //Returns "33"
+        var x = 24;
+        var y = "Hello";
+        x + y   // Returns "24Hello";  
+        // With - operator (converts string type to int and subtracts)
+        var x = 3;
+        var y = "3";
+        x - y    //Returns 0 since the variable y (string type) is converted to a number type
+
+        // Boolean Coercion 
+        // Truthy values are those which will be converted (coerced) to true . Falsy values are those which will be converted to false .
+        // All values except 0, 0n, -0, “”, null, undefined and NaN are truthy values.
+        var x = 0;
+        var y = 23;    
+        if(x) { console.log(x) }   // The code inside this block will not run since the value of x is 0(Falsy)       
+        if(y) { console.log(y) }    // The code inside this block will run since the value of y is 23 (Truthy)
+        
+        var x = 220;
+        var y = "Hello";
+        var z = undefined;       
+        x || y    // Returns 220 since the first value is truthy      
+        x || z   // Returns 220 since the first value is truthy        
+        x && y    // Returns "Hello" since both the values are truthy       
+        y && z   // Returns undefined since the second value is falsy     
+        if( x && y ){ 
+            console.log("Code runs" ); // This block runs because x && y returns "Hello" (Truthy)
+            // console. log() is a function in JavaScript which is used to print any kind of variables
+            // defined before in it or to just print any message that needs to be displayed to the user.
+        }         
+        if( x || z ){
+            console.log("Code runs");  // This block runs because x || y returns 220(Truthy)
+        }
+
+        // Equality Coercion
+        // The ‘ == ‘ operator compares values and not types. The ‘==’ operator, converts both the operands to the same type and then compares them.
+        var a = 12;
+        var b = "12";
+        a == b // Returns true because both 'a' and 'b' are converted to the same type and then compared. Hence the operands are equal.
+
+        // Coercion does not take place when using the ‘===’ operator. Both operands are not converted to the same type in the case of ‘===’ operator.
+        var a = 226;
+        var b = "226";
+        a === b // Returns false because coercion does not take place and the  operands are of different types. Hence they are not equal.
+
+    // NaN property in JS
+        isNaN("Hello")  // Returns true
+        isNaN(345)   // Returns false
+        isNaN('1')  // Returns false, since '1' is converted to Number type which results in 0 ( a number) 
+        isNaN(true) // Returns false, since true converted to Number type results in 1 ( a number) ***********
+        isNaN(false) // Returns false ***********
+        isNaN(undefined) // Returns true
+
+    // Assignment Operator ('=')
+        // For primitive Data types
+        var y = 234;
+        var z = y;
+        // Changing the value of y
+        y = 23;
+        console.log(z);  // Returns 234, since z points to a new address in the memory so changes in y will not effect z
+
+        // For non-primitive data types
+        var obj = { name: "Vivek", surname: "Bisht" };
+        var obj2 = obj;
+        // changing the value of obj1
+        obj1.name = "Akki";
+        console.log(obj2);       
+        // Returns {name:"Akki", surname:"Bisht"} since both the variables are pointing to the same address.
+
+
+    // Concat Strings
         var words = "Can the real slim shady";
         var moreWords = "please stand up";
-        var sentence = words + moreWords
-        document.write("<br>", sentence);
+        var sentence = words + " " + moreWords
+        document.write("<br>", sentence); // Adds two strings with a space in between
 
-        // Vars are stored as objects in JS and can access some properties of the objects
+    // Vars are stored as objects in JS and can access some properties of the objects
         var alpha = "ABCDEFG";
         var length = alpha.length;
         document.write("<br>", length);
         var result = alpha.substring(3, 5); // Gets DE, does not include element at index 5
         document.write("<br>", result);
 
-        // Arrays
+    // Arrays
         var a = new Array(4); // array that will hold 4 items
         a[0] = "cat";
         a[1] = "dog";
@@ -46,14 +140,7 @@
             // or
         var c = ["cat", "dog", 95, true];
 
-        // Define your own functions
-        function sayHello(who){
-            document.write("<br>", "Hello, " + who);
-            // Can put these in the head section to tidy things up 
-        }
-        sayHello("Fred");
-
-        // conditions
+    // conditions
         var a = 7;
         if (a>10) {
             alert("A is smaller or equal to 10. A is " + a); // sends a JS alert and out puts the var 
@@ -61,10 +148,241 @@
             //alert("A is greater than 10. A is " + a);
         }
 
-        // Loops 
+    // Loops 
         for (i=0; i<5; i++) {
             document.write("<br>" + "This is iteration " + i)
         }
+
+     // Operators
+        var x = 2;
+        var y = "2";
+        (x == y)  // Returns true since the value of both x and y is the same
+        (x === y) // Returns false since the typeof x is "number" and typeof y is "string"
+
+    // Functions
+        function sayHello(who){
+            document.write("<br>", "Hello, " + who);
+            // Can put these in the head section to tidy things up 
+        }
+        sayHello("Fred");
+
+        // Immediately invoked function (known as IIFE) is a function that runs as soon as it is defined 
+        // Syntax of IIFE :
+        (function(){ 
+            // Do something;
+        })();
+        // Need the first set of parentheses as otherwise the complier will throw an error as functions need a name in JS
+        // not a function declaration, instead, it’s a function expression.
+        // Second set of parentheses results in the function declaration being returned immediately. 
+
+        // Higher order functions 
+        // Functions that operate on other functions, either by taking them as arguments or by returning them, are called higher-order functions
+        function higherOrder(fn) {
+        fn();
+        }
+            
+        higherOrder(function() { console.log("Hello world") }); 
+
+        function higherOrder2() {
+        return function() {
+            return "Do something";
+        }
+        }
+        var x = higherOrder2();
+        x()   // Returns "Do something"
+
+
+    // Constructor Function
+        // Constructor functions are used to create objects in javascript.
+        // **Note- Name of a constructor function should always be written in Pascal Notation: every word should start with a capital letter.
+        function Person(name,age,gender){
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+        }
+
+
+        var person1 = new Person("Vivek", 76, "male");
+        console.log(person1);
+
+        var person2 = new Person("Courtney", 34, "female");
+        console.log(person2);
+
+
+    // Callbacks
+        // A callback is a function that will be executed after another function gets executed.
+        // In javascript, functions are treated as first-class citizens, they can be used as an argument of another function, can be returned by another function and can be used as a property of an object.
+
+        // Functions that are used as an argument to another function are called callback functions.
+        function divideByHalf(sum){
+        console.log(Math.floor(sum / 2));
+        }
+
+        function multiplyBy2(sum){
+        console.log(sum * 2);
+        }
+
+        function operationOnSum(num1,num2,operation){
+        var sum = num1 + num2;
+        operation(sum); // The callback. Both divideByHalf and multiplyBy2 functions are used as callback functions 
+        }
+
+        operationOnSum(3, 3, divideByHalf); // Outputs 3
+        operationOnSum(5, 5, multiplyBy2); // Outputs 20 
+
+    // This Keyword
+        // The “this” keyword refers to the object that the function is a property of.
+        // The value of “this” keyword will always depend on the object that is invoking the function.
+        function doSomething() {
+            console.log(this);
+        }        
+        doSomething();
+        // Since the function is invoked in the global context, the function is a property of the global object.
+        // Therefore, the output of the above code will be the global object. Since we ran the above code inside the browser, the global object is the window object.
+
+        var obj = {
+            name:  "vivek",
+            getName: function(){
+            console.log(this.name);
+            }
+        }       
+        obj.getName();
+        // In the above code, at the time of invocation, the getName function is a property of the object obj , 
+        // therefore, the this keyword will refer to the object obj , and hence the output will be “vivek”.
+
+        var obj = {
+            name:  "vivek",
+            getName: function(){
+            console.log(this.name);
+        }
+                
+        }
+        
+        var getName = obj.getName; //Note this gets the fucntion and does not enact the function
+        var obj2 = {name:"akshay", getName }; // note getName is a function, hence you can call it
+        obj2.getName();
+
+        // The output will be “akshay”.
+        // Although the getName function is declared inside the object obj , at the time of invocation, getName()
+        // is a property of obj2 , therefore the “this” keyword will refer to obj2 .
+
+        // The silly way to understanding the this keyword is, whenever the function is invoked, check the object before the dot .
+        // The value of this . keyword will always be the object before the dot .
+
+        // If there is no object before the dot like in example1, the value of this keyword will be the global object.
+
+    // Call method
+        // It’s a predefined method in javascript.
+        // This method invokes a method (function) by specifying the owner object.
+        function sayHello(){
+            return "Hello " + this.name;
+        }     
+        var obj = {name: "Sandy"};
+        sayHello.call(obj); // Returns "Hello Sandy"
+                
+
+        // call() method allows an object to use the method (function) of another object.
+        var person = {
+            age: 23,
+            getAge: function(){
+                return this.age;
+            }
+        }     
+        var person2 = {age:  54};
+        person.getAge.call(person2);// Returns 54  
+
+        // call() accepts arguments:
+        function saySomething(message){
+            return this.name + " is " + message;
+        }        
+        var person4 = {name:  "John"};        
+        saySomething.call(person4, "awesome"); // Returns "John is awesome"    
+
+    // apply()
+        // The apply method is similar to the call() method. The only difference is that,
+        // call() method takes arguments separately whereas, apply() method takes arguments as an array.
+
+        function saySomething(message){
+            return this.name + " is " + message;
+        }     
+        var person4 = {name:  "John"};     
+        saySomething.apply(person4, ["awesome"]);
+
+    // bind()
+        // This method returns a new function, where the value of “this” skeyword will be bound to the owner object, which is provided as a parameter.
+        // Example with arguments:
+        var bikeDetails = {
+            displayDetails: function(registrationNumber,brandName){
+                return this.name+ " , "+ "bike details: "+ registrationNumber + " , " + brandName;
+            }
+        }        
+        var person1 = {name:  "Vivek"};       
+        var detailsOfPerson1 = bikeDetails.displayDetails.bind(person1, "TS0122", "Bullet");       
+        // Binds the displayDetails function to the person1 object         
+        detailsOfPerson1();
+        // Returns Vivek, bike details: TS0452, Thunderbird 
+
+
+    // Prototypes in JS
+        // All javascript objects inherit properties from a prototype.
+        // For example,
+        // Date objects inherit properties from the Date prototype
+        // Math objects inherit properties from the Math prototype
+        // Array objects inherit properties from the Array prototype.
+        // On top of the chain is Object.prototype. Every prototype inherits properties and methods from the Object.prototype.
+
+        // A prototype is a blueprint of an object. Prototype allows us to use properties and methods on an object even if the properties
+        // and methods do not exist on the current object.
+        
+        // Let’s see prototypes help us use methods and properties:
+        var arr = [];
+        arr.push(2);
+        console.log(arr); // Outputs [2]
+        // we have not defined any property or method called push on the array “arr” but the javascript engine does not throw an error.
+        // The reason being the use of prototypes. As we discussed before, Array objects inherit properties from the Array prototype.
+
+        // he javascript engine sees that the method push does not exist on the current array object and therefore, looks for the method 
+        // push inside the Array prototype and it finds the method.
+        // Whenever the property or method is not found on the current object, the javascript engine will always try to look in its prototype 
+        // and if it still does not exist, it looks inside the prototype's prototype and so on.
+
+    // Memoization
+        // Memoization is a form of caching where the return value of a function is cached based on its parameters. 
+        // If the parameter of that function is not changed, the cached version of the function is returned.
+        // Example not including it:
+        function addTo256(num){
+            return num + 256;
+        }
+
+        addTo256(20); // Returns 276
+        addTo256(40); // Returns 296
+        addTo256(20); // Returns 276
+        // When we are calling the function addTo256 again with the same parameter (“20” in the case above), we are computing the result again for the same parameter.
+        // imagine if the function does some heavy duty work, then, computing the result again and again with the same parameter will lead to wastage of time.
+
+        function memoizedAddTo256(){
+            var cache = {};
+
+            return function(num){
+                if(num in cache){
+                console.log("cached value");
+                return cache[num]
+
+                }
+                else{
+                cache[num] = num + 256;
+                return cache[num];
+                }
+            }
+        }
+
+        var memoizedFunc = memoizedAddTo256();
+
+        memoizedFunc(20); // Normal return
+        memoizedFunc(20); // Cached return
+
+        // **Note- Although using memoization saves time, it results in larger consumption of memory since we are storing all the computed results
+
 
     </script>
 </body>
