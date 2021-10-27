@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work with API in JS</title>
+    <!--  Firstly we need to connect the axios library to our html file for easy work with queries. -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <script>
+        // This code doesnt work due to API key but should do if change it up and have a valid key 
+
+        // Constant URL value for JAAS API
+        const RAPIDAPI_API_URL = 'https://arjunkomath-jaas-json-as-a-service-v1.p.rapidapi.com/';
+
+        // Object with RapidAPI authorization headers and Content-Type header
+        const RAPIDAPI_REQUEST_HEADERS = {
+          'X-RapidAPI-Host': 'arjunkomath-jaas-json-as-a-service-v1.p.rapidapi.com'
+          , 'X-RapidAPI-Key': '7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+          , 'Content-Type': 'application/json'
+        };
+        
+        // Variable to store ID
+        let STUDENT_ID = '';
+        // Object for examples
+        const student = {
+          name: 'John'
+          , surname: 'Doe'
+          , age: 18
+        };
+
+    //POST   // Making a POST request using an axios instance from a connected library
+        axios.post(RAPIDAPI_API_URL, student, { headers: RAPIDAPI_REQUEST_HEADERS })
+          // Handle a successful response from the server
+          .then(response => {
+                // Getting a data object from response that contains the necessary data from the server
+                const data = response.data;
+                console.log('data', data);
+                // Save the unique id that the server gives to our object
+                STUDENT_ID = data._id;
+          })
+          // Catch and print errors if any
+          .catch(error => console.error('On create student error', error));
+
+    //GET  // Making a GET request using an axios instance from a connected library
+        axios.get(`${RAPIDAPI_API_URL}/${STUDENT_ID}`, { headers: RAPIDAPI_REQUEST_HEADERS })
+          .then(response => {
+                console.log(response.data);
+          })
+          .catch(error => console.error('On get student error', error))
+
+    //PUT
+        student.age = 20;
+        student.score = 4.0;
+        axios.put(`${RAPIDAPI_API_URL}/${STUDENT_ID}`, student, { headers: RAPIDAPI_REQUEST_HEADERS })
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => console.error('On change student error', error))
+    </script>
+    
+</body>
+</html>
