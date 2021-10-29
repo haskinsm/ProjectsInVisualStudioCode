@@ -9,7 +9,7 @@
             "type": "pwa-chrome",
             "request": "launch", 
             "name": "Launch Chrome against localhost", 
-            "url": "http://127.0.0.1:5500/JS/helpFileJS.html", //I think it was originally http://127.0.0.1:5500/${file}
+            "url": "http://127.0.0.1:5500/JS/help_file_js.html", //I think it was originally http://127.0.0.1:5500/${file}
             "webRoot": "${workspaceFolder}"
         }
     ]

@@ -43,32 +43,38 @@
         typeof undefined // Returns "undefined"
         typeof null // Returns "object" (kind of a bug in JavaScript)
 
-        // Collection of data in key-value pairs
+        // Collection of data in key-value pairs (basically like a dict)
         var obj1 = {
             x:  43,
-            y:  "Hello world!",
+            y:  "Message in my Dict!",
             z: function(){
                 return this.x;
             }
         } 
+        obj1.x = 54;
+        obj1["Age"] = 21;
+        console.log( obj1.x + " " + obj1.y );
+        for (var key in obj1){
+            ///// var value = obj1[key]
+        }
        
     // Implicit Type Coercion (JS is weakly typed)
         // String coercion
         // With + operator (converts int type to string and concatenates)
-        var x = 3
-        var y = "3" 
-        x + y //Returns "33"
+        var x = 3;
+        var y = "3"; 
+        x + y; //Returns "33"
         // global method Number() can convert strings to numbers.
-        x + Number(y) // == 6
+        x + Number(y); // == 6
         // global method String() can convert numbers to strings. So can (<num>).toString()
         var x = 24;
         var y = "Hello";
-        x + y   // Returns "24Hello";  
+        x + y;   // Returns "24Hello";  
         // With - operator (converts string type to int and subtracts) Same goes with * and I think the other operators 
         var x = 3;
         var y = "3";
-        x - y    //Returns 0 since the variable y (string type) is converted to a number type
-        "5" * "2"   // returns 10        because "5" and "2" are converted to 5 and 2
+        x - y;   //Returns 0 since the variable y (string type) is converted to a number type
+        "5" * "2";   // returns 10        because "5" and "2" are converted to 5 and 2
 
         // Boolean Coercion 
         // Truthy values are those which will be converted (coerced) to true . Falsy values are those which will be converted to false .
@@ -141,6 +147,19 @@
         var moreWords = "please stand up";
         var sentence = words + " " + moreWords
         document.write("<br>", sentence); // Adds two strings with a space in between
+    
+    // String functions 
+        let txt = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        txt.length;
+        console.log(txt.slice(0,4)); // This gets ABCD. If you omit the second parameter will slice out rest of the string, if add - in front of the numbers gets the last few
+        // txt.substring(start, end)
+        // txt.substr(start, length)
+        // txt.replace("ABCD","IveReplacedABCDWithThis");
+        // txt.toUpperCase();
+        // txt.toLowerCase();
+        // txt.trim();  method removes whitespace from both sides of a string:
+        // txt.charAt(0)
+        // txt.split(" ")          // Split on spaces
 
     // Vars are stored as objects in JS and can access some properties of the objects
         var alpha = "ABCDEFG";
@@ -173,7 +192,7 @@
         }
 
     // Loops 
-        for (i=0; i<5; i++) {
+        for (let i=0; i<5; i++) {
             document.write("<br>" + "This is iteration " + i)
         }
 
@@ -194,7 +213,7 @@
         // Syntax of IIFE :
         (function(){ 
             // Do something;
-            var foo = "Hello There this is coming from my IIFE";
+            var foo = "Hello There this is coming from my IIFE where I keep my sensitive data";
             console.log(foo);
         })();
         // Need the first set of parentheses as otherwise the complier will throw an error as functions need a name in JS
@@ -275,7 +294,7 @@
 
         const wait = time => new Promise((resolve) => setTimeout(resolve, time));
 
-        wait(3000).then(() => console.log('Hello!')); // 'Hello!'
+        wait(3000).then(() => console.log('Hello! This is the promise that made you wait 3000ms')); // 'Hello!'
         // Our wait(3000) call will wait 3000ms (3 seconds), and then log 'Hello!'. All spec-compatible promises define a .then() method which you use to pass
         // handlers which can take the resolved or rejected value.
 
@@ -320,12 +339,6 @@
         // In the above code, at the time of invocation, the getName function is a property of the object obj , 
         // therefore, the this keyword will refer to the object obj , and hence the output will be “vivek”.
 
-        var obj = {
-            name:  "vivek",
-            getName: function(){
-              console.log(this.name);
-            }       
-        }
         var getName = obj.getName; //Note this gets the fucntion and does not enact the function
         var obj2 = {name:"akshay", getName }; // note getName is a function, hence you can call it
         obj2.getName();
@@ -343,10 +356,10 @@
         // It’s a predefined method in javascript.
         // This method invokes a method (function) by specifying the owner object.
         function sayHello(){
-            return "Hello " + this.name;
+            return "Hello " + this.name + " this was made using call func";
         }     
-        var obj = {name: "Sandy"};
-        sayHello.call(obj); // Returns "Hello Sandy"
+        var obj5 = {name: "Sandy"};
+        console.log(sayHello.call(obj5)); // Returns "Hello Sandy"
                 
 
         // call() method allows an object to use the method (function) of another object.
@@ -361,20 +374,20 @@
 
         // call() accepts arguments:
         function saySomething(message){
-            return this.name + " is " + message;
+            return this.name + " is " + message + " cause he uses call method";
         }        
         var person4 = {name:  "John"};        
-        saySomething.call(person4, "awesome"); // Returns "John is awesome"    
+        console.log(saySomething.call(person4, "awesome")); // Returns "John is awesome"    
 
     // apply()
         // The apply method is similar to the call() method. The only difference is that,
         // call() method takes arguments separately whereas, apply() method takes arguments as an array.
 
-        function saySomething(message){
-            return this.name + " is " + message;
+        function saySomething2(message1, message2){
+            return this.name + " is " + message1 + " and " + message2;
         }     
         var person4 = {name:  "John"};     
-        saySomething.apply(person4, ["awesome"]);
+        console.log(saySomething2.apply(person4, ["awesome", "cool"]));
 
     // bind()
         // This method returns a new function, where the value of “this” keyword will be bound to the owner object, which is provided as a parameter.
@@ -387,7 +400,7 @@
         var person1 = {name:  "Vivek"};       
         var detailsOfPerson1 = bikeDetails.displayDetails.bind(person1, "TS0122", "Bullet");       
         // Binds the displayDetails function to the person1 object         
-        detailsOfPerson1();
+        console.log( detailsOfPerson1() );
         // Returns Vivek, bike details: TS0452, Thunderbird 
 
 
@@ -495,6 +508,19 @@
             return "Property shadowing doesnt hoist " + this.fName + " " + this.lName   
         }
         console.log(tester.getName()); 
+
+
+        // Add function to string prototype class
+        String.prototype.distance = function (char) {
+            var index = this.indexOf(char);
+            if (index === -1) {
+                alert(char + " does not appear in " + this);
+            } else {
+                alert(char + " is " + (this.length - index) + " characters from the end of the string! This is me adding a function to the String objects prototype");
+            }
+        };
+        "Hello".distance("H");
+
     
     // Classes 
         // Like syntaxtic sugar to make it easier to deal wth prototypes, i.e. creating methods 
@@ -541,7 +567,7 @@
     // Modules
         // a module is a small unit of independent, reusable code. Modules are the foundation of many JavaScript design patterns and are critically 
         // necessary when building any non-trivial JavaScript-based application.
-        // JavaScript module export as the value rather than define a type, as JavaScript JavaScript module can export an object, Modules that export 
+        // JavaScript module export as the value rather than define a type, as JavaScript module can export an object, Modules that export 
         // a string containing an HTML template or a CSS stylesheet are also common.
         // JavaScript doesn’t have private keyword but we can achieve private methods and properties using closures.
         var myModule = (function() {
@@ -580,9 +606,9 @@
             var cache = {};
 
             return function(num){
-                if(num in cache){
+                if(cache.hasOwnProperty(num)){  // Peter said there could be problems with: num in cache    so use     cache.hasOwnProperty(num)
                   console.log("cached value");
-                  return cache[num]
+                  return cache[num];
                 }
                 else{
                   cache[num] = num + 256;
@@ -595,6 +621,7 @@
 
         memoizedFunc(20); // Normal return
         memoizedFunc(20); // Cached return
+        conosle.log(memoizedFunc(20));
 
         // **Note- Although using memoization saves time, it results in larger consumption of memory since we are storing all the computed results
 
@@ -619,15 +646,15 @@
         // is created with the scope. The inner function (closure) can access the variable defined in its scope (variables defined between its curly brackets),
         // in the scope of its parent function, and the global variables. Now here you need to remember that the outer function can not have access to the inner 
         // function variable (we have already discussed this in scope concept). Let’s take an example and understand it in a better way.
-        const first = () => {
-            const greet = "Hi";
+        var first = function() {
+            const greet = "Hi from my closure";
             //console.log(name) // Note name is not in scope so blank output
-            const second = () => {
+            var second = function () {
                 const name = 'john';
                 console.log(greet); // Note greet is in scope 
             }
             //console.log(name) // Note name is not in scope so blank output 
-            return second 
+            return second;
         }
 
         const newFunc = first();
@@ -649,8 +676,8 @@
           return displayName;
         }
         var myFunc = User('Raj');
-        myFunc('Welcome '); //Output: Welcome Raj
-        myFunc('Hello '); //output: Hello Raj
+        myFunc('Welcome'); //Output: Welcome Raj
+        myFunc('Hello'); //output: Hello Raj
         // We have an outer function User() which returns an inner function as displayName(),
         // The inner function will have access to the variables in the outer function scope, even after the outer function has returned.
 
